@@ -510,6 +510,11 @@
                 this.playBeep(220, 'sawtooth', 0.2, 0.2);
                 setTimeout(() => this.playBeep(180, 'sawtooth', 0.35, 0.25), 150);
             }
+            streakLost() {
+                this.playBeep(329.63, 'sawtooth', 0.12, 0.2);
+                setTimeout(() => this.playBeep(261.63, 'sawtooth', 0.15, 0.22), 90);
+                setTimeout(() => this.playBeep(196.00, 'sawtooth', 0.3, 0.28), 180);
+            }
             tick() {
                 this.playBeep(880, 'triangle', 0.04, 0.08);
             }

@@ -10,6 +10,12 @@ use Tests\TestCase;
 
 class QuiwinGameTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        \App\Models\GameSetting::truncate();
+    }
+
     public function test_user_registration_awards_200_points()
     {
         $uniqueEmail = 'test_' . uniqid() . '@example.com';

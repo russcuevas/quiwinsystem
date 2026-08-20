@@ -42,6 +42,12 @@ class UserController extends Controller
         $accuracy = $totalQuestionsAnswered > 0 ? round(($totalCorrect / $totalQuestionsAnswered) * 100, 1) : 0;
         $bestStreak = GameSession::where('user_id', $user->id)->max('max_streak') ?? 0;
 
+        // Recent point transactions
+        $transactions = PointTransaction::where('user_id', $user->id)
+            ->latest()
+            ->take(8)
+            ->get();
+
         $entryFee = (int) \App\Models\GameSetting::getVal('entry_fee', 50);
 
         return view('user.home', compact('user', 'activeSession', 'recentGames', 'leaderboard', 'totalGames', 'accuracy', 'bestStreak', 'transactions', 'entryFee'));
