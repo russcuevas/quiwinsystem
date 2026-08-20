@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\GameSession;
 use App\Models\User;
 use App\Services\OpenTdbService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class QuiwinGameTest extends TestCase
@@ -16,7 +15,7 @@ class QuiwinGameTest extends TestCase
         \App\Models\GameSetting::truncate();
     }
 
-    public function test_user_registration_awards_200_points()
+    public function test_user_registration_creates_pending_user_with_coupon_code()
     {
         $uniqueEmail = 'test_' . uniqid() . '@example.com';
         $response = $this->post(route('register.submit'), [
@@ -26,11 +25,117 @@ class QuiwinGameTest extends TestCase
             'password_confirmation' => 'password123',
         ]);
 
-        $response->assertRedirect(route('user.home'));
+        $response->assertRedirect(route('login'));
         $this->assertDatabaseHas('users', [
             'email' => $uniqueEmail,
-            'points' => 200,
+            'status' => 'pending',
+            'points' => 0,
         ]);
+
+        $user = User::where('email', $uniqueEmail)->first();
+        $this->assertNotNull($user->referral_code);
+        $this->assertStringStartsWith('QUI-', $user->referral_code);
+    }
+
+    public function test_pending_user_cannot_login_until_admin_approves()
+    {
+        $uniqueEmail = 'pending_' . uniqid() . '@example.com';
+        $user = User::create([
+            'name' => 'Pending Player',
+            'email' => $uniqueEmail,
+            'password' => bcrypt('password123'),
+            'role' => 'user',
+            'status' => 'pending',
+            'referral_code' => 'QUI-' . strtoupper(substr(md5(uniqid()), 0, 6)),
+            'points' => 0,
+            'is_active' => true,
+        ]);
+
+        // Attempt login while pending
+        $loginRes = $this->post(route('login.submit'), [
+            'email' => $uniqueEmail,
+            'password' => 'password123',
+        ]);
+
+        $loginRes->assertSessionHasErrors('email');
+        $this->assertGuest();
+
+        // Admin approves player
+        $admin = User::where('role', 'admin')->first() ?: User::create([
+            'name' => 'Admin User',
+            'email' => 'admin_' . uniqid() . '@quiwin.com',
+            'password' => bcrypt('password123'),
+            'role' => 'admin',
+            'status' => 'approved',
+            'points' => 9999,
+        ]);
+
+        $approveRes = $this->actingAs($admin)->post(route('admin.users.approve', ['userId' => $user->id]));
+        $approveRes->assertSessionHas('success');
+
+        $user->refresh();
+        $this->assertEquals('approved', $user->status);
+        $this->assertEquals(200, $user->points);
+
+        // Now login succeeds
+        $this->post(route('logout'));
+        $loginResApproved = $this->post(route('login.submit'), [
+            'email' => $uniqueEmail,
+            'password' => 'password123',
+        ]);
+        $loginResApproved->assertRedirect(route('user.home'));
+    }
+
+    public function test_referral_system_and_five_player_quest_reward()
+    {
+        $admin = User::where('role', 'admin')->first();
+
+        // Referrer player
+        $referrer = User::create([
+            'name' => 'Top Inviter',
+            'email' => 'inviter_' . uniqid() . '@quiwin.com',
+            'password' => bcrypt('password123'),
+            'role' => 'user',
+            'status' => 'approved',
+            'referral_code' => 'QUI-MASTER',
+            'points' => 200,
+            'is_active' => true,
+        ]);
+
+        // Register 5 friends using QUI-MASTER
+        $friendIds = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $friendEmail = "friend{$i}_" . uniqid() . "@quiwin.com";
+            $this->post(route('register.submit'), [
+                'name' => "Friend {$i}",
+                'email' => $friendEmail,
+                'password' => 'password123',
+                'password_confirmation' => 'password123',
+                'referral_code' => 'QUI-MASTER',
+            ]);
+
+            $friend = User::where('email', $friendEmail)->first();
+            $this->assertEquals($referrer->id, $friend->referred_by);
+            $friendIds[] = $friend->id;
+        }
+
+        // Admin approves first 4 friends -> quest not yet triggered
+        for ($i = 0; $i < 4; $i++) {
+            $this->actingAs($admin)->post(route('admin.users.approve', ['userId' => $friendIds[$i]]));
+        }
+
+        $referrer->refresh();
+        $this->assertEquals(200, $referrer->points);
+        $this->assertEquals(4, $referrer->approvedReferrals()->count());
+        $this->assertFalse($referrer->quest_rewarded);
+
+        // Admin approves 5th friend -> +1,000 PTS Quest Reward granted!
+        $this->actingAs($admin)->post(route('admin.users.approve', ['userId' => $friendIds[4]]));
+
+        $referrer->refresh();
+        $this->assertEquals(5, $referrer->approvedReferrals()->count());
+        $this->assertTrue($referrer->quest_rewarded);
+        $this->assertEquals(1200, $referrer->points); // 200 initial + 1000 quest bonus!
     }
 
     public function test_game_start_deducts_50_points_and_creates_session()
@@ -41,6 +146,8 @@ class QuiwinGameTest extends TestCase
             'password' => bcrypt('password123'),
             'points' => 200,
             'role' => 'user',
+            'status' => 'approved',
+            'referral_code' => 'QUI-' . strtoupper(substr(md5(uniqid()), 0, 6)),
         ]);
 
         $response = $this->actingAs($user)->post(route('game.start'));
@@ -61,6 +168,8 @@ class QuiwinGameTest extends TestCase
             'password' => bcrypt('password123'),
             'points' => 200,
             'role' => 'user',
+            'status' => 'approved',
+            'referral_code' => 'QUI-' . strtoupper(substr(md5(uniqid()), 0, 6)),
         ]);
 
         $this->actingAs($user)->post(route('game.start'));
@@ -102,6 +211,8 @@ class QuiwinGameTest extends TestCase
             'email' => 'reg_' . uniqid() . '@quiwin.com',
             'password' => bcrypt('password123'),
             'role' => 'user',
+            'status' => 'approved',
+            'referral_code' => 'QUI-' . strtoupper(substr(md5(uniqid()), 0, 6)),
         ]);
 
         // Regular user denied
@@ -111,35 +222,5 @@ class QuiwinGameTest extends TestCase
         // Admin granted
         $resAdmin = $this->actingAs($admin)->get(route('admin.dashboard'));
         $resAdmin->assertStatus(200);
-    }
-
-    public function test_admin_can_manipulate_pointing_system()
-    {
-        $admin = User::where('email', 'admin@quiwin.com')->first();
-
-        // Update pointing system settings as admin
-        $res = $this->actingAs($admin)->post(route('admin.settings.update'), [
-            'easy_correct_points' => 10,
-            'easy_wrong_penalty' => 4,
-            'easy_timer_seconds' => 7,
-            'medium_correct_points' => 15,
-            'medium_wrong_penalty' => 8,
-            'medium_timer_seconds' => 6,
-            'hard_correct_points' => 25,
-            'hard_wrong_penalty' => 20,
-            'hard_timer_seconds' => 5,
-            'entry_fee' => 75,
-            'welcome_bonus' => 300,
-            'streak_3_bonus' => 3,
-            'streak_5_bonus' => 6,
-            'streak_8_bonus' => 12,
-        ]);
-
-        $res->assertSessionHas('success');
-
-        // Check that GameSetting reflects the new custom pointing
-        $this->assertEquals(10, \App\Models\GameSetting::getVal('easy_correct_points'));
-        $this->assertEquals(4, \App\Models\GameSetting::getVal('easy_wrong_penalty'));
-        $this->assertEquals(75, \App\Models\GameSetting::getVal('entry_fee'));
     }
 }

@@ -27,12 +27,22 @@
         </div>
     </div>
 
-    <!-- 5 Analytics Metrics Cards -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem;">
+    <!-- 6 Analytics Metrics Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem;">
         
+        <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #f59e0b; background: {{ $pendingUsersCount > 0 ? 'rgba(245, 158, 11, 0.12)' : 'var(--bg-card)' }};">
+            <div style="font-size: 0.85rem; color: #fbbf24; font-weight: 700; display: flex; align-items: center; justify-content: space-between;">
+                <span>Pending Approvals</span>
+                @if($pendingUsersCount > 0)
+                    <span style="background: #ef4444; color: #fff; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 9999px;">Action Required</span>
+                @endif
+            </div>
+            <div style="font-size: 2rem; font-weight: 900; color: #fbbf24; margin-top: 0.25rem;">{{ number_format($pendingUsersCount) }}</div>
+        </div>
+
         <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #6366f1;">
-            <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Registered Players</div>
-            <div style="font-size: 2rem; font-weight: 900; color: #fff; margin-top: 0.25rem;">{{ number_format($totalUsers) }}</div>
+            <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Approved Players</div>
+            <div style="font-size: 2rem; font-weight: 900; color: #fff; margin-top: 0.25rem;">{{ number_format($totalApprovedUsers) }}</div>
         </div>
 
         <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #06b6d4;">
@@ -56,6 +66,80 @@
         </div>
 
     </div>
+
+    <!-- PENDING APPROVALS SECTION (When there are pending registrations) -->
+    @if($pendingUsers->isNotEmpty())
+    <div class="glass-card" style="padding: 1.75rem; border: 1px solid rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-user-clock text-amber-400"></i> Pending Player Approvals ({{ $pendingUsers->count() }})
+                </h3>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.2rem;">
+                    Approve players to grant them 200 Welcome Bonus PTS, enable their login, and credit their referrer's 5/5 Quest.
+                </p>
+            </div>
+            <a href="{{ route('admin.users', ['status' => 'pending']) }}" class="btn btn-outline" style="font-size: 0.85rem; border-color: rgba(245, 158, 11, 0.5); color: #fbbf24;">
+                View All Pending Players
+            </a>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: #64748b; text-align: left;">
+                        <th style="padding: 0.6rem;">Player Name</th>
+                        <th style="padding: 0.6rem;">Email</th>
+                        <th style="padding: 0.6rem;">Generated Coupon</th>
+                        <th style="padding: 0.6rem;">Referred By</th>
+                        <th style="padding: 0.6rem;">Registered</th>
+                        <th style="padding: 0.6rem; text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($pendingUsers as $pUser)
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1;">
+                        <td style="padding: 0.75rem 0.5rem; font-weight: 700; color: #fff;">
+                            <i class="fa-solid fa-circle-user text-amber-400"></i> {{ $pUser->name }}
+                        </td>
+                        <td style="padding: 0.75rem 0.5rem; color: #94a3b8;">{{ $pUser->email }}</td>
+                        <td style="padding: 0.75rem 0.5rem;">
+                            <code style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 700;">{{ $pUser->referral_code ?? 'None' }}</code>
+                        </td>
+                        <td style="padding: 0.75rem 0.5rem;">
+                            @if($pUser->referrer)
+                                <span style="color: #34d399; font-weight: 600;">{{ $pUser->referrer->name }}</span>
+                                <span style="font-size: 0.75rem; color: #64748b;">({{ $pUser->referrer->referral_code }})</span>
+                            @else
+                                <span style="color: #64748b;">Direct Signup</span>
+                            @endif
+                        </td>
+                        <td style="padding: 0.75rem 0.5rem; color: #64748b; font-size: 0.8rem;">
+                            {{ $pUser->created_at->diffForHumans() }}
+                        </td>
+                        <td style="padding: 0.75rem 0.5rem; text-align: right;">
+                            <div style="display: inline-flex; gap: 0.5rem;">
+                                <form action="{{ route('admin.users.approve', ['userId' => $pUser->id]) }}" method="POST" style="margin:0;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; background: linear-gradient(135deg, #10b981, #059669);">
+                                        <i class="fa-solid fa-check"></i> Approve (+200 PTS)
+                                    </button>
+                                </form>
+                                <form action="{{ route('admin.users.reject', ['userId' => $pUser->id]) }}" method="POST" style="margin:0;" onsubmit="return confirm('Reject registration for {{ $pUser->name }}?')">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline" style="padding: 0.4rem 0.65rem; font-size: 0.8rem; color: #fb7185; border-color: rgba(244, 63, 94, 0.4);">
+                                        <i class="fa-solid fa-xmark"></i> Reject
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
 
     <!-- 2 Column Layout: Recent Game Sessions & Top Players -->
     <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem;">

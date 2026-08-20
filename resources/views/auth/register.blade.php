@@ -12,7 +12,7 @@
                 <i class="fa-solid fa-gift fa-bounce"></i> Welcome Bonus: +200 PTS!
             </div>
             <p style="color: #a7f3d0; font-size: 0.85rem; margin-top: 0.25rem;">
-                Sign up today and get 200 free Quiwin points instantly to play.
+                Register today & get 200 PTS + your own unique Coupon Code once approved by Admin!
             </p>
         </div>
 
@@ -57,7 +57,7 @@
                 @enderror
             </div>
 
-            <div style="margin-bottom: 1.5rem;">
+            <div style="margin-bottom: 1.25rem;">
                 <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.4rem;">Confirm Password</label>
                 <div style="position: relative;">
                     <i class="fa-solid fa-shield-check" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #64748b;"></i>
@@ -65,8 +65,25 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem; background: linear-gradient(135deg, #10b981, #059669);">
-                <i class="fa-solid fa-coins"></i> Claim 200 PTS & Start Playing
+            <!-- Referral / Coupon Code Input (Optional) -->
+            <div style="margin-bottom: 1.5rem; background: rgba(99, 102, 241, 0.08); border: 1px dashed rgba(99, 102, 241, 0.35); border-radius: 0.85rem; padding: 0.85rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #a5b4fc; margin-bottom: 0.35rem;">
+                    <i class="fa-solid fa-ticket text-amber-400"></i> Referral / Coupon Code (Optional)
+                </label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-tag" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #818cf8;"></i>
+                    <input type="text" name="referral_code" value="{{ old('referral_code', request('ref')) }}" class="form-input" style="padding-left: 2.75rem; text-transform: uppercase; font-family: monospace; font-weight: 700; letter-spacing: 1px;" placeholder="e.g. QUI-XXXXXX">
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">
+                    Have a friend's coupon code? Enter it here to help them earn 1,000 PTS on their 5/5 Quest!
+                </div>
+                @error('referral_code')
+                    <span style="color: #fb7185; font-size: 0.8rem; margin-top: 0.35rem; display: block;">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.95rem; font-size: 1.05rem; font-weight: 800; background: linear-gradient(135deg, #10b981, #059669);">
+                <i class="fa-solid fa-user-plus"></i> Submit Registration (Pending Approval)
             </button>
         </form>
 

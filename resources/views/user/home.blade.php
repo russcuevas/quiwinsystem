@@ -59,10 +59,11 @@
                     </div>
 
                     @if ($user->points >= ($entryFee ?? 50))
-                        <form action="{{ route('game.start') }}" method="POST" style="margin: 0;">
+                        <form id="playGameForm" action="{{ route('game.start') }}" method="POST" style="margin: 0;"
+                            onsubmit="handlePlayGameSubmit(event, this)">
                             @csrf
-                            <button type="submit" class="btn btn-primary"
-                                style="width: 100%; padding: 1rem; font-size: 1.15rem; font-weight: 800; border-radius: 1rem; background: linear-gradient(135deg, #6366f1, #06b6d4); box-shadow: 0 0 24px rgba(99, 102, 241, 0.5);">
+                            <button type="submit" id="playGameBtn" class="btn btn-primary"
+                                style="width: 100%; padding: 1rem; font-size: 1.15rem; font-weight: 800; border-radius: 1rem; background: linear-gradient(135deg, #6366f1, #06b6d4); box-shadow: 0 0 24px rgba(99, 102, 241, 0.5); transition: all 0.2s ease;">
                                 <i class="fa-solid fa-gamepad"></i> PLAY GAME (-{{ $entryFee ?? 50 }} PTS)
                             </button>
                         </form>
@@ -256,8 +257,105 @@
 
             </div>
 
-            <!-- Right: Global Leaderboard & Points Ledger -->
+            <!-- Right: Referral Quest, Leaderboard & Points Ledger -->
             <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+                <!-- REFERRAL / COUPON CODE & 5/5 QUEST CARD -->
+                <div class="glass-card" style="padding: 1.75rem; background: linear-gradient(135deg, rgba(30, 27, 75, 0.7), rgba(15, 23, 42, 0.85)); border: 1px solid rgba(245, 158, 11, 0.35); position: relative; overflow: hidden;">
+                    
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(245, 158, 11, 0.2); display: flex; align-items: center; justify-content: center; color: #fbbf24; font-size: 1.1rem;">
+                                <i class="fa-solid fa-gift"></i>
+                            </div>
+                            <h3 style="font-size: 1.2rem; font-weight: 800; color: #fff;">Invite & Earn Quest</h3>
+                        </div>
+                        <span style="font-size: 0.75rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.2rem 0.6rem; border-radius: 9999px;">
+                            +1,000 PTS REWARD
+                        </span>
+                    </div>
+
+                    <!-- Personal Coupon Code Display Box -->
+                    <div style="background: rgba(15, 23, 42, 0.8); border: 1px dashed rgba(99, 102, 241, 0.5); border-radius: 0.85rem; padding: 1rem; margin-bottom: 1.25rem;">
+                        <div style="font-size: 0.8rem; font-weight: 700; color: #94a3b8; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Your Personal Coupon Code
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                            <div id="referralCodeText" style="font-family: monospace; font-size: 1.4rem; font-weight: 900; color: #38bdf8; letter-spacing: 2px;">
+                                {{ $user->referral_code }}
+                            </div>
+                            <div style="display: flex; gap: 0.35rem;">
+                                <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; border-color: rgba(99, 102, 241, 0.4); color: #a5b4fc;" onclick="copyReferralCode('{{ $user->referral_code }}')" id="copyCodeBtn" title="Copy Code">
+                                    <i class="fa-solid fa-copy"></i> Copy
+                                </button>
+                                <button type="button" class="btn btn-gold" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;" onclick="copyReferralLink('{{ url('/register?ref=' . $user->referral_code) }}')" id="copyLinkBtn" title="Copy Invite Link">
+                                    <i class="fa-solid fa-link"></i> Link
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5/5 Mission Progress -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.85rem; font-weight: 700; color: #e2e8f0;">
+                                🎯 Mission: Invite 5 Approved Friends
+                            </span>
+                            <span style="font-size: 0.9rem; font-weight: 900; color: {{ $approvedReferralsCount >= 5 ? '#34d399' : '#fbbf24' }};">
+                                {{ $referralQuestProgress }} / 5
+                            </span>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden; position: relative;">
+                            <div style="height: 100%; width: {{ ($referralQuestProgress / 5) * 100 }}%; background: linear-gradient(90deg, #f59e0b, #10b981); border-radius: 9999px; transition: width 0.5s ease;"></div>
+                        </div>
+
+                        @if($user->quest_rewarded || $approvedReferralsCount >= 5)
+                            <div style="margin-top: 0.6rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 0.6rem; padding: 0.5rem 0.75rem; font-size: 0.8rem; color: #34d399; font-weight: 700; text-align: center;">
+                                <i class="fa-solid fa-trophy"></i> Quest Completed! +1,000 PTS Reward Awarded!
+                            </div>
+                        @else
+                            <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem; line-height: 1.4;">
+                                Share your coupon code with friends. Once they register and get approved by Admin, you will receive <strong>1,000 bonus points</strong> upon reaching 5/5!
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Friends Invited List -->
+                    @if($referralsList->isNotEmpty())
+                        <div style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.75rem;">
+                            <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.5rem;">
+                                Your Invited Friends ({{ $referralsList->count() }})
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                @foreach($referralsList as $refFriend)
+                                    <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; padding: 0.35rem 0.5rem; background: rgba(255,255,255,0.02); border-radius: 0.4rem;">
+                                        <div style="color: #cbd5e1; font-weight: 500;">
+                                            <i class="fa-solid fa-circle-user text-indigo-400"></i> {{ $refFriend->name }}
+                                        </div>
+                                        <div>
+                                            @if($refFriend->status === 'approved')
+                                                <span style="color: #34d399; font-weight: 700; font-size: 0.75rem;">
+                                                    <i class="fa-solid fa-check"></i> Approved (+1)
+                                                </span>
+                                            @elseif($refFriend->status === 'pending')
+                                                <span style="color: #fbbf24; font-weight: 600; font-size: 0.75rem;">
+                                                    <i class="fa-solid fa-clock"></i> Pending Admin
+                                                </span>
+                                            @else
+                                                <span style="color: #f87171; font-size: 0.75rem;">
+                                                    <i class="fa-solid fa-ban"></i> Rejected
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
 
                 <!-- Leaderboard -->
                 <div class="glass-card" style="padding: 1.75rem;">
@@ -343,6 +441,46 @@
 
     </div>
 
+    <!-- PREPARING GAME LOADING MODAL -->
+    <div id="gameLoadingModal" class="modal-overlay"
+        style="z-index: 9999; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(10, 15, 29, 0.88);">
+        <div class="modal-card"
+            style="text-align: center; max-width: 440px; border: 1px solid rgba(99, 102, 241, 0.4); box-shadow: 0 0 60px rgba(99, 102, 241, 0.4); padding: 2.5rem 2rem;">
+
+            <!-- Animated Glowing Portal Orb -->
+            <div
+                style="position: relative; width: 92px; height: 92px; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;">
+                <div
+                    style="position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 3px solid transparent; border-top-color: #6366f1; border-right-color: #06b6d4; animation: spinOrb 1s linear infinite;">
+                </div>
+                <div
+                    style="position: absolute; width: 72%; height: 72%; border-radius: 50%; border: 3px dashed rgba(245, 158, 11, 0.6); animation: spinOrbReverse 2s linear infinite;">
+                </div>
+                <div
+                    style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #06b6d4); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; box-shadow: 0 0 25px rgba(99, 102, 241, 0.9);">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+            </div>
+
+            <h3 style="font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 0.5rem; letter-spacing: -0.5px;">
+                Preparing for a game...
+            </h3>
+            <p id="loadingStatusText"
+                style="color: #cbd5e1; font-size: 0.92rem; margin-bottom: 1.5rem; line-height: 1.5; min-height: 42px;">
+                Loading...
+            </p>
+
+            <!-- Loading Step Progress Bar -->
+            <div
+                style="width: 100%; height: 7px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden; position: relative;">
+                <div id="loadingProgressBar"
+                    style="height: 100%; width: 25%; background: linear-gradient(90deg, #6366f1, #06b6d4, #10b981); border-radius: 9999px; transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <style>
         @keyframes pulse {
 
@@ -355,5 +493,109 @@
                 transform: scale(1.02);
             }
         }
+
+        @keyframes spinOrb {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spinOrbReverse {
+            0% {
+                transform: rotate(360deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
     </style>
 @endsection
+
+@push('scripts')
+    <script>
+        let isSubmittingGame = false;
+
+        function handlePlayGameSubmit(event, form) {
+            if (isSubmittingGame) {
+                event.preventDefault();
+                return false;
+            }
+            isSubmittingGame = true;
+
+            // Button state
+            const btn = document.getElementById('playGameBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing Arena...';
+                btn.style.opacity = '0.85';
+                btn.style.cursor = 'wait';
+            }
+
+            // Show Modal
+            const modal = document.getElementById('gameLoadingModal');
+            if (modal) {
+                modal.classList.add('active');
+            }
+
+            // Audio feedback
+            if (window.soundFX && typeof window.soundFX.correct === 'function') {
+                window.soundFX.correct();
+            }
+
+            // Status text cycle
+            const statusText = document.getElementById('loadingStatusText');
+            const progressBar = document.getElementById('loadingProgressBar');
+
+            setTimeout(() => {
+                if (statusText) statusText.innerHTML =
+                    '<i class="fa-solid fa-cloud-arrow-down text-cyan-400"></i> Fetching 30 randomized non-repeating questions...';
+                if (progressBar) progressBar.style.width = '65%';
+            }, 500);
+
+            setTimeout(() => {
+                if (statusText) statusText.innerHTML =
+                    '<i class="fa-solid fa-bolt text-amber-400"></i> Initializing Arena & Round 1 Easy Challenge...';
+                if (progressBar) progressBar.style.width = '92%';
+            }, 1200);
+
+            return true;
+        }
+
+        function copyReferralCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('copyCodeBtn');
+                if (btn) {
+                    const orig = btn.innerHTML;
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                    btn.style.color = '#34d399';
+                    setTimeout(() => {
+                        btn.innerHTML = orig;
+                        btn.style.color = '#a5b4fc';
+                    }, 2000);
+                }
+            }).catch(() => {
+                prompt('Your Referral / Coupon Code:', code);
+            });
+        }
+
+        function copyReferralLink(link) {
+            navigator.clipboard.writeText(link).then(() => {
+                const btn = document.getElementById('copyLinkBtn');
+                if (btn) {
+                    const orig = btn.innerHTML;
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Link Copied!';
+                    setTimeout(() => {
+                        btn.innerHTML = orig;
+                    }, 2000);
+                }
+            }).catch(() => {
+                prompt('Your Registration Referral Link:', link);
+            });
+        }
+    </script>
+@endpush

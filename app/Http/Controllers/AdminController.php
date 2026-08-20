@@ -22,13 +22,24 @@ class AdminController extends Controller
     public function dashboard()
     {
         $totalUsers = User::where('role', 'user')->count();
+        $pendingUsersCount = User::where('role', 'user')->where('status', 'pending')->count();
+        $totalApprovedUsers = User::where('role', 'user')->where('status', 'approved')->count();
         $totalGames = GameSession::count();
         $totalCompletedGames = GameSession::where('status', 'completed')->count();
         $totalPointsInCirculation = User::where('role', 'user')->sum('points');
         $totalQuestionsInDb = Question::count();
 
+        // Pending users awaiting approval
+        $pendingUsers = User::where('role', 'user')
+            ->where('status', 'pending')
+            ->with('referrer')
+            ->latest()
+            ->take(10)
+            ->get();
+
         // Top players
         $topPlayers = User::where('role', 'user')
+            ->where('status', 'approved')
             ->orderByDesc('points')
             ->take(8)
             ->get();
@@ -52,6 +63,9 @@ class AdminController extends Controller
 
         return view('admin.dashboard', compact(
             'totalUsers',
+            'pendingUsersCount',
+            'totalApprovedUsers',
+            'pendingUsers',
             'totalGames',
             'totalCompletedGames',
             'totalPointsInCirculation',
@@ -68,18 +82,105 @@ class AdminController extends Controller
     public function users(Request $request)
     {
         $search = $request->input('search');
-        $query = User::where('role', 'user');
+        $status = $request->input('status', 'all');
+        $query = User::where('role', 'user')->with(['referrer', 'approvedReferrals']);
+
+        if ($status !== 'all') {
+            $query->where('status', $status);
+        }
 
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('referral_code', 'like', "%{$search}%");
             });
         }
 
-        $users = $query->orderByDesc('points')->paginate(15);
+        $users = $query->orderByDesc('id')->paginate(15);
+        $pendingCount = User::where('role', 'user')->where('status', 'pending')->count();
 
-        return view('admin.users', compact('users', 'search'));
+        return view('admin.users', compact('users', 'search', 'status', 'pendingCount'));
+    }
+
+    public function approveUser($userId)
+    {
+        $user = User::findOrFail($userId);
+        if ($user->isAdmin()) {
+            return back()->with('error', 'Cannot approve admin accounts.');
+        }
+
+        if ($user->status === 'approved') {
+            return back()->with('info', "Player {$user->name} is already approved.");
+        }
+
+        $welcomeBonus = (int) \App\Models\GameSetting::getVal('welcome_bonus', 200);
+
+        // Ensure user has a referral code
+        if (!$user->referral_code) {
+            do {
+                $uniqueCode = 'QUI-' . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 6));
+            } while (User::where('referral_code', $uniqueCode)->exists());
+            $user->referral_code = $uniqueCode;
+        }
+
+        $user->status = 'approved';
+        $user->points = $welcomeBonus;
+        $user->save();
+
+        // Award welcome bonus points transaction
+        PointTransaction::create([
+            'user_id' => $user->id,
+            'game_session_id' => null,
+            'type' => 'register_bonus',
+            'amount' => $welcomeBonus,
+            'balance_after' => $user->points,
+            'description' => "Welcome registration bonus approved by Admin (+{$welcomeBonus} PTS) | Coupon Code: {$user->referral_code}",
+        ]);
+
+        $message = "Player {$user->name} has been APPROVED! Granted {$welcomeBonus} welcome points with Coupon Code {$user->referral_code}.";
+
+        // Check if user was referred by another player
+        if ($user->referred_by) {
+            $referrer = User::find($user->referred_by);
+            if ($referrer) {
+                $approvedCount = $referrer->approvedReferrals()->count();
+
+                // If referrer reaches 5 approved referrals and hasn't claimed quest bonus
+                if ($approvedCount >= 5 && !$referrer->quest_rewarded) {
+                    $questReward = 1000;
+                    $referrer->points += $questReward;
+                    $referrer->quest_rewarded = true;
+                    $referrer->save();
+
+                    PointTransaction::create([
+                        'user_id' => $referrer->id,
+                        'game_session_id' => null,
+                        'type' => 'quest_reward',
+                        'amount' => $questReward,
+                        'balance_after' => $referrer->points,
+                        'description' => "🎯 Referral Quest Milestone Completed (5/5 Friends Invited & Approved) (+{$questReward} PTS)",
+                    ]);
+
+                    $message .= " 🚀 Referrer {$referrer->name} achieved 5/5 Quest Milestone & awarded +1,000 PTS bonus!";
+                }
+            }
+        }
+
+        return back()->with('success', $message);
+    }
+
+    public function rejectUser($userId)
+    {
+        $user = User::findOrFail($userId);
+        if ($user->isAdmin()) {
+            return back()->with('error', 'Cannot reject admin accounts.');
+        }
+
+        $user->status = 'rejected';
+        $user->save();
+
+        return back()->with('success', "Player {$user->name}'s registration has been REJECTED.");
     }
 
     public function updateUserPoints(Request $request, $userId)

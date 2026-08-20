@@ -16,7 +16,11 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'status',
+        'referral_code',
+        'referred_by',
         'points',
+        'quest_rewarded',
         'is_active',
     ];
 
@@ -29,11 +33,42 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'points' => 'integer',
         'is_active' => 'boolean',
+        'quest_rewarded' => 'boolean',
     ];
 
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->status === 'approved';
+    }
+
+    public function isPending(): bool
+    {
+        return $this->status === 'pending';
+    }
+
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referred_by');
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referred_by');
+    }
+
+    public function approvedReferrals()
+    {
+        return $this->hasMany(User::class, 'referred_by')->where('status', 'approved');
+    }
+
+    public function pendingReferrals()
+    {
+        return $this->hasMany(User::class, 'referred_by')->where('status', 'pending');
     }
 
     public function gameSessions()

@@ -66,8 +66,10 @@
             style="padding: 2.5rem; position: relative; border: 1px solid rgba(99, 102, 241, 0.3); box-shadow: 0 16px 48px rgba(0,0,0,0.5); transition: border-color 0.25s ease, box-shadow 0.25s ease;">
 
             <!-- Streak Broken Alert Banner (Hidden by default) -->
-            <div id="streak-broken-pop" style="position: absolute; top: -16px; left: 50%; transform: translateX(-50%); z-index: 60; display: none; pointer-events: none;">
-                <div style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; font-weight: 800; font-size: 0.9rem; padding: 0.4rem 1.25rem; border-radius: 9999px; box-shadow: 0 0 24px rgba(239, 68, 68, 0.7); border: 1px solid #fca5a5; display: flex; align-items: center; gap: 0.5rem; letter-spacing: 0.3px;">
+            <div id="streak-broken-pop"
+                style="position: absolute; top: -16px; left: 50%; transform: translateX(-50%); z-index: 60; display: none; pointer-events: none;">
+                <div
+                    style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; font-weight: 800; font-size: 0.9rem; padding: 0.4rem 1.25rem; border-radius: 9999px; box-shadow: 0 0 24px rgba(239, 68, 68, 0.7); border: 1px solid #fca5a5; display: flex; align-items: center; gap: 0.5rem; letter-spacing: 0.3px;">
                     <i class="fa-solid fa-heart-crack text-amber-300"></i>
                     <span id="streak-broken-text">STREAK BROKEN! (3x Streak Lost)</span>
                 </div>
@@ -343,15 +345,25 @@
         }
 
         /* ========================================================
-           ULTRA-SMOOTH GPU-ACCELERATED GAMEPLAY ANIMATIONS
-           ======================================================== */
+                   ULTRA-SMOOTH GPU-ACCELERATED GAMEPLAY ANIMATIONS
+                   ======================================================== */
 
         /* 1. Correct Answer: Smooth Emerald Glow & Pop */
         @keyframes choiceCorrectPop {
-            0% { transform: scale3d(1, 1, 1); }
-            40% { transform: scale3d(1.035, 1.035, 1); box-shadow: 0 0 30px rgba(16, 185, 129, 0.6); }
-            100% { transform: scale3d(1, 1, 1); }
+            0% {
+                transform: scale3d(1, 1, 1);
+            }
+
+            40% {
+                transform: scale3d(1.035, 1.035, 1);
+                box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
+            }
+
+            100% {
+                transform: scale3d(1, 1, 1);
+            }
         }
+
         .choice-btn.correct {
             animation: choiceCorrectPop 0.4s ease-out !important;
             background: rgba(16, 185, 129, 0.28) !important;
@@ -361,22 +373,49 @@
         }
 
         @keyframes correctArenaPulse {
-            0% { border-color: rgba(99, 102, 241, 0.3); }
-            35% { border-color: #10b981; box-shadow: 0 0 45px rgba(16, 185, 129, 0.45), 0 16px 48px rgba(0,0,0,0.5); }
-            100% { border-color: rgba(99, 102, 241, 0.3); }
+            0% {
+                border-color: rgba(99, 102, 241, 0.3);
+            }
+
+            35% {
+                border-color: #10b981;
+                box-shadow: 0 0 45px rgba(16, 185, 129, 0.45), 0 16px 48px rgba(0, 0, 0, 0.5);
+            }
+
+            100% {
+                border-color: rgba(99, 102, 241, 0.3);
+            }
         }
+
         .arena-correct-pulse {
             animation: correctArenaPulse 0.6s ease-out;
         }
 
         /* 2. Wrong Answer: Micro Shockwave Shake */
         @keyframes choiceWrongVibrate {
-            0%, 100% { transform: translate3d(0, 0, 0); }
-            20% { transform: translate3d(-6px, 0, 0); }
-            40% { transform: translate3d(6px, 0, 0); }
-            60% { transform: translate3d(-4px, 0, 0); }
-            80% { transform: translate3d(4px, 0, 0); }
+
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            20% {
+                transform: translate3d(-6px, 0, 0);
+            }
+
+            40% {
+                transform: translate3d(6px, 0, 0);
+            }
+
+            60% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            80% {
+                transform: translate3d(4px, 0, 0);
+            }
         }
+
         .choice-btn.wrong {
             animation: choiceWrongVibrate 0.4s ease-out !important;
             background: rgba(244, 63, 94, 0.28) !important;
@@ -386,28 +425,80 @@
         }
 
         @keyframes arenaShake {
-            0%, 100% { transform: translate3d(0, 0, 0); }
-            20% { transform: translate3d(-8px, -2px, 0); border-color: #ef4444; box-shadow: 0 0 40px rgba(239, 68, 68, 0.5); }
-            40% { transform: translate3d(8px, 2px, 0); }
-            60% { transform: translate3d(-5px, 1px, 0); }
-            80% { transform: translate3d(5px, -1px, 0); }
+
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            20% {
+                transform: translate3d(-8px, -2px, 0);
+                border-color: #ef4444;
+                box-shadow: 0 0 40px rgba(239, 68, 68, 0.5);
+            }
+
+            40% {
+                transform: translate3d(8px, 2px, 0);
+            }
+
+            60% {
+                transform: translate3d(-5px, 1px, 0);
+            }
+
+            80% {
+                transform: translate3d(5px, -1px, 0);
+            }
         }
+
         .arena-wrong-shake {
             animation: arenaShake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97);
         }
 
         /* 3. Floating Neon Score Particles (+PTS Up / -PTS Down) */
         @keyframes floatScoreAscend {
-            0% { opacity: 0; transform: translate3d(-50%, 10px, 0) scale(0.7); }
-            25% { opacity: 1; transform: translate3d(-50%, -15px, 0) scale(1.15); filter: drop-shadow(0 0 14px #34d399); }
-            70% { opacity: 1; transform: translate3d(-50%, -38px, 0) scale(1); }
-            100% { opacity: 0; transform: translate3d(-50%, -58px, 0) scale(0.85); }
+            0% {
+                opacity: 0;
+                transform: translate3d(-50%, 10px, 0) scale(0.7);
+            }
+
+            25% {
+                opacity: 1;
+                transform: translate3d(-50%, -15px, 0) scale(1.15);
+                filter: drop-shadow(0 0 14px #34d399);
+            }
+
+            70% {
+                opacity: 1;
+                transform: translate3d(-50%, -38px, 0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate3d(-50%, -58px, 0) scale(0.85);
+            }
         }
+
         @keyframes floatScoreDescend {
-            0% { opacity: 0; transform: translate3d(-50%, -10px, 0) scale(0.7); }
-            25% { opacity: 1; transform: translate3d(-50%, 15px, 0) scale(1.15); filter: drop-shadow(0 0 14px #f43f5e); }
-            70% { opacity: 1; transform: translate3d(-50%, 38px, 0) scale(1); }
-            100% { opacity: 0; transform: translate3d(-50%, 58px, 0) scale(0.85); }
+            0% {
+                opacity: 0;
+                transform: translate3d(-50%, -10px, 0) scale(0.7);
+            }
+
+            25% {
+                opacity: 1;
+                transform: translate3d(-50%, 15px, 0) scale(1.15);
+                filter: drop-shadow(0 0 14px #f43f5e);
+            }
+
+            70% {
+                opacity: 1;
+                transform: translate3d(-50%, 38px, 0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate3d(-50%, 58px, 0) scale(0.85);
+            }
         }
 
         .floating-score-chip {
@@ -427,40 +518,76 @@
             align-items: center;
             gap: 0.4rem;
         }
+
         .floating-score-chip.gain {
             animation: floatScoreAscend 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             background: linear-gradient(135deg, #10b981, #059669);
             color: #fff;
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.8), 0 8px 24px rgba(0,0,0,0.5);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.8), 0 8px 24px rgba(0, 0, 0, 0.5);
             border: 2px solid #a7f3d0;
         }
+
         .floating-score-chip.loss {
             animation: floatScoreDescend 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             background: linear-gradient(135deg, #ef4444, #dc2626);
             color: #fff;
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.8), 0 8px 24px rgba(0,0,0,0.5);
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.8), 0 8px 24px rgba(0, 0, 0, 0.5);
             border: 2px solid #fecaca;
         }
 
         /* 4. Broken Streak Animation */
         @keyframes streakBrokenDrop {
-            0% { opacity: 0; transform: translate3d(-50%, -20px, 0) scale(0.6); }
-            30% { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1.12); }
-            60% { transform: translate3d(-50%, 0, 0) scale(0.98); }
-            80% { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
-            100% { opacity: 0; transform: translate3d(-50%, 15px, 0) scale(0.9); }
+            0% {
+                opacity: 0;
+                transform: translate3d(-50%, -20px, 0) scale(0.6);
+            }
+
+            30% {
+                opacity: 1;
+                transform: translate3d(-50%, 0, 0) scale(1.12);
+            }
+
+            60% {
+                transform: translate3d(-50%, 0, 0) scale(0.98);
+            }
+
+            80% {
+                opacity: 1;
+                transform: translate3d(-50%, 0, 0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate3d(-50%, 15px, 0) scale(0.9);
+            }
         }
+
         .streak-shatter-pop {
             display: block !important;
             animation: streakBrokenDrop 1.2s ease-out forwards;
         }
 
         @keyframes streakBadgeExtinguish {
-            0% { transform: scale3d(1.25, 1.25, 1); filter: brightness(1.7); }
-            30% { transform: scale3d(0.8, 0.8, 1) rotate(-8deg); filter: grayscale(1) brightness(0.6); }
-            60% { transform: scale3d(1.05, 1.05, 1) rotate(8deg); }
-            100% { transform: scale3d(1, 1, 1) rotate(0); filter: none; }
+            0% {
+                transform: scale3d(1.25, 1.25, 1);
+                filter: brightness(1.7);
+            }
+
+            30% {
+                transform: scale3d(0.8, 0.8, 1) rotate(-8deg);
+                filter: grayscale(1) brightness(0.6);
+            }
+
+            60% {
+                transform: scale3d(1.05, 1.05, 1) rotate(8deg);
+            }
+
+            100% {
+                transform: scale3d(1, 1, 1) rotate(0);
+                filter: none;
+            }
         }
+
         .streak-badge-shattered {
             animation: streakBadgeExtinguish 0.7s ease-out;
             background: rgba(239, 68, 68, 0.25) !important;
@@ -470,10 +597,20 @@
 
         /* 5. Streak Ignite Combo Animation */
         @keyframes streakIgnite {
-            0% { transform: scale3d(1, 1, 1); }
-            40% { transform: scale3d(1.22, 1.22, 1) rotate(3deg); box-shadow: 0 0 25px rgba(245, 158, 11, 0.8); }
-            100% { transform: scale3d(1.08, 1.08, 1) rotate(0); }
+            0% {
+                transform: scale3d(1, 1, 1);
+            }
+
+            40% {
+                transform: scale3d(1.22, 1.22, 1) rotate(3deg);
+                box-shadow: 0 0 25px rgba(245, 158, 11, 0.8);
+            }
+
+            100% {
+                transform: scale3d(1.08, 1.08, 1) rotate(0);
+            }
         }
+
         .streak-ignited {
             animation: streakIgnite 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -896,9 +1033,9 @@
 
             const chip = document.createElement('div');
             chip.className = `floating-score-chip ${isPositive ? 'gain' : 'loss'}`;
-            chip.innerHTML = isPositive
-                ? `<i class="fa-solid fa-arrow-trend-up"></i> ${text}`
-                : `<i class="fa-solid fa-arrow-trend-down"></i> ${text}`;
+            chip.innerHTML = isPositive ?
+                `<i class="fa-solid fa-arrow-trend-up"></i> ${text}` :
+                `<i class="fa-solid fa-arrow-trend-down"></i> ${text}`;
 
             arenaCard.appendChild(chip);
             setTimeout(() => {

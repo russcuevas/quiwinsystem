@@ -48,9 +48,40 @@ class UserController extends Controller
             ->take(8)
             ->get();
 
+        // Ensure player has a unique referral code
+        if (!$user->referral_code) {
+            do {
+                $uniqueCode = 'QUI-' . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 6));
+            } while (User::where('referral_code', $uniqueCode)->exists());
+            $user->referral_code = $uniqueCode;
+            $user->save();
+        }
+
+        // Referral Quest Stats
+        $approvedReferralsCount = $user->approvedReferrals()->count();
+        $pendingReferralsCount = $user->pendingReferrals()->count();
+        $referralQuestTarget = 5;
+        $referralQuestProgress = min($approvedReferralsCount, $referralQuestTarget);
+        $referralsList = $user->referrals()->latest()->take(6)->get();
+
         $entryFee = (int) \App\Models\GameSetting::getVal('entry_fee', 50);
 
-        return view('user.home', compact('user', 'activeSession', 'recentGames', 'leaderboard', 'totalGames', 'accuracy', 'bestStreak', 'transactions', 'entryFee'));
+        return view('user.home', compact(
+            'user',
+            'activeSession',
+            'recentGames',
+            'leaderboard',
+            'totalGames',
+            'accuracy',
+            'bestStreak',
+            'transactions',
+            'entryFee',
+            'approvedReferralsCount',
+            'pendingReferralsCount',
+            'referralQuestTarget',
+            'referralQuestProgress',
+            'referralsList'
+        ));
     }
 
     public function topUp(Request $request)

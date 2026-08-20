@@ -34,6 +34,16 @@ class AuthController extends Controller
                 return back()->withErrors(['email' => 'Your account has been deactivated. Please contact an admin.']);
             }
 
+            if (!Auth::user()->isAdmin() && Auth::user()->isPending()) {
+                Auth::logout();
+                return back()->withErrors(['email' => '⏳ Your account is currently PENDING Admin approval. Your 200 welcome points and account access will be activated once an administrator approves your registration.']);
+            }
+
+            if (!Auth::user()->isAdmin() && Auth::user()->status === 'rejected') {
+                Auth::logout();
+                return back()->withErrors(['email' => '❌ Your account registration was rejected by an administrator.']);
+            }
+
             if (Auth::user()->isAdmin()) {
                 return redirect()->intended(route('admin.dashboard'));
             }
@@ -60,36 +70,43 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'referral_code' => 'nullable|string|max:50',
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
-        $welcomeBonus = (int) \App\Models\GameSetting::getVal('welcome_bonus', 200);
+        // Check referral code if provided
+        $referrerId = null;
+        if ($request->filled('referral_code')) {
+            $refCode = strtoupper(trim($request->referral_code));
+            $referrer = User::where('referral_code', $refCode)->first();
+            if ($referrer) {
+                $referrerId = $referrer->id;
+            } else {
+                return back()->withErrors(['referral_code' => 'The referral / coupon code entered does not exist. Please check and try again or leave blank.'])->withInput();
+            }
+        }
+
+        // Generate unique referral code for this new player
+        do {
+            $uniqueCode = 'QUI-' . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 6));
+        } while (User::where('referral_code', $uniqueCode)->exists());
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user',
-            'points' => $welcomeBonus, // Dynamic welcome bonus
+            'status' => 'pending', // Requires admin approval before login & bonus grant
+            'referral_code' => $uniqueCode,
+            'referred_by' => $referrerId,
+            'points' => 0, // Points are awarded when approved by Admin
             'is_active' => true,
         ]);
 
-        // Record initial welcome bonus transaction
-        PointTransaction::create([
-            'user_id' => $user->id,
-            'game_session_id' => null,
-            'type' => 'register_bonus',
-            'amount' => $welcomeBonus,
-            'balance_after' => $welcomeBonus,
-            'description' => "Welcome registration bonus (+{$welcomeBonus} Quiwin Points)",
-        ]);
-
-        Auth::login($user);
-
-        return redirect()->route('user.home')->with('success', "Welcome to Quiwin! {$welcomeBonus} bonus points have been added to your account.");
+        return redirect()->route('login')->with('success', "🎉 Registration successful! Your account is now PENDING Admin Approval. Once approved by the administrator, you will receive your 200 welcome points and your coupon code ({$uniqueCode}) will be active!");
     }
 
     public function logout(Request $request)

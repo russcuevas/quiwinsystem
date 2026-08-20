@@ -49,6 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::post('/users/{userId}/approve', [AdminController::class, 'approveUser'])->name('users.approve');
+        Route::post('/users/{userId}/reject', [AdminController::class, 'rejectUser'])->name('users.reject');
         Route::post('/users/{userId}/points', [AdminController::class, 'updateUserPoints'])->name('users.points');
         Route::post('/users/{userId}/toggle-status', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
         Route::get('/questions', [AdminController::class, 'questions'])->name('questions');

@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Quiwin') - Ultimate Quiz Challenge</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+
     <!-- FontAwesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -40,7 +43,7 @@
 
         body {
             background-color: var(--bg-primary);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
                 radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),
                 radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.06) 0%, transparent 60%);
@@ -309,8 +312,15 @@
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Audio FX Engine using Web Audio API */
@@ -318,6 +328,7 @@
     </style>
     @stack('styles')
 </head>
+
 <body>
     <!-- Ambient Canvas for Background Particles -->
     <canvas id="ambient-canvas" class="ambient-glow"></canvas>
@@ -326,7 +337,8 @@
     <nav class="navbar">
         <div class="main-container">
             <div class="nav-inner">
-                <a href="{{ auth()->check() ? (auth()->user()->isAdmin() ? route('admin.dashboard') : route('user.home')) : route('login') }}" class="brand-logo">
+                <a href="{{ auth()->check() ? (auth()->user()->isAdmin() ? route('admin.dashboard') : route('user.home')) : route('login') }}"
+                    class="brand-logo">
                     <div class="logo-icon">
                         <i class="fa-solid fa-trophy"></i>
                     </div>
@@ -335,7 +347,7 @@
 
                 <div class="nav-actions">
                     @auth
-                        @if(!auth()->user()->isAdmin())
+                        @if (!auth()->user()->isAdmin())
                             <!-- Points balance -->
                             <div class="points-badge" id="nav-points-badge" title="Your current points balance">
                                 <i class="fa-solid fa-coins"></i>
@@ -343,33 +355,40 @@
                             </div>
 
                             <!-- Quick Top Up Button -->
-                            <button type="button" class="btn btn-outline" style="padding: 0.45rem 0.85rem; font-size: 0.85rem;" onclick="openTopUpModal()">
+                            <button type="button" class="btn btn-outline"
+                                style="padding: 0.45rem 0.85rem; font-size: 0.85rem;" onclick="openTopUpModal()">
                                 <i class="fa-solid fa-plus-circle text-amber-400"></i> Top-Up
                             </button>
                         @else
-                            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline" style="padding: 0.45rem 0.85rem; font-size: 0.85rem;">
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline"
+                                style="padding: 0.45rem 0.85rem; font-size: 0.85rem;">
                                 <i class="fa-solid fa-shield-halved text-indigo-400"></i> Admin Panel
                             </a>
-                            <a href="{{ route('admin.users') }}" class="btn btn-outline" style="padding: 0.45rem 0.85rem; font-size: 0.85rem;">
+                            <a href="{{ route('admin.users') }}" class="btn btn-outline"
+                                style="padding: 0.45rem 0.85rem; font-size: 0.85rem;">
                                 <i class="fa-solid fa-users text-cyan-400"></i> Players
                             </a>
-                            <a href="{{ route('admin.questions') }}" class="btn btn-outline" style="padding: 0.45rem 0.85rem; font-size: 0.85rem;">
+                            <a href="{{ route('admin.questions') }}" class="btn btn-outline"
+                                style="padding: 0.45rem 0.85rem; font-size: 0.85rem;">
                                 <i class="fa-solid fa-database text-purple-400"></i> Questions
                             </a>
-                            <a href="{{ route('admin.settings') }}" class="btn btn-outline" style="padding: 0.45rem 0.85rem; font-size: 0.85rem; border-color: rgba(16, 185, 129, 0.4); color: #34d399;">
+                            <a href="{{ route('admin.settings') }}" class="btn btn-outline"
+                                style="padding: 0.45rem 0.85rem; font-size: 0.85rem; border-color: rgba(16, 185, 129, 0.4); color: #34d399;">
                                 <i class="fa-solid fa-sliders text-emerald-400"></i> Pointing Rules
                             </a>
                         @endif
 
                         <!-- User Profile Info & Logout -->
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span style="font-weight: 600; color: #e2e8f0; font-size: 0.9rem; display: flex; align-items: center; gap: 0.4rem;">
+                            <span
+                                style="font-weight: 600; color: #e2e8f0; font-size: 0.9rem; display: flex; align-items: center; gap: 0.4rem;">
                                 <i class="fa-solid fa-circle-user text-indigo-400" style="font-size: 1.1rem;"></i>
                                 {{ auth()->user()->name }}
                             </span>
                             <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                                 @csrf
-                                <button type="submit" class="btn btn-outline" style="padding: 0.45rem 0.75rem; font-size: 0.85rem; color: #f87171;" title="Logout">
+                                <button type="submit" class="btn btn-outline"
+                                    style="padding: 0.45rem 0.75rem; font-size: 0.85rem; color: #f87171;" title="Logout">
                                     <i class="fa-solid fa-right-from-bracket"></i>
                                 </button>
                             </form>
@@ -388,21 +407,21 @@
     <!-- Content Area -->
     <main style="flex: 1; padding: 2rem 0;">
         <div class="main-container">
-            @if(session('success'))
+            @if (session('success'))
                 <div class="alert-box alert-success">
                     <i class="fa-solid fa-circle-check fa-lg"></i>
                     <div>{{ session('success') }}</div>
                 </div>
             @endif
 
-            @if(session('error'))
+            @if (session('error'))
                 <div class="alert-box alert-error">
                     <i class="fa-solid fa-circle-exclamation fa-lg"></i>
                     <div>{{ session('error') }}</div>
                 </div>
             @endif
 
-            @if(session('info'))
+            @if (session('info'))
                 <div class="alert-box alert-info">
                     <i class="fa-solid fa-circle-info fa-lg"></i>
                     <div>{{ session('info') }}</div>
@@ -415,60 +434,72 @@
 
     <!-- Global Top-Up Modal -->
     @auth
-    <div id="topUpModal" class="modal-overlay">
-        <div class="modal-card">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
-                <div style="display: flex; align-items: center; gap: 0.6rem;">
-                    <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(245, 158, 11, 0.2); display: flex; align-items: center; justify-content: center; color: #f59e0b;">
-                        <i class="fa-solid fa-coins fa-lg"></i>
+        <div id="topUpModal" class="modal-overlay">
+            <div class="modal-card">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                        <div
+                            style="width: 36px; height: 36px; border-radius: 10px; background: rgba(245, 158, 11, 0.2); display: flex; align-items: center; justify-content: center; color: #f59e0b;">
+                            <i class="fa-solid fa-coins fa-lg"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff;">Top-Up Quiwin Points</h3>
                     </div>
-                    <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff;">Top-Up Quiwin Points</h3>
-                </div>
-                <button onclick="closeTopUpModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">
-                Select a top-up package or enter a custom amount of points to add to your balance.
-            </p>
-
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.25rem;">
-                <button type="button" class="btn btn-outline" style="border-color: rgba(245, 158, 11, 0.4); font-size: 0.95rem; font-weight: 700; color: #fcd34d;" onclick="setTopUpAmount(100)">
-                    +100 PTS
-                </button>
-                <button type="button" class="btn btn-outline" style="border-color: rgba(245, 158, 11, 0.4); font-size: 0.95rem; font-weight: 700; color: #fcd34d;" onclick="setTopUpAmount(250)">
-                    +250 PTS
-                </button>
-                <button type="button" class="btn btn-outline" style="border-color: rgba(245, 158, 11, 0.4); font-size: 0.95rem; font-weight: 700; color: #fcd34d;" onclick="setTopUpAmount(500)">
-                    +500 PTS
-                </button>
-            </div>
-
-            <form action="{{ route('user.topup') }}" method="POST" id="topUpForm">
-                @csrf
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.4rem;">
-                        Amount to Add (PTS)
-                    </label>
-                    <input type="number" name="amount" id="topUpAmountInput" min="10" max="10000" value="100" class="form-input" required>
-                </div>
-
-                <div style="display: flex; gap: 0.75rem;">
-                    <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeTopUpModal()">Cancel</button>
-                    <button type="submit" class="btn btn-gold" style="flex: 2;">
-                        <i class="fa-solid fa-bolt"></i> Confirm Top-Up
+                    <button onclick="closeTopUpModal()"
+                        style="background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;">
+                        <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-            </form>
+
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">
+                    Select a top-up package or enter a custom amount of points to add to your balance.
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.25rem;">
+                    <button type="button" class="btn btn-outline"
+                        style="border-color: rgba(245, 158, 11, 0.4); font-size: 0.95rem; font-weight: 700; color: #fcd34d;"
+                        onclick="setTopUpAmount(100)">
+                        +100 PTS
+                    </button>
+                    <button type="button" class="btn btn-outline"
+                        style="border-color: rgba(245, 158, 11, 0.4); font-size: 0.95rem; font-weight: 700; color: #fcd34d;"
+                        onclick="setTopUpAmount(250)">
+                        +250 PTS
+                    </button>
+                    <button type="button" class="btn btn-outline"
+                        style="border-color: rgba(245, 158, 11, 0.4); font-size: 0.95rem; font-weight: 700; color: #fcd34d;"
+                        onclick="setTopUpAmount(500)">
+                        +500 PTS
+                    </button>
+                </div>
+
+                <form action="{{ route('user.topup') }}" method="POST" id="topUpForm">
+                    @csrf
+                    <div style="margin-bottom: 1.5rem;">
+                        <label
+                            style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.4rem;">
+                            Amount to Add (PTS)
+                        </label>
+                        <input type="number" name="amount" id="topUpAmountInput" min="10" max="10000"
+                            value="100" class="form-input" required>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button type="button" class="btn btn-outline" style="flex: 1;"
+                            onclick="closeTopUpModal()">Cancel</button>
+                        <button type="submit" class="btn btn-gold" style="flex: 2;">
+                            <i class="fa-solid fa-bolt"></i> Confirm Top-Up
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
     @endauth
 
     <!-- Footer -->
-    <footer style="border-top: 1px solid var(--bg-card-border); padding: 1.5rem 0; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+    <footer
+        style="border-top: 1px solid var(--bg-card-border); padding: 1.5rem 0; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
         <div class="main-container">
-            <p>Quiwin Interactive Quiz Platform &bull; Powered by Open Trivia DB &bull; {{ date('Y') }}</p>
+            <p>Quiwin &bull; {{ date('Y') }}</p>
         </div>
     </footer>
 
@@ -499,7 +530,7 @@
                     gain.connect(this.ctx.destination);
                     osc.start();
                     osc.stop(this.ctx.currentTime + duration);
-                } catch(e){}
+                } catch (e) {}
             }
             correct() {
                 this.playBeep(523.25, 'sine', 0.12, 0.2); // C5
@@ -536,7 +567,7 @@
         // Ambient canvas particles
         (function() {
             const canvas = document.getElementById('ambient-canvas');
-            if(!canvas) return;
+            if (!canvas) return;
             const ctx = canvas.getContext('2d');
             let w, h, particles = [];
 
@@ -547,7 +578,7 @@
             window.addEventListener('resize', resize);
             resize();
 
-            for(let i = 0; i < 40; i++) {
+            for (let i = 0; i < 40; i++) {
                 particles.push({
                     x: Math.random() * w,
                     y: Math.random() * h,
@@ -563,10 +594,10 @@
                 particles.forEach(p => {
                     p.x += p.dx;
                     p.y += p.dy;
-                    if(p.x < 0) p.x = w;
-                    if(p.x > w) p.x = 0;
-                    if(p.y < 0) p.y = h;
-                    if(p.y > h) p.y = 0;
+                    if (p.x < 0) p.x = w;
+                    if (p.x > w) p.x = 0;
+                    if (p.y < 0) p.y = h;
+                    if (p.y > h) p.y = 0;
 
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -581,17 +612,20 @@
         // Modal Helpers
         function openTopUpModal() {
             const modal = document.getElementById('topUpModal');
-            if(modal) modal.classList.add('active');
+            if (modal) modal.classList.add('active');
         }
+
         function closeTopUpModal() {
             const modal = document.getElementById('topUpModal');
-            if(modal) modal.classList.remove('active');
+            if (modal) modal.classList.remove('active');
         }
+
         function setTopUpAmount(amt) {
             const input = document.getElementById('topUpAmountInput');
-            if(input) input.value = amt;
+            if (input) input.value = amt;
         }
     </script>
     @stack('scripts')
 </body>
+
 </html>
