@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 // Root redirect
 Route::get('/', function () {
     if (auth()->check()) {
-        return auth()->user()->isAdmin() ? redirect()->route('admin.dashboard') : redirect()->route('user.home');
+        /** @var User $user */
+        $user = auth()->user();
+        return $user->isAdmin() ? redirect()->route('admin.dashboard') : redirect()->route('user.home');
     }
     return redirect()->route('login');
 });
@@ -36,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [UserController::class, 'home'])->name('user.home');
     Route::post('/user/top-up', [UserController::class, 'topUp'])->name('user.topup');
     Route::post('/user/withdraw', [UserController::class, 'withdraw'])->name('user.withdraw');
+    Route::post('/user/rank-reward/claim', [UserController::class, 'claimRankReward'])->name('user.rankreward.claim');
     Route::post('/user/mail/{mailId}/read', [UserController::class, 'markMailRead'])->name('user.mail.read');
     Route::post('/user/mail/read-all', [UserController::class, 'markAllMailsRead'])->name('user.mail.readall');
 

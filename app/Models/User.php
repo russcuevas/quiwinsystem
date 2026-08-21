@@ -24,6 +24,7 @@ class User extends Authenticatable
         'daily_streak',
         'last_played_date',
         'weekly_quest_claims',
+        'claimed_rank_rewards',
         'is_active',
     ];
 
@@ -37,10 +38,17 @@ class User extends Authenticatable
         'points' => 'integer',
         'daily_streak' => 'integer',
         'weekly_quest_claims' => 'integer',
+        'claimed_rank_rewards' => 'array',
         'last_played_date' => 'date',
         'is_active' => 'boolean',
         'quest_rewarded' => 'boolean',
     ];
+
+    public function hasClaimedRankReward(string $tier): bool
+    {
+        $claimed = $this->claimed_rank_rewards ?? [];
+        return in_array($tier, $claimed, true);
+    }
 
     public function isAdmin(): bool
     {

@@ -918,7 +918,7 @@
 
                 <!-- Player Current Rank Banner -->
                 <div
-                    style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 27, 75, 0.75)); border: 1px solid {{ $rankBorder }}; border-radius: 0.95rem; padding: 1rem; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+                    style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 27, 75, 0.75)); border: 1px solid {{ $rankBorder }}; border-radius: 0.95rem; padding: 1rem; margin-bottom: 0.85rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
                         <div
                             style="width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,0.06); border: 2px solid {{ $rankBorder }}; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: {{ $rankColor }}; box-shadow: 0 0 20px {{ $rankColor }}44;">
@@ -935,16 +935,49 @@
                     <div style="text-align: right;">
                         <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600;">Your Balance</div>
                         <div style="font-size: 1.2rem; font-weight: 900; color: #fbbf24;">
-                            {{ number_format($userPts) }} <span style="font-size: 0.75rem; color: #94a3b8;">PTS</span>
+                            <span id="rankModalPointsDisplay">{{ number_format($userPts) }}</span> <span style="font-size: 0.75rem; color: #94a3b8;">PTS</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 6 Tiers Grid / Progression Ladder -->
+                <!-- Anti-Abuse Protection Notice & Match Requirement Progress -->
+                <div
+                    style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 0.85rem; padding: 0.75rem 0.95rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; min-width: 0; flex: 1;">
+                        <div
+                            style="width: 32px; height: 32px; border-radius: 8px; background: rgba(99, 102, 241, 0.2); display: flex; align-items: center; justify-content: center; color: #818cf8; font-size: 0.9rem; flex-shrink: 0;">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div style="min-width: 0; flex: 1;">
+                            <div style="font-size: 0.78rem; font-weight: 800; color: #fff; line-height: 1.2;">
+                                Anti-Abuse Rule: Play 20 Matches
+                            </div>
+                            <div style="font-size: 0.7rem; color: #94a3b8; line-height: 1.2; margin-top: 0.15rem;">
+                                You must complete at least 20 matches before claiming rank milestone points.
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right; flex-shrink: 0;">
+                        <span
+                            style="font-size: 0.75rem; font-weight: 800; padding: 0.25rem 0.65rem; border-radius: 9999px; background: {{ $totalGames >= 20 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)' }}; color: {{ $totalGames >= 20 ? '#34d399' : '#fbbf24' }}; border: 1px solid {{ $totalGames >= 20 ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)' }};">
+                            @if ($totalGames >= 20)
+                                <i class="fa-solid fa-circle-check"></i> {{ $totalGames }}/20 Matches (Unlocked)
+                            @else
+                                <i class="fa-solid fa-gamepad"></i> {{ $totalGames }}/20 Matches ({{ 20 - $totalGames }} Left)
+                            @endif
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 6 Tiers Grid / Progression Ladder with Claimable Rewards -->
                 <div style="display: flex; flex-direction: column; gap: 0.65rem;">
 
-                    <!-- Tier 6: Legend (5000+ PTS) -->
-                    @php $isCurrentLegend = ($userPts >= 5000); @endphp
+                    <!-- Tier 6: Legend (5000+ PTS) -> +1,000 PTS Reward -->
+                    @php
+                        $isCurrentLegend = ($userPts >= 5000);
+                        $isClaimedLegend = in_array('legend', $claimedRankRewards ?? [], true);
+                        $canClaimLegend = ($userPts >= 5000 && $totalGames >= 20 && !$isClaimedLegend);
+                    @endphp
                     <div class="rank-tier-card {{ $isCurrentLegend ? 'active-tier' : '' }}"
                         style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentLegend ? '#f43f5e' : 'rgba(244, 63, 94, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; position: relative;">
                         <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
@@ -956,31 +989,42 @@
                                 <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
                                     <span style="font-size: 0.95rem; font-weight: 900; color: #f43f5e;">Legend 🔥</span>
                                     <span
-                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(244, 63, 94, 0.2); color: #fda4af; padding: 0.1rem 0.45rem; border-radius: 9999px;">5,000+
-                                        PTS</span>
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(244, 63, 94, 0.2); color: #fda4af; padding: 0.1rem 0.45rem; border-radius: 9999px;">5,000+ PTS</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.1rem 0.45rem; border-radius: 9999px;">🎁 +1,000 PTS Reward</span>
                                 </div>
-                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">The pinnacle of
-                                    Quiwin trivia gods. Highest prestige & glory!</div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">The pinnacle of Quiwin trivia gods. Highest prestige & glory!</div>
                             </div>
                         </div>
-                        <div style="flex-shrink: 0; text-align: right;">
-                            @if ($isCurrentLegend)
-                                <span
-                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #f43f5e, #e11d48); color: #fff; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(244, 63, 94, 0.6);">
-                                    YOU ARE HERE ⭐
+                        <div style="flex-shrink: 0; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
+                            @if ($isClaimedLegend)
+                                <span style="font-size: 0.72rem; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.25rem 0.65rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.3rem;">
+                                    <i class="fa-solid fa-circle-check"></i> Claimed (+1,000 PTS)
+                                </span>
+                            @elseif ($canClaimLegend)
+                                <button type="button" onclick="claimRankTierReward('legend', this)" class="btn btn-gold claim-rank-btn"
+                                    style="font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 9999px; cursor: pointer;">
+                                    <i class="fa-solid fa-gift"></i> Claim +1,000 PTS
+                                </button>
+                            @elseif ($userPts >= 5000 && $totalGames < 20)
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px dashed rgba(245, 158, 11, 0.4); padding: 0.22rem 0.55rem; border-radius: 9999px;"
+                                    title="Play 20 matches to unlock claim">
+                                    <i class="fa-solid fa-lock text-amber-400"></i> Need 20 Matches ({{ $totalGames }}/20)
                                 </span>
                             @else
-                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;">
-                                    <i class="fa-solid fa-lock"></i> 5,000 PTS
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 0.22rem 0.55rem; border-radius: 9999px;">
+                                    <i class="fa-solid fa-lock"></i> 5,000 PTS (+1k)
                                 </span>
                             @endif
                         </div>
                     </div>
 
-                    <!-- Tier 5: Grandmaster (2500 - 4999 PTS) -->
+                    <!-- Tier 5: Grandmaster (2500 - 4999 PTS) -> +500 PTS Reward -->
                     @php
-                        $isCurrentGrandmaster = $userPts >= 2500 && $userPts < 5000;
-                        $isPastGrandmaster = $userPts >= 5000;
+                        $isCurrentGrandmaster = ($userPts >= 2500 && $userPts < 5000);
+                        $isPastGrandmaster = ($userPts >= 5000);
+                        $isClaimedGrandmaster = in_array('grandmaster', $claimedRankRewards ?? [], true);
+                        $canClaimGrandmaster = ($userPts >= 2500 && $totalGames >= 20 && !$isClaimedGrandmaster);
                     @endphp
                     <div class="rank-tier-card {{ $isCurrentGrandmaster ? 'active-tier' : '' }}"
                         style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentGrandmaster ? '#06b6d4' : 'rgba(6, 182, 212, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
@@ -991,36 +1035,43 @@
                             </div>
                             <div>
                                 <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
-                                    <span style="font-size: 0.95rem; font-weight: 900; color: #38bdf8;">Grandmaster
-                                        💎</span>
+                                    <span style="font-size: 0.95rem; font-weight: 900; color: #38bdf8;">Grandmaster 💎</span>
                                     <span
-                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(6, 182, 212, 0.2); color: #67e8f9; padding: 0.1rem 0.45rem; border-radius: 9999px;">2,500
-                                        – 4,999 PTS</span>
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(6, 182, 212, 0.2); color: #67e8f9; padding: 0.1rem 0.45rem; border-radius: 9999px;">2,500 – 4,999 PTS</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.1rem 0.45rem; border-radius: 9999px;">🎁 +500 PTS Reward</span>
                                 </div>
-                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Exceptional diamond
-                                    champion with extraordinary trivia mastery.</div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Exceptional diamond champion with extraordinary trivia mastery.</div>
                             </div>
                         </div>
-                        <div style="flex-shrink: 0; text-align: right;">
-                            @if ($isCurrentGrandmaster)
-                                <span
-                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #06b6d4, #0891b2); color: #fff; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(6, 182, 212, 0.6);">
-                                    YOU ARE HERE ⭐
+                        <div style="flex-shrink: 0; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
+                            @if ($isClaimedGrandmaster)
+                                <span style="font-size: 0.72rem; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.25rem 0.65rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.3rem;">
+                                    <i class="fa-solid fa-circle-check"></i> Claimed (+500 PTS)
                                 </span>
-                            @elseif($isPastGrandmaster)
-                                <span style="font-size: 0.75rem; color: #34d399; font-weight: 700;"><i
-                                        class="fa-solid fa-circle-check"></i></span>
+                            @elseif ($canClaimGrandmaster)
+                                <button type="button" onclick="claimRankTierReward('grandmaster', this)" class="btn btn-gold claim-rank-btn"
+                                    style="font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 9999px; cursor: pointer;">
+                                    <i class="fa-solid fa-gift"></i> Claim +500 PTS
+                                </button>
+                            @elseif ($userPts >= 2500 && $totalGames < 20)
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px dashed rgba(245, 158, 11, 0.4); padding: 0.22rem 0.55rem; border-radius: 9999px;">
+                                    <i class="fa-solid fa-lock text-amber-400"></i> Need 20 Matches ({{ $totalGames }}/20)
+                                </span>
                             @else
-                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;"><i
-                                        class="fa-solid fa-lock"></i> 2,500 PTS</span>
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 0.22rem 0.55rem; border-radius: 9999px;">
+                                    <i class="fa-solid fa-lock"></i> 2,500 PTS (+500)
+                                </span>
                             @endif
                         </div>
                     </div>
 
-                    <!-- Tier 4: Master (1000 - 2499 PTS) -->
+                    <!-- Tier 4: Master (1000 - 2499 PTS) -> +100 PTS Reward -->
                     @php
-                        $isCurrentMaster = $userPts >= 1000 && $userPts < 2500;
-                        $isPastMaster = $userPts >= 2500;
+                        $isCurrentMaster = ($userPts >= 1000 && $userPts < 2500);
+                        $isPastMaster = ($userPts >= 2500);
+                        $isClaimedMaster = in_array('master', $claimedRankRewards ?? [], true);
+                        $canClaimMaster = ($userPts >= 1000 && $totalGames >= 20 && !$isClaimedMaster);
                     @endphp
                     <div class="rank-tier-card {{ $isCurrentMaster ? 'active-tier' : '' }}"
                         style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentMaster ? '#a855f7' : 'rgba(168, 85, 247, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
@@ -1033,33 +1084,41 @@
                                 <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
                                     <span style="font-size: 0.95rem; font-weight: 900; color: #c084fc;">Master 👑</span>
                                     <span
-                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(168, 85, 247, 0.2); color: #d8b4fe; padding: 0.1rem 0.45rem; border-radius: 9999px;">1,000
-                                        – 2,499 PTS</span>
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(168, 85, 247, 0.2); color: #d8b4fe; padding: 0.1rem 0.45rem; border-radius: 9999px;">1,000 – 2,499 PTS</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.1rem 0.45rem; border-radius: 9999px;">🎁 +100 PTS Reward</span>
                                 </div>
-                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Elite trivia master
-                                    commanding speed, knowledge, and high streaks.</div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Elite trivia master commanding speed, knowledge, and high streaks.</div>
                             </div>
                         </div>
-                        <div style="flex-shrink: 0; text-align: right;">
-                            @if ($isCurrentMaster)
-                                <span
-                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #a855f7, #7e22ce); color: #fff; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);">
-                                    YOU ARE HERE ⭐
+                        <div style="flex-shrink: 0; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
+                            @if ($isClaimedMaster)
+                                <span style="font-size: 0.72rem; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.25rem 0.65rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.3rem;">
+                                    <i class="fa-solid fa-circle-check"></i> Claimed (+100 PTS)
                                 </span>
-                            @elseif($isPastMaster)
-                                <span style="font-size: 0.75rem; color: #34d399; font-weight: 700;"><i
-                                        class="fa-solid fa-circle-check"></i></span>
+                            @elseif ($canClaimMaster)
+                                <button type="button" onclick="claimRankTierReward('master', this)" class="btn btn-gold claim-rank-btn"
+                                    style="font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 9999px; cursor: pointer;">
+                                    <i class="fa-solid fa-gift"></i> Claim +100 PTS
+                                </button>
+                            @elseif ($userPts >= 1000 && $totalGames < 20)
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px dashed rgba(245, 158, 11, 0.4); padding: 0.22rem 0.55rem; border-radius: 9999px;">
+                                    <i class="fa-solid fa-lock text-amber-400"></i> Need 20 Matches ({{ $totalGames }}/20)
+                                </span>
                             @else
-                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;"><i
-                                        class="fa-solid fa-lock"></i> 1,000 PTS</span>
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 0.22rem 0.55rem; border-radius: 9999px;">
+                                    <i class="fa-solid fa-lock"></i> 1,000 PTS (+100)
+                                </span>
                             @endif
                         </div>
                     </div>
 
-                    <!-- Tier 3: Veteran (500 - 999 PTS) -->
+                    <!-- Tier 3: Veteran (500 - 999 PTS) -> +50 PTS Reward -->
                     @php
-                        $isCurrentVeteran = $userPts >= 500 && $userPts < 1000;
-                        $isPastVeteran = $userPts >= 1000;
+                        $isCurrentVeteran = ($userPts >= 500 && $userPts < 1000);
+                        $isPastVeteran = ($userPts >= 1000);
+                        $isClaimedVeteran = in_array('veteran', $claimedRankRewards ?? [], true);
+                        $canClaimVeteran = ($userPts >= 500 && $totalGames >= 20 && !$isClaimedVeteran);
                     @endphp
                     <div class="rank-tier-card {{ $isCurrentVeteran ? 'active-tier' : '' }}"
                         style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentVeteran ? '#f59e0b' : 'rgba(245, 158, 11, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
@@ -1072,33 +1131,41 @@
                                 <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
                                     <span style="font-size: 0.95rem; font-weight: 900; color: #fbbf24;">Veteran ⚡</span>
                                     <span
-                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fde68a; padding: 0.1rem 0.45rem; border-radius: 9999px;">500
-                                        – 999 PTS</span>
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fde68a; padding: 0.1rem 0.45rem; border-radius: 9999px;">500 – 999 PTS</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.1rem 0.45rem; border-radius: 9999px;">🎁 +50 PTS Reward</span>
                                 </div>
-                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Experienced
-                                    competitor with strong trivia accuracy across rounds.</div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Experienced competitor with strong trivia accuracy across rounds.</div>
                             </div>
                         </div>
-                        <div style="flex-shrink: 0; text-align: right;">
-                            @if ($isCurrentVeteran)
-                                <span
-                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #f59e0b, #d97706); color: #090d16; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);">
-                                    YOU ARE HERE ⭐
+                        <div style="flex-shrink: 0; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
+                            @if ($isClaimedVeteran)
+                                <span style="font-size: 0.72rem; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.25rem 0.65rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.3rem;">
+                                    <i class="fa-solid fa-circle-check"></i> Claimed (+50 PTS)
                                 </span>
-                            @elseif($isPastVeteran)
-                                <span style="font-size: 0.75rem; color: #34d399; font-weight: 700;"><i
-                                        class="fa-solid fa-circle-check"></i></span>
+                            @elseif ($canClaimVeteran)
+                                <button type="button" onclick="claimRankTierReward('veteran', this)" class="btn btn-gold claim-rank-btn"
+                                    style="font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 9999px; cursor: pointer;">
+                                    <i class="fa-solid fa-gift"></i> Claim +50 PTS
+                                </button>
+                            @elseif ($userPts >= 500 && $totalGames < 20)
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px dashed rgba(245, 158, 11, 0.4); padding: 0.22rem 0.55rem; border-radius: 9999px;">
+                                    <i class="fa-solid fa-lock text-amber-400"></i> Need 20 Matches ({{ $totalGames }}/20)
+                                </span>
                             @else
-                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;"><i
-                                        class="fa-solid fa-lock"></i> 500 PTS</span>
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 0.22rem 0.55rem; border-radius: 9999px;">
+                                    <i class="fa-solid fa-lock"></i> 500 PTS (+50)
+                                </span>
                             @endif
                         </div>
                     </div>
 
-                    <!-- Tier 2: Challenger (200 - 499 PTS) -->
+                    <!-- Tier 2: Challenger (200 - 499 PTS) -> +20 PTS Reward -->
                     @php
-                        $isCurrentChallenger = $userPts >= 200 && $userPts < 500;
-                        $isPastChallenger = $userPts >= 500;
+                        $isCurrentChallenger = ($userPts >= 200 && $userPts < 500);
+                        $isPastChallenger = ($userPts >= 500);
+                        $isClaimedChallenger = in_array('challenger', $claimedRankRewards ?? [], true);
+                        $canClaimChallenger = ($userPts >= 200 && $totalGames >= 20 && !$isClaimedChallenger);
                     @endphp
                     <div class="rank-tier-card {{ $isCurrentChallenger ? 'active-tier' : '' }}"
                         style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentChallenger ? '#38bdf8' : 'rgba(56, 189, 248, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
@@ -1109,36 +1176,41 @@
                             </div>
                             <div>
                                 <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
-                                    <span style="font-size: 0.95rem; font-weight: 900; color: #38bdf8;">Challenger
-                                        ⚔️</span>
+                                    <span style="font-size: 0.95rem; font-weight: 900; color: #38bdf8;">Challenger ⚔️</span>
                                     <span
-                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(56, 189, 248, 0.2); color: #bae6fd; padding: 0.1rem 0.45rem; border-radius: 9999px;">200
-                                        – 499 PTS</span>
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(56, 189, 248, 0.2); color: #bae6fd; padding: 0.1rem 0.45rem; border-radius: 9999px;">200 – 499 PTS</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.1rem 0.45rem; border-radius: 9999px;">🎁 +20 PTS Reward</span>
                                 </div>
-                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Active arena fighter
-                                    proving skills and building point multiplier streaks.</div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Active arena fighter proving skills and building point multiplier streaks.</div>
                             </div>
                         </div>
-                        <div style="flex-shrink: 0; text-align: right;">
-                            @if ($isCurrentChallenger)
-                                <span
-                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);">
-                                    YOU ARE HERE ⭐
+                        <div style="flex-shrink: 0; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
+                            @if ($isClaimedChallenger)
+                                <span style="font-size: 0.72rem; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.25rem 0.65rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.3rem;">
+                                    <i class="fa-solid fa-circle-check"></i> Claimed (+20 PTS)
                                 </span>
-                            @elseif($isPastChallenger)
-                                <span style="font-size: 0.75rem; color: #34d399; font-weight: 700;"><i
-                                        class="fa-solid fa-circle-check"></i></span>
+                            @elseif ($canClaimChallenger)
+                                <button type="button" onclick="claimRankTierReward('challenger', this)" class="btn btn-gold claim-rank-btn"
+                                    style="font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 9999px; cursor: pointer;">
+                                    <i class="fa-solid fa-gift"></i> Claim +20 PTS
+                                </button>
+                            @elseif ($userPts >= 200 && $totalGames < 20)
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px dashed rgba(245, 158, 11, 0.4); padding: 0.22rem 0.55rem; border-radius: 9999px;">
+                                    <i class="fa-solid fa-lock text-amber-400"></i> Need 20 Matches ({{ $totalGames }}/20)
+                                </span>
                             @else
-                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;"><i
-                                        class="fa-solid fa-lock"></i> 200 PTS</span>
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 0.22rem 0.55rem; border-radius: 9999px;">
+                                    <i class="fa-solid fa-lock"></i> 200 PTS (+20)
+                                </span>
                             @endif
                         </div>
                     </div>
 
-                    <!-- Tier 1: Novice (0 - 199 PTS) -->
+                    <!-- Tier 1: Novice (0 - 199 PTS) -> 0 PTS Reward -->
                     @php
-                        $isCurrentNovice = $userPts < 200;
-                        $isPastNovice = $userPts >= 200;
+                        $isCurrentNovice = ($userPts < 200);
+                        $isPastNovice = ($userPts >= 200);
                     @endphp
                     <div class="rank-tier-card {{ $isCurrentNovice ? 'active-tier' : '' }}"
                         style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentNovice ? '#94a3b8' : 'rgba(148, 163, 184, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
@@ -1151,11 +1223,11 @@
                                 <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
                                     <span style="font-size: 0.95rem; font-weight: 900; color: #cbd5e1;">Novice 🛡️</span>
                                     <span
-                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(148, 163, 184, 0.2); color: #e2e8f0; padding: 0.1rem 0.45rem; border-radius: 9999px;">0
-                                        – 199 PTS</span>
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(148, 163, 184, 0.2); color: #e2e8f0; padding: 0.1rem 0.45rem; border-radius: 9999px;">0 – 199 PTS</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 700; color: #64748b; padding: 0.1rem 0.45rem;">Starting Rank</span>
                                 </div>
-                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Entry tier for new
-                                    players starting their journey to the top.</div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Entry tier for new players starting their journey to the top.</div>
                             </div>
                         </div>
                         <div style="flex-shrink: 0; text-align: right;">
@@ -1389,6 +1461,31 @@
                 transform: rotate(0deg);
             }
         }
+        @keyframes pulseGlow {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+            }
+
+            50% {
+                transform: scale(1.04);
+                box-shadow: 0 0 20px rgba(245, 158, 11, 0.8);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+            }
+        }
+
+        .claim-rank-btn {
+            animation: pulseGlow 1.8s infinite ease-in-out;
+            transition: all 0.2s ease;
+        }
+
+        .claim-rank-btn:hover {
+            transform: scale(1.06) translateY(-1px);
+        }
     </style>
 @endsection
 
@@ -1404,6 +1501,58 @@
         function closeRankSystemModal() {
             const modal = document.getElementById('rankSystemModal');
             if (modal) modal.classList.remove('active');
+        }
+
+        async function claimRankTierReward(tier, btn) {
+            if (!btn) return;
+            const origHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Claiming...';
+            btn.style.opacity = '0.85';
+
+            try {
+                const response = await fetch("{{ route('user.rankreward.claim') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({ tier: tier })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update button to claimed badge
+                    btn.outerHTML = '<span style="font-size: 0.72rem; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.25rem 0.65rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.3rem;"><i class="fa-solid fa-circle-check"></i> Claimed (+' + Number(data.reward_points).toLocaleString() + ' PTS)</span>';
+
+                    // Update modal balance
+                    const modalDisplay = document.getElementById('rankModalPointsDisplay');
+                    if (modalDisplay) {
+                        modalDisplay.textContent = Number(data.new_points).toLocaleString();
+                    }
+
+                    // Play reward sound
+                    if (window.soundFX && typeof window.soundFX.correct === 'function') {
+                        window.soundFX.correct();
+                    }
+
+                    // Toast notification alert
+                    alert(data.message || "🎉 Reward Claimed Successfully!");
+                    window.location.reload();
+                } else {
+                    alert(data.message || "Unable to claim rank reward.");
+                    btn.disabled = false;
+                    btn.innerHTML = origHtml;
+                    btn.style.opacity = '1';
+                }
+            } catch (err) {
+                alert("An error occurred while connecting to server. Please try again.");
+                btn.disabled = false;
+                btn.innerHTML = origHtml;
+                btn.style.opacity = '1';
+            }
         }
 
         function openQuestModal(tab = 'daily') {
