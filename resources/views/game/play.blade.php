@@ -3,42 +3,42 @@
 @section('title', 'Quiwin Arena - Match #' . $session->id)
 
 @section('content')
-    <div style="max-width: 900px; margin: 0 auto; position: relative;">
+    <div style="max-width: 900px; margin: 0 auto; position: relative; padding-bottom: 3.5rem;">
 
         <!-- Top Arena Status Bar (Round, Points, Streak, Live Balance) -->
-        <div class="glass-card"
-            style="padding: 1.25rem 1.75rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; border: 1px solid rgba(255,255,255,0.12);">
+        <div class="glass-card arena-top-bar"
+            style="padding: clamp(0.75rem, 2vw, 1.25rem) clamp(0.85rem, 2.5vw, 1.75rem); margin-bottom: 1rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.65rem; border: 1px solid rgba(255,255,255,0.12);">
 
             <!-- Round & Difficulty Badge -->
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;">
                 <div id="round-badge"
-                    style="padding: 0.4rem 0.85rem; border-radius: 9999px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399;">
+                    style="padding: 0.35rem 0.75rem; border-radius: 9999px; font-weight: 800; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; white-space: nowrap;">
                     <i class="fa-solid fa-layer-group"></i> <span id="round-text">ROUND 1 &bull; EASY</span>
                 </div>
 
                 <div id="category-badge"
-                    style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 0.4rem 0.85rem; border-radius: 9999px; font-size: 0.85rem; color: #cbd5e1; font-weight: 600; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 0.35rem 0.75rem; border-radius: 9999px; font-size: 0.78rem; color: #cbd5e1; font-weight: 600; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     <i class="fa-solid fa-tag text-cyan-400"></i> <span id="category-text">Loading Category...</span>
                 </div>
             </div>
 
             <!-- Right Side: Streak & Live Score / Points -->
-            <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                 <!-- Streak Flame -->
                 <div id="streak-container"
-                    style="display: flex; align-items: center; gap: 0.4rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); padding: 0.4rem 0.85rem; border-radius: 9999px; font-weight: 800; font-size: 0.9rem; color: #fbbf24; transition: transform 0.2s ease;">
+                    style="display: flex; align-items: center; gap: 0.35rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); padding: 0.35rem 0.65rem; border-radius: 9999px; font-weight: 800; font-size: 0.82rem; color: #fbbf24; transition: transform 0.2s ease;">
                     <i class="fa-solid fa-fire text-amber-400" id="streak-icon"></i>
                     <span id="streak-count">0</span> STREAK
                 </div>
 
                 <!-- Live Net Delta -->
                 <div
-                    style="display: flex; align-items: center; gap: 0.4rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); padding: 0.4rem 0.85rem; border-radius: 9999px; font-weight: 800; font-size: 0.9rem; color: #a5b4fc;">
-                    Match Score: <span id="points-delta" style="font-weight: 900; margin-left: 0.2rem;">0</span> PTS
+                    style="display: flex; align-items: center; gap: 0.35rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); padding: 0.35rem 0.65rem; border-radius: 9999px; font-weight: 800; font-size: 0.82rem; color: #a5b4fc;">
+                    Score: <span id="points-delta" style="font-weight: 900; margin-left: 0.15rem;">0</span> PTS
                 </div>
 
                 <!-- Player Wallet Balance -->
-                <div class="points-badge" style="padding: 0.4rem 0.85rem;">
+                <div class="points-badge" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;">
                     <i class="fa-solid fa-coins"></i>
                     <span id="player-balance">{{ number_format($user->points) }}</span>
                 </div>
@@ -47,14 +47,14 @@
         </div>
 
         <!-- Progress Bar (1 to 30) -->
-        <div style="margin-bottom: 1.5rem;">
+        <div style="margin-bottom: 1rem;">
             <div
-                style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #94a3b8; margin-bottom: 0.5rem;">
-                <span>QUESTION <span id="question-index-text" style="color: #fff; font-size: 1rem;">1</span> OF 30</span>
+                style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: #94a3b8; margin-bottom: 0.35rem;">
+                <span>QUESTION <span id="question-index-text" style="color: #fff; font-size: 0.95rem;">1</span> OF 30</span>
                 <span id="round-indicator-text" style="color: #34d399;">Round 1: +2 / -3 PTS</span>
             </div>
             <div
-                style="width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden; position: relative;">
+                style="width: 100%; height: 7px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden; position: relative;">
                 <div id="progress-bar-fill"
                     style="height: 100%; width: 3.33%; background: linear-gradient(90deg, #6366f1, #06b6d4); border-radius: 9999px; transition: width 0.4s ease;">
                 </div>
@@ -62,24 +62,24 @@
         </div>
 
         <!-- Main Question Arena Card -->
-        <div id="main-arena-card" class="glass-card"
-            style="padding: 2.5rem; position: relative; border: 1px solid rgba(99, 102, 241, 0.3); box-shadow: 0 16px 48px rgba(0,0,0,0.5); transition: border-color 0.25s ease, box-shadow 0.25s ease;">
+        <div id="main-arena-card" class="glass-card arena-card"
+            style="padding: clamp(1.25rem, 3vw, 2.5rem); position: relative; border: 1px solid rgba(99, 102, 241, 0.3); box-shadow: 0 16px 48px rgba(0,0,0,0.5); transition: border-color 0.25s ease, box-shadow 0.25s ease;">
 
             <!-- Streak Broken Alert Banner (Hidden by default) -->
             <div id="streak-broken-pop"
-                style="position: absolute; top: -16px; left: 50%; transform: translateX(-50%); z-index: 60; display: none; pointer-events: none;">
+                style="position: absolute; top: -16px; left: 50%; transform: translateX(-50%); z-index: 60; display: none; pointer-events: none; width: max-content; max-width: 90%;">
                 <div
-                    style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; font-weight: 800; font-size: 0.9rem; padding: 0.4rem 1.25rem; border-radius: 9999px; box-shadow: 0 0 24px rgba(239, 68, 68, 0.7); border: 1px solid #fca5a5; display: flex; align-items: center; gap: 0.5rem; letter-spacing: 0.3px;">
+                    style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; font-weight: 800; font-size: 0.85rem; padding: 0.35rem 1rem; border-radius: 9999px; box-shadow: 0 0 24px rgba(239, 68, 68, 0.7); border: 1px solid #fca5a5; display: flex; align-items: center; gap: 0.4rem; letter-spacing: 0.3px;">
                     <i class="fa-solid fa-heart-crack text-amber-300"></i>
-                    <span id="streak-broken-text">STREAK BROKEN! (3x Streak Lost)</span>
+                    <span id="streak-broken-text">STREAK BROKEN!</span>
                 </div>
             </div>
 
-            <!-- 5-Second Circular Countdown Timer Ring -->
-            <div style="display: flex; justify-content: center; margin-bottom: 1.75rem;">
-                <div
-                    style="position: relative; width: 84px; height: 84px; display: flex; align-items: center; justify-content: center;">
-                    <svg width="84" height="84" viewBox="0 0 84 84" style="transform: rotate(-90deg);">
+            <!-- Countdown Timer Ring -->
+            <div style="display: flex; justify-content: center; margin-bottom: 1.25rem;">
+                <div class="timer-wrapper"
+                    style="position: relative; width: 76px; height: 76px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="76" height="76" viewBox="0 0 84 84" style="transform: rotate(-90deg); width: 100%; height: 100%;">
                         <circle cx="42" cy="42" r="36" stroke="rgba(255,255,255,0.1)" stroke-width="6"
                             fill="transparent" />
                         <circle id="timer-circle" cx="42" cy="42" r="36" stroke="#10b981" stroke-width="6"
@@ -87,7 +87,7 @@
                             style="transition: stroke-dashoffset 0.1s linear, stroke 0.3s ease;" />
                     </svg>
                     <div id="timer-number"
-                        style="position: absolute; font-size: 1.75rem; font-weight: 900; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                        style="position: absolute; font-size: 1.6rem; font-weight: 900; color: #fff; font-family: 'Space Grotesk', sans-serif;">
                         0
                     </div>
                 </div>
@@ -95,48 +95,48 @@
 
             <!-- Question Prompt -->
             <div
-                style="min-height: 90px; display: flex; align-items: center; justify-content: center; text-align: center; margin-bottom: 2rem;">
-                <h2 id="question-text" style="font-size: 1.35rem; font-weight: 700; color: #fff; line-height: 1.45;">
+                style="min-height: 60px; display: flex; align-items: center; justify-content: center; text-align: center; margin-bottom: 1.5rem;">
+                <h2 id="question-text" style="font-size: clamp(1.05rem, 3.5vw, 1.35rem); font-weight: 700; color: #fff; line-height: 1.45;">
                     Fetching questions...
                 </h2>
             </div>
 
             <!-- Streak Bonus Announcement Pop (Hidden by default) -->
             <div id="combo-pop"
-                style="text-align: center; height: 28px; margin-bottom: 1rem; opacity: 0; transition: all 0.3s ease;">
+                style="text-align: center; height: 28px; margin-bottom: 0.75rem; opacity: 0; transition: all 0.3s ease;">
                 <span id="combo-text"
-                    style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; font-weight: 800; font-size: 0.9rem; padding: 0.3rem 0.85rem; border-radius: 9999px; box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);">
+                    style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; font-weight: 800; font-size: 0.85rem; padding: 0.25rem 0.75rem; border-radius: 9999px; box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);">
                     🔥 3x COMBO BONUS (+1 PTS)!
                 </span>
             </div>
 
             <!-- 4 Choices Grid -->
-            <div id="choices-grid"
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem;">
+            <div id="choices-grid" class="choices-container"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.75rem;">
                 <!-- Choice buttons will be dynamically rendered here -->
             </div>
 
             <!-- Feedback Result Message under choices -->
             <div id="feedback-container"
-                style="margin-top: 1.5rem; text-align: center; min-height: 32px; font-weight: 700; font-size: 1.05rem; opacity: 0; transition: opacity 0.2s ease;">
+                style="margin-top: 1.25rem; text-align: center; min-height: 28px; font-weight: 700; font-size: 1rem; opacity: 0; transition: opacity 0.2s ease;">
                 <span id="feedback-text"></span>
             </div>
 
         </div>
 
         <!-- Bottom Actions: Forfeit / Sound Toggle -->
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.25rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; flex-wrap: wrap; gap: 0.5rem;">
             <form action="{{ route('game.abandon', ['sessionId' => $session->id]) }}" method="POST"
                 onsubmit="return confirm('Are you sure you want to forfeit this match? Points earned or lost will be finalized.')">
                 @csrf
                 <button type="submit" class="btn btn-outline"
-                    style="color: #94a3b8; font-size: 0.85rem; padding: 0.45rem 0.85rem;">
+                    style="color: #94a3b8; font-size: 0.8rem; padding: 0.4rem 0.75rem; min-height: 36px;">
                     <i class="fa-solid fa-flag"></i> Forfeit Match
                 </button>
             </form>
 
-            <div style="display: flex; align-items: center; gap: 0.5rem; color: #64748b; font-size: 0.85rem;">
-                <i class="fa-solid fa-volume-high text-cyan-400"></i> Web Audio FX Active
+            <div style="display: flex; align-items: center; gap: 0.4rem; color: #64748b; font-size: 0.8rem;">
+                <i class="fa-solid fa-volume-high text-cyan-400"></i> Audio FX Active
             </div>
         </div>
 
@@ -284,9 +284,12 @@
             align-items: center;
             gap: 1rem;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: transform 0.08s ease, background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease, opacity 0.15s ease;
             width: 100%;
             outline: none;
+            will-change: transform;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         .choice-btn:hover:not(:disabled) {
@@ -296,28 +299,30 @@
             box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
         }
 
-        .choice-btn:disabled {
-            cursor: default;
-            opacity: 0.85;
+        .choice-btn:active:not(:disabled),
+        .choice-btn.selected {
+            transform: scale(0.97) !important;
+            border-color: #818cf8 !important;
+            background: rgba(99, 102, 241, 0.35) !important;
+            box-shadow: 0 0 16px rgba(99, 102, 241, 0.4) !important;
         }
 
-        .choice-btn.selected {
-            border-color: #6366f1;
-            background: rgba(99, 102, 241, 0.25);
+        .choice-btn:disabled {
+            cursor: default;
         }
 
         .choice-btn.correct {
             background: rgba(16, 185, 129, 0.25) !important;
             border-color: #10b981 !important;
             color: #34d399 !important;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4) !important;
         }
 
         .choice-btn.wrong {
             background: rgba(244, 63, 94, 0.25) !important;
             border-color: #f43f5e !important;
             color: #fb7185 !important;
-            box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.4) !important;
         }
 
         .choice-letter {
@@ -614,6 +619,69 @@
         .streak-ignited {
             animation: streakIgnite 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+
+        /* 6. Question Content Fade & Slide Transition */
+        @keyframes questionPop {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 6px, 0);
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .question-fade-in {
+            animation: questionPop 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @media (max-width: 640px) {
+            .arena-top-bar {
+                padding: 0.5rem 0.65rem !important;
+                margin-bottom: 0.5rem !important;
+                gap: 0.35rem !important;
+            }
+            .arena-card {
+                padding: 0.85rem 0.65rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+            .timer-wrapper {
+                width: 60px !important;
+                height: 60px !important;
+            }
+            .timer-wrapper svg {
+                width: 60px !important;
+                height: 60px !important;
+            }
+            #timer-number {
+                font-size: 1.35rem !important;
+            }
+            #question-text {
+                font-size: 0.95rem !important;
+                line-height: 1.35 !important;
+            }
+            .choices-container {
+                grid-template-columns: 1fr !important;
+                gap: 0.45rem !important;
+            }
+            .choice-btn {
+                padding: 0.65rem 0.8rem !important;
+                min-height: 44px !important;
+                font-size: 0.88rem !important;
+                gap: 0.55rem !important;
+                border-radius: 0.75rem !important;
+            }
+            .choice-letter {
+                width: 28px !important;
+                height: 28px !important;
+                font-size: 0.8rem !important;
+            }
+            .floating-score-chip {
+                font-size: 1.3rem !important;
+                padding: 0.25rem 0.85rem !important;
+            }
+        }
     </style>
 @endpush
 
@@ -665,6 +733,8 @@
         }
 
         function updateHUD(data) {
+            if (!data) return;
+
             const qIndexEl = document.getElementById('question-index-text');
             if (qIndexEl && data.current_question_index) qIndexEl.textContent = data.current_question_index;
 
@@ -691,8 +761,10 @@
                 progressFill.style.width = `${progressPct}%`;
             }
 
-            if (data.timer_seconds) {
+            if (data.timer_seconds && parseFloat(data.timer_seconds) > 0) {
                 totalTime = parseFloat(data.timer_seconds);
+            } else {
+                totalTime = 5.0;
             }
 
             const settings = data.settings || {};
@@ -747,6 +819,7 @@
         }
 
         function renderQuestion(q) {
+            if (!q) return;
             currentQuestionData = q;
             isAnsweringLocked = false;
 
@@ -754,7 +827,12 @@
             if (catEl) catEl.textContent = q.category || 'General';
 
             const qTextEl = document.getElementById('question-text');
-            if (qTextEl) qTextEl.innerHTML = q.question_text;
+            if (qTextEl) {
+                qTextEl.innerHTML = q.question_text;
+                qTextEl.classList.remove('question-fade-in');
+                void qTextEl.offsetWidth; // trigger reflow
+                qTextEl.classList.add('question-fade-in');
+            }
 
             // Reset feedback
             const fbContainer = document.getElementById('feedback-container');
@@ -767,48 +845,55 @@
 
             // Render Choices
             const grid = document.getElementById('choices-grid');
-            grid.innerHTML = '';
+            if (grid) {
+                grid.innerHTML = '';
+                grid.classList.remove('question-fade-in');
+                void grid.offsetWidth; // trigger reflow
+                grid.classList.add('question-fade-in');
+                const letters = ['A', 'B', 'C', 'D'];
+                const choices = Array.isArray(q.choices) ? q.choices : [];
+                choices.forEach((choice, idx) => {
+                    const letter = letters[idx] || (idx + 1);
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'choice-btn';
+                    btn.dataset.choice = choice;
+                    btn.innerHTML = `
+                        <div class="choice-letter">${letter}</div>
+                        <div style="flex: 1; word-break: break-word;">${choice}</div>
+                    `;
+                    btn.onclick = () => selectChoice(choice, btn);
+                    grid.appendChild(btn);
+                });
+            }
 
-            const letters = ['A', 'B', 'C', 'D'];
-            q.choices.forEach((choice, idx) => {
-                const letter = letters[idx] || (idx + 1);
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'choice-btn';
-                btn.dataset.choice = choice;
-                btn.innerHTML = `
-                <div class="choice-letter">${letter}</div>
-                <div style="flex: 1;">${choice}</div>
-            `;
-                btn.onclick = () => selectChoice(choice, btn);
-                grid.appendChild(btn);
-            });
-
-            // Start 5-second countdown timer
+            // Start countdown timer
             startQuestionTimer();
         }
 
         function startQuestionTimer() {
             clearInterval(timerInterval);
+            if (!totalTime || isNaN(totalTime) || totalTime <= 0) {
+                totalTime = 5.0;
+            }
             timeLeft = totalTime;
             updateTimerDisplay(timeLeft);
 
-            const tickRateMs = 50;
-            const totalSteps = (totalTime * 1000) / tickRateMs;
-            let currentStep = totalSteps;
+            const startTime = Date.now();
+            const durationMs = totalTime * 1000;
 
             timerInterval = setInterval(() => {
                 if (isPausedForBreak || isPausedForBankruptcy) return;
 
-                currentStep--;
-                timeLeft = Math.max(0, (currentStep * tickRateMs) / 1000);
+                const elapsed = Date.now() - startTime;
+                timeLeft = Math.max(0, (durationMs - elapsed) / 1000);
                 updateTimerDisplay(timeLeft);
 
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
                     handleTimeOut();
                 }
-            }, tickRateMs);
+            }, 50);
         }
 
         function updateTimerDisplay(timeSec) {
@@ -816,26 +901,33 @@
             const timerCircle = document.getElementById('timer-circle');
 
             const wholeSec = Math.ceil(timeSec);
-            timerNum.textContent = wholeSec;
+            if (timerNum) timerNum.textContent = wholeSec;
 
             // Circular stroke offset: full circumference is 2 * PI * 36 ≈ 226
             const circumference = 226;
-            const progress = timeSec / totalTime;
+            const safeTotal = (totalTime && totalTime > 0) ? totalTime : 5.0;
+            const progress = Math.min(1, Math.max(0, timeSec / safeTotal));
             const offset = circumference * (1 - progress);
-            timerCircle.style.strokeDashoffset = offset;
 
-            // Dynamic color: Emerald (5-3s) -> Amber (3-1.5s) -> Rose (1.5-0s)
-            if (timeSec > 3) {
-                timerCircle.style.stroke = '#10b981';
-                timerNum.style.color = '#fff';
-            } else if (timeSec > 1.5) {
-                timerCircle.style.stroke = '#f59e0b';
-                timerNum.style.color = '#fbbf24';
-                if (Math.abs(timeSec - Math.round(timeSec)) < 0.06) window.soundFX.tick();
-            } else {
-                timerCircle.style.stroke = '#f43f5e';
-                timerNum.style.color = '#fb7185';
-                if (Math.abs(timeSec - Math.round(timeSec)) < 0.06) window.soundFX.tick();
+            if (timerCircle) {
+                timerCircle.style.strokeDashoffset = offset;
+                // Dynamic color: Emerald (5-3s) -> Amber (3-1.5s) -> Rose (1.5-0s)
+                if (timeSec > 3) {
+                    timerCircle.style.stroke = '#10b981';
+                    if (timerNum) timerNum.style.color = '#fff';
+                } else if (timeSec > 1.5) {
+                    timerCircle.style.stroke = '#f59e0b';
+                    if (timerNum) timerNum.style.color = '#fbbf24';
+                    if (Math.abs(timeSec - Math.round(timeSec)) < 0.06 && window.soundFX && typeof window.soundFX.tick === 'function') {
+                        window.soundFX.tick();
+                    }
+                } else {
+                    timerCircle.style.stroke = '#f43f5e';
+                    if (timerNum) timerNum.style.color = '#fb7185';
+                    if (Math.abs(timeSec - Math.round(timeSec)) < 0.06 && window.soundFX && typeof window.soundFX.tick === 'function') {
+                        window.soundFX.tick();
+                    }
+                }
             }
         }
 
@@ -844,7 +936,22 @@
             isAnsweringLocked = true;
             clearInterval(timerInterval);
 
-            btnElement.classList.add('selected');
+            // Immediate 0ms tactile feedback
+            if (btnElement) {
+                btnElement.classList.add('selected');
+                btnElement.style.transform = 'scale(0.97)';
+                btnElement.style.borderColor = '#818cf8';
+                btnElement.style.background = 'rgba(99, 102, 241, 0.35)';
+            }
+
+            // Immediately dim other choices
+            document.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.disabled = true;
+                if (btn !== btnElement) {
+                    btn.style.opacity = '0.55';
+                }
+            });
+
             submitAnswer(choice);
         }
 
@@ -876,49 +983,46 @@
                     return;
                 }
 
-                // Reveal answers on UI
+                // Instant answer reveal
                 revealAnswerUI(result);
 
                 const arenaCard = document.getElementById('main-arena-card');
                 const streakContainer = document.getElementById('streak-container');
 
-                // Rich, GPU-Accelerated Dynamic Visual & Audio FX
+                // GPU-Accelerated Dynamic Visual & Audio FX
                 if (result.is_correct) {
-                    // Correct Answer Animation
                     if (arenaCard) {
                         arenaCard.classList.remove('arena-wrong-shake');
                         arenaCard.classList.add('arena-correct-pulse');
-                        setTimeout(() => arenaCard.classList.remove('arena-correct-pulse'), 650);
+                        setTimeout(() => arenaCard.classList.remove('arena-correct-pulse'), 500);
                     }
 
                     spawnFloatingScore(`+${result.points_awarded} PTS`, true);
 
                     if (streakContainer && result.current_streak >= 3) {
                         streakContainer.classList.add('streak-ignited');
-                        setTimeout(() => streakContainer.classList.remove('streak-ignited'), 500);
+                        setTimeout(() => streakContainer.classList.remove('streak-ignited'), 450);
                     }
 
                     if (result.current_streak >= 3) {
-                        window.soundFX.streak();
+                        if (window.soundFX && typeof window.soundFX.streak === 'function') window.soundFX.streak();
                     } else {
-                        window.soundFX.correct();
+                        if (window.soundFX && typeof window.soundFX.correct === 'function') window.soundFX.correct();
                     }
                 } else {
-                    // Wrong Answer Animation
                     if (arenaCard) {
                         arenaCard.classList.remove('arena-correct-pulse');
                         arenaCard.classList.add('arena-wrong-shake');
-                        setTimeout(() => arenaCard.classList.remove('arena-wrong-shake'), 600);
+                        setTimeout(() => arenaCard.classList.remove('arena-wrong-shake'), 500);
                     }
 
                     spawnFloatingScore(`${result.points_awarded} PTS`, false);
 
-                    // Broken Streak Shatter Alert
                     if (prevStreak >= 3) {
                         triggerStreakBrokenEffect(prevStreak);
-                        window.soundFX.streakLost();
+                        if (window.soundFX && typeof window.soundFX.streakLost === 'function') window.soundFX.streakLost();
                     } else {
-                        window.soundFX.wrong();
+                        if (window.soundFX && typeof window.soundFX.wrong === 'function') window.soundFX.wrong();
                     }
                 }
 
@@ -947,10 +1051,10 @@
                     } else {
                         if (userChoice === null) {
                             fbText.innerHTML =
-                                `<span style="color: #fb7185;"><i class="fa-solid fa-clock"></i> TIMED OUT! ${result.points_awarded} PTS (Correct answer: ${result.correct_answer})</span>`;
+                                `<span style="color: #fb7185;"><i class="fa-solid fa-clock"></i> TIMED OUT! ${result.points_awarded} PTS (Correct: ${result.correct_answer})</span>`;
                         } else {
                             fbText.innerHTML =
-                                `<span style="color: #fb7185;"><i class="fa-solid fa-circle-xmark"></i> WRONG! ${result.points_awarded} PTS (Correct answer: ${result.correct_answer})</span>`;
+                                `<span style="color: #fb7185;"><i class="fa-solid fa-circle-xmark"></i> WRONG! ${result.points_awarded} PTS (Correct: ${result.correct_answer})</span>`;
                         }
                     }
                 }
@@ -971,7 +1075,7 @@
                     streakCountEl.textContent = result.current_streak;
                 }
 
-                // Instant transition to next question without secondary network roundtrip
+                // Crisp, snappy transition to next question (400ms)
                 setTimeout(() => {
                     if (comboPop) comboPop.style.opacity = '0';
 
@@ -1006,7 +1110,7 @@
                     } else {
                         fetchQuestionState();
                     }
-                }, 650);
+                }, 400);
 
             } catch (err) {
                 console.error('Error submitting answer:', err);
@@ -1068,9 +1172,14 @@
             }
         }
 
+        let pendingRoundBreakResult = null;
+
         // Round Intermission Break Logic
         function showRoundBreakModal(result) {
             isPausedForBreak = true;
+            pendingRoundBreakResult = result;
+            clearInterval(timerInterval);
+
             const modal = document.getElementById('roundBreakModal');
             const title = document.getElementById('break-title');
             const banner = document.getElementById('next-round-banner');
@@ -1092,13 +1201,41 @@
                 `${result.points_delta >= 0 ? '+' : ''}${result.points_delta} PTS`;
 
             modal.classList.add('active');
-            window.soundFX.streak();
+            if (window.soundFX && typeof window.soundFX.streak === 'function') {
+                window.soundFX.streak();
+            }
         }
 
         function proceedToNextRound() {
             isPausedForBreak = false;
-            document.getElementById('roundBreakModal').classList.remove('active');
-            fetchQuestionState();
+            isPausedForBankruptcy = false;
+            isAnsweringLocked = false;
+            clearInterval(timerInterval);
+
+            const modal = document.getElementById('roundBreakModal');
+            if (modal) modal.classList.remove('active');
+
+            if (window.soundFX && typeof window.soundFX.correct === 'function') {
+                window.soundFX.correct();
+            }
+
+            const cached = pendingRoundBreakResult;
+            pendingRoundBreakResult = null;
+
+            if (cached && cached.next_question) {
+                updateHUD({
+                    current_question_index: cached.next_question_index,
+                    points_delta: cached.points_delta,
+                    user_points: cached.user_points,
+                    current_streak: cached.current_streak,
+                    current_round: cached.next_round,
+                    timer_seconds: cached.timer_seconds || 5.0,
+                    settings: cached.settings || {}
+                });
+                renderQuestion(cached.next_question);
+            } else {
+                fetchQuestionState();
+            }
         }
 
         // Bankruptcy Modal Logic

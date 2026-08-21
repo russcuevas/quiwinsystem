@@ -14,7 +14,9 @@ class AuthController extends Controller
     public function showLogin()
     {
         if (Auth::check()) {
-            return Auth::user()->isAdmin() ? redirect()->route('admin.dashboard') : redirect()->route('user.home');
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            return $user->isAdmin() ? redirect()->route('admin.dashboard') : redirect()->route('user.home');
         }
         return view('auth.login');
     }
@@ -29,26 +31,29 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            if (!Auth::user()->is_active) {
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+
+            if (!$user->is_active) {
                 Auth::logout();
                 return back()->withErrors(['email' => 'Your account has been deactivated. Please contact an admin.']);
             }
 
-            if (!Auth::user()->isAdmin() && Auth::user()->isPending()) {
+            if (!$user->isAdmin() && $user->isPending()) {
                 Auth::logout();
                 return back()->withErrors(['email' => '⏳ Your account is currently PENDING Admin approval.']);
             }
 
-            if (!Auth::user()->isAdmin() && Auth::user()->status === 'rejected') {
+            if (!$user->isAdmin() && $user->status === 'rejected') {
                 Auth::logout();
                 return back()->withErrors(['email' => '❌ Your account registration was rejected by an administrator.']);
             }
 
-            if (Auth::user()->isAdmin()) {
+            if ($user->isAdmin()) {
                 return redirect()->intended(route('admin.dashboard'));
             }
 
-            return redirect()->intended(route('user.home'))->with('success', 'Welcome back, ' . Auth::user()->name . '!');
+            return redirect()->intended(route('user.home'))->with('success', 'Welcome back, ' . $user->name . '!');
         }
 
         return back()->withErrors([

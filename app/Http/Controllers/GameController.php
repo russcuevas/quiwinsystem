@@ -119,18 +119,22 @@ class GameController extends Controller
         $questions = $session->questions_data ?? [];
         $currentQuestion = null;
 
-        foreach ($questions as $q) {
-            if ($q['index'] === $currentIndex) {
-                // Return question WITHOUT revealing correct_answer to client
-                $currentQuestion = [
-                    'index' => $q['index'],
-                    'round' => $q['round'],
-                    'difficulty' => $q['difficulty'],
-                    'category' => $q['category'],
-                    'question_text' => $q['question_text'],
-                    'choices' => $q['choices'],
-                ];
-                break;
+        if ($currentIndex > 30 || (count($questions) > 0 && $currentIndex > count($questions))) {
+            $session->status = 'completed';
+            $session->save();
+        } else {
+            foreach ($questions as $q) {
+                if ($q['index'] === $currentIndex) {
+                    $currentQuestion = [
+                        'index' => $q['index'],
+                        'round' => $q['round'],
+                        'difficulty' => $q['difficulty'],
+                        'category' => $q['category'],
+                        'question_text' => $q['question_text'],
+                        'choices' => $q['choices'],
+                    ];
+                    break;
+                }
             }
         }
 
@@ -282,10 +286,10 @@ class GameController extends Controller
             $isRoundBreak = false;
             $nextRound = $round;
 
-            if ($currentIndex === 10 && $round === 1) {
+            if ((int)$currentIndex === 10) {
                 $isRoundBreak = true;
                 $session->current_round = 2;
-            } elseif ($currentIndex === 20 && $round === 2) {
+            } elseif ((int)$currentIndex === 20) {
                 $isRoundBreak = true;
                 $session->current_round = 3;
             }
@@ -328,6 +332,10 @@ class GameController extends Controller
                 }
             }
 
+            $timerSeconds = ($session->current_round === 1)
+                ? ($settings['easy_timer_seconds'] ?? 5)
+                : (($session->current_round === 2) ? ($settings['medium_timer_seconds'] ?? 5) : ($settings['hard_timer_seconds'] ?? 5));
+
             return response()->json([
                 'success' => true,
                 'is_correct' => $isCorrect,
@@ -339,6 +347,8 @@ class GameController extends Controller
                 'current_streak' => $session->current_streak,
                 'points_delta' => $session->points_delta,
                 'user_points' => $user->points,
+                'timer_seconds' => $timerSeconds,
+                'settings' => $settings,
                 'is_bankrupt' => $isBankrupt,
                 'is_round_break' => $isRoundBreak,
                 'is_completed' => $isCompleted,

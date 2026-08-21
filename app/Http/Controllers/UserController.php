@@ -14,6 +14,7 @@ class UserController extends Controller
 {
     public function home()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         // Abandon any lingering active session when user leaves to home
@@ -110,6 +111,7 @@ class UserController extends Controller
             'amount' => 'required|integer|min:10|max:10000',
         ]);
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $amount = (int) $request->amount;
         $user->points += $amount;
@@ -137,6 +139,7 @@ class UserController extends Controller
 
     public function withdraw(Request $request)
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         // 1. Balance constraint: Cannot withdraw if balance is below 500

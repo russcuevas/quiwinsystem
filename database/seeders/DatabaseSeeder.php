@@ -76,8 +76,9 @@ class DatabaseSeeder extends Seeder
 
         // 3. Seed Initial High-Quality Questions via OpenTdbService
         $openTdb = new OpenTdbService();
-        $openTdb->fetchQuestionsForDifficulty('easy', 15);
-        $openTdb->fetchQuestionsForDifficulty('medium', 15);
-        $openTdb->fetchQuestionsForDifficulty('hard', 15);
+        $openTdb->ensureBaselineQuestionsExist();
+        $openTdb->fetchQuestionsForDifficulty('easy', 10);
+        $openTdb->fetchQuestionsForDifficulty('medium', 10);
+        $openTdb->fetchQuestionsForDifficulty('hard', 10);
     }
 }
