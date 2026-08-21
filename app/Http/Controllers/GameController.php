@@ -26,6 +26,7 @@ class GameController extends Controller
      */
     public function start(Request $request)
     {
+        /** @var User $user */
         $user = Auth::user();
 
         // Abandon any prior uncompleted sessions so users cannot cheat or resume
@@ -89,6 +90,7 @@ class GameController extends Controller
      */
     public function play($sessionId)
     {
+        /** @var User $user */
         $user = Auth::user();
         $session = GameSession::where('id', $sessionId)
             ->where('user_id', $user->id)
@@ -102,7 +104,9 @@ class GameController extends Controller
             return redirect()->route('user.home')->with('error', 'This match was cancelled/disqualified because you left the arena or switched tabs. Please start a new match.');
         }
 
-        return view('game.play', compact('session', 'user'));
+        $settings = \App\Models\GameSetting::getSettings();
+
+        return view('game.play', compact('session', 'user', 'settings'));
     }
 
     /**
@@ -110,6 +114,7 @@ class GameController extends Controller
      */
     public function getState($sessionId)
     {
+        /** @var User $user */
         $user = Auth::user();
         $session = GameSession::where('id', $sessionId)
             ->where('user_id', $user->id)
@@ -166,6 +171,7 @@ class GameController extends Controller
      */
     public function submitAnswer(Request $request, $sessionId)
     {
+        /** @var User $user */
         $user = Auth::user();
         $session = GameSession::where('id', $sessionId)
             ->where('user_id', $user->id)
@@ -371,6 +377,7 @@ class GameController extends Controller
             'amount' => 'required|integer|min:20|max:10000',
         ]);
 
+        /** @var User $user */
         $user = Auth::user();
         $session = GameSession::where('id', $sessionId)
             ->where('user_id', $user->id)
@@ -416,6 +423,7 @@ class GameController extends Controller
      */
     public function summary($sessionId)
     {
+        /** @var User $user */
         $user = Auth::user();
         $session = GameSession::where('id', $sessionId)
             ->where('user_id', $user->id)
@@ -429,6 +437,7 @@ class GameController extends Controller
      */
     public function abandon(Request $request, $sessionId)
     {
+        /** @var User $user */
         $user = Auth::user();
         $session = GameSession::where('id', $sessionId)
             ->where('user_id', $user->id)

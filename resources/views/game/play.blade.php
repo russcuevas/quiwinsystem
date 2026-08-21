@@ -2,6 +2,16 @@
 
 @section('title', 'Quiwin Arena - Match #' . $session->id)
 
+@php
+    $settings = $settings ?? \App\Models\GameSetting::getSettings();
+    $easyCorrect = $settings['easy_correct_points'] ?? 2;
+    $easyWrong = $settings['easy_wrong_penalty'] ?? 3;
+    $medCorrect = $settings['medium_correct_points'] ?? 3;
+    $medWrong = $settings['medium_wrong_penalty'] ?? 5;
+    $hardCorrect = $settings['hard_correct_points'] ?? 5;
+    $hardWrong = $settings['hard_wrong_penalty'] ?? 10;
+@endphp
+
 @section('content')
     <div style="max-width: 900px; margin: 0 auto; position: relative; padding-bottom: 3.5rem;">
 
@@ -51,7 +61,7 @@
             <div
                 style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: #94a3b8; margin-bottom: 0.35rem;">
                 <span>QUESTION <span id="question-index-text" style="color: #fff; font-size: 0.95rem;">1</span> OF 30</span>
-                <span id="round-indicator-text" style="color: #34d399;">Round 1: +2 / -3 PTS</span>
+                <span id="round-indicator-text" style="color: #34d399;">Round 1: +{{ $easyCorrect }} / -{{ $easyWrong }} PTS</span>
             </div>
             <div
                 style="width: 100%; height: 7px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden; position: relative;">
@@ -180,7 +190,7 @@
             <div id="next-round-banner"
                 style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 0.85rem; padding: 0.85rem; margin-bottom: 1.5rem; text-align: left; font-size: 0.85rem; color: #fef3c7;">
                 <strong>Next: Round 2 (Questions 11-20)</strong> &bull; Medium difficulty &bull; <span
-                    style="color: #34d399;">+3 PTS</span> / <span style="color: #fb7185;">-5 PTS</span>
+                    style="color: #34d399;">+{{ $medCorrect }} PTS</span> / <span style="color: #fb7185;">-{{ $medWrong }} PTS</span>
             </div>
 
             <button type="button" class="btn btn-primary"
@@ -702,10 +712,11 @@
     <script>
         const sessionId = {{ $session->id }};
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        let currentSettings = @json($settings);
 
         let currentQuestionData = null;
         let timerInterval = null;
-        let totalTime = 5.0;
+        let totalTime = parseFloat(currentSettings.easy_timer_seconds || 5.0);
         let timeLeft = totalTime;
         let isAnsweringLocked = false;
         let isPausedForBreak = false;
@@ -748,6 +759,10 @@
         function updateHUD(data) {
             if (!data) return;
 
+            if (data.settings) {
+                currentSettings = Object.assign({}, currentSettings, data.settings);
+            }
+
             const qIndexEl = document.getElementById('question-index-text');
             if (qIndexEl && data.current_question_index) qIndexEl.textContent = data.current_question_index;
 
@@ -774,19 +789,22 @@
                 progressFill.style.width = `${progressPct}%`;
             }
 
+            const round = data.current_round || 1;
+
             if (data.timer_seconds && parseFloat(data.timer_seconds) > 0) {
                 totalTime = parseFloat(data.timer_seconds);
             } else {
-                totalTime = 5.0;
+                if (round === 1) totalTime = parseFloat(currentSettings.easy_timer_seconds || 5.0);
+                else if (round === 2) totalTime = parseFloat(currentSettings.medium_timer_seconds || 5.0);
+                else totalTime = parseFloat(currentSettings.hard_timer_seconds || 5.0);
             }
 
-            const settings = data.settings || {};
-            const easyCorrect = settings.easy_correct_points || 2;
-            const easyWrong = settings.easy_wrong_penalty || 3;
-            const medCorrect = settings.medium_correct_points || 3;
-            const medWrong = settings.medium_wrong_penalty || 5;
-            const hardCorrect = settings.hard_correct_points || 5;
-            const hardWrong = settings.hard_wrong_penalty || 10;
+            const easyCorrect = currentSettings.easy_correct_points || 2;
+            const easyWrong = currentSettings.easy_wrong_penalty || 3;
+            const medCorrect = currentSettings.medium_correct_points || 3;
+            const medWrong = currentSettings.medium_wrong_penalty || 5;
+            const hardCorrect = currentSettings.hard_correct_points || 5;
+            const hardWrong = currentSettings.hard_wrong_penalty || 10;
 
             // Update Round Badge
             const roundBadge = document.getElementById('round-badge');
@@ -794,14 +812,14 @@
             const roundIndicator = document.getElementById('round-indicator-text');
 
             if (roundBadge && roundText && roundIndicator) {
-                if (data.current_round === 1) {
+                if (round === 1) {
                     roundBadge.style.background = 'rgba(16, 185, 129, 0.2)';
                     roundBadge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
                     roundBadge.style.color = '#34d399';
                     roundText.textContent = 'ROUND 1 • EASY';
                     roundIndicator.textContent = `Round 1: +${easyCorrect} / -${easyWrong} PTS`;
                     roundIndicator.style.color = '#34d399';
-                } else if (data.current_round === 2) {
+                } else if (round === 2) {
                     roundBadge.style.background = 'rgba(245, 158, 11, 0.2)';
                     roundBadge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
                     roundBadge.style.color = '#fbbf24';
@@ -924,11 +942,12 @@
 
             if (timerCircle) {
                 timerCircle.style.strokeDashoffset = offset;
-                // Dynamic color: Emerald (5-3s) -> Amber (3-1.5s) -> Rose (1.5-0s)
-                if (timeSec > 3) {
+                // Dynamic color based on percentage of time remaining: >50% Green, 25-50% Amber, <25% Red
+                const ratio = progress;
+                if (ratio > 0.5) {
                     timerCircle.style.stroke = '#10b981';
                     if (timerNum) timerNum.style.color = '#fff';
-                } else if (timeSec > 1.5) {
+                } else if (ratio > 0.25) {
                     timerCircle.style.stroke = '#f59e0b';
                     if (timerNum) timerNum.style.color = '#fbbf24';
                     if (Math.abs(timeSec - Math.round(timeSec)) < 0.06 && window.soundFX && typeof window.soundFX.tick ===
@@ -1121,6 +1140,8 @@
                             user_points: result.user_points,
                             current_streak: result.current_streak,
                             current_round: result.next_round,
+                            timer_seconds: result.timer_seconds,
+                            settings: result.settings,
                         });
                         renderQuestion(result.next_question);
                     } else {
@@ -1196,18 +1217,27 @@
             pendingRoundBreakResult = result;
             clearInterval(timerInterval);
 
+            if (result.settings) {
+                currentSettings = Object.assign({}, currentSettings, result.settings);
+            }
+
             const modal = document.getElementById('roundBreakModal');
             const title = document.getElementById('break-title');
             const banner = document.getElementById('next-round-banner');
 
+            const medCorrect = currentSettings.medium_correct_points || 3;
+            const medWrong = currentSettings.medium_wrong_penalty || 5;
+            const hardCorrect = currentSettings.hard_correct_points || 5;
+            const hardWrong = currentSettings.hard_wrong_penalty || 10;
+
             if (result.next_round === 2) {
                 title.textContent = 'Round 1 (Easy) Completed! 🎉';
                 banner.innerHTML =
-                    `<strong>Next: Round 2 (Questions 11–20)</strong> &bull; Medium difficulty &bull; <span style="color: #34d399;">+3 PTS</span> / <span style="color: #fb7185;">-5 PTS</span>`;
+                    `<strong>Next: Round 2 (Questions 11–20)</strong> &bull; Medium difficulty &bull; <span style="color: #34d399;">+${medCorrect} PTS</span> / <span style="color: #fb7185;">-${medWrong} PTS</span>`;
             } else if (result.next_round === 3) {
                 title.textContent = 'Round 2 (Normal) Completed! 🔥';
                 banner.innerHTML =
-                    `<strong>Next: Round 3 (Questions 21–30)</strong> &bull; Hard difficulty &bull; <span style="color: #34d399;">+5 PTS</span> / <span style="color: #fb7185;">-10 PTS</span>`;
+                    `<strong>Next: Round 3 (Questions 21–30)</strong> &bull; Hard difficulty &bull; <span style="color: #34d399;">+${hardCorrect} PTS</span> / <span style="color: #fb7185;">-${hardWrong} PTS</span>`;
             }
 
             document.getElementById('break-correct').textContent =
@@ -1245,8 +1275,8 @@
                     user_points: cached.user_points,
                     current_streak: cached.current_streak,
                     current_round: cached.next_round,
-                    timer_seconds: cached.timer_seconds || 5.0,
-                    settings: cached.settings || {}
+                    timer_seconds: cached.timer_seconds,
+                    settings: cached.settings || currentSettings
                 });
                 renderQuestion(cached.next_question);
             } else {
