@@ -36,7 +36,7 @@ class AuthController extends Controller
 
             if (!Auth::user()->isAdmin() && Auth::user()->isPending()) {
                 Auth::logout();
-                return back()->withErrors(['email' => '⏳ Your account is currently PENDING Admin approval. Your 200 welcome points and account access will be activated once an administrator approves your registration.']);
+                return back()->withErrors(['email' => '⏳ Your account is currently PENDING Admin approval.']);
             }
 
             if (!Auth::user()->isAdmin() && Auth::user()->status === 'rejected') {

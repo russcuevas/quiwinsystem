@@ -75,10 +75,14 @@
                         </button>
                     @endif
 
-                    <div style="margin-top: 0.85rem;">
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.85rem;">
                         <button type="button" class="btn btn-outline"
-                            style="width: 100%; font-size: 0.85rem; padding: 0.5rem;" onclick="openTopUpModal()">
-                            <i class="fa-solid fa-wallet text-amber-400"></i> Add More Points
+                            style="flex: 1; font-size: 0.85rem; padding: 0.55rem;" onclick="openTopUpModal()">
+                            <i class="fa-solid fa-wallet text-amber-400"></i> Top-Up
+                        </button>
+                        <button type="button" class="btn btn-outline"
+                            style="flex: 1; font-size: 0.85rem; padding: 0.55rem; border-color: rgba(16, 185, 129, 0.4); color: #34d399;" onclick="openWithdrawModal()">
+                            <i class="fa-solid fa-money-bill-transfer text-emerald-400"></i> Withdraw
                         </button>
                     </div>
                 </div>
@@ -431,6 +435,61 @@
                         @empty
                             <p style="color: #64748b; font-size: 0.85rem; text-align: center;">No transactions recorded
                                 yet.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- GCash Withdrawal Payout History -->
+                <div class="glass-card" style="padding: 1.75rem; border: 1px solid rgba(16, 185, 129, 0.3);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.15rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-money-bill-transfer text-emerald-400"></i> GCash Withdrawals
+                        </h3>
+                        <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.25rem 0.6rem; border-color: rgba(16, 185, 129, 0.4); color: #34d399;" onclick="openWithdrawModal()">
+                            + New Request
+                        </button>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                        @forelse($withdrawals as $w)
+                            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid {{ $w->status === 'approved' ? 'rgba(16, 185, 129, 0.4)' : ($w->status === 'rejected' ? 'rgba(244, 63, 94, 0.3)' : 'rgba(245, 158, 11, 0.3)') }}; border-radius: 0.75rem; padding: 0.75rem 0.85rem;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem;">
+                                    <span style="font-weight: 800; font-size: 1rem; color: #fff;">
+                                        ₱{{ number_format($w->amount) }} <span style="font-size: 0.75rem; color: #94a3b8;">PHP</span>
+                                    </span>
+                                    
+                                    @if($w->status === 'approved')
+                                        <span style="font-size: 0.72rem; font-weight: 800; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.15rem 0.55rem; border-radius: 9999px;">
+                                            <i class="fa-solid fa-circle-check"></i> Already sent by the admin
+                                        </span>
+                                    @elseif($w->status === 'pending')
+                                        <span style="font-size: 0.72rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.15rem 0.55rem; border-radius: 9999px;">
+                                            <i class="fa-solid fa-clock"></i> Pending Admin Approval
+                                        </span>
+                                    @else
+                                        <span style="font-size: 0.72rem; font-weight: 800; background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); padding: 0.15rem 0.55rem; border-radius: 9999px;">
+                                            <i class="fa-solid fa-ban"></i> Rejected
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <div style="font-size: 0.8rem; color: #cbd5e1; display: flex; align-items: center; justify-content: space-between;">
+                                    <span>
+                                        <i class="fa-solid fa-mobile-screen text-cyan-400"></i> {{ $w->gcash_number }} ({{ $w->gcash_name }})
+                                    </span>
+                                    <span style="color: #64748b; font-size: 0.75rem;">
+                                        {{ $w->created_at->diffForHumans() }}
+                                    </span>
+                                </div>
+
+                                @if($w->status === 'pending')
+                                    <div style="margin-top: 0.35rem; font-size: 0.72rem; color: #94a3b8; font-style: italic;">
+                                        Points will be deducted when approved.
+                                    </div>
+                                @endif
+                            </div>
+                        @empty
+                            <p style="color: #64748b; font-size: 0.85rem; text-align: center; padding: 0.5rem 0;">No withdrawal requests made yet.</p>
                         @endforelse
                     </div>
                 </div>

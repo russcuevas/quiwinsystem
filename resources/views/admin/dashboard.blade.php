@@ -15,6 +15,12 @@
         </div>
 
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <a href="{{ route('admin.withdrawals') }}" class="btn btn-outline" style="border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
+                <i class="fa-solid fa-money-bill-wave"></i> GCash Withdrawals
+                @if($pendingWithdrawalsCount > 0)
+                    <span style="background: #ef4444; color: white; border-radius: 9999px; font-size: 0.7rem; padding: 0.1rem 0.4rem; margin-left: 0.3rem;">{{ $pendingWithdrawalsCount }}</span>
+                @endif
+            </a>
             <a href="{{ route('admin.users') }}" class="btn btn-outline">
                 <i class="fa-solid fa-users"></i> Manage Players
             </a>
@@ -22,22 +28,33 @@
                 <i class="fa-solid fa-database"></i> Question Bank
             </a>
             <a href="{{ route('admin.settings') }}" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669);">
-                <i class="fa-solid fa-sliders"></i> Pointing System & Rules
+                <i class="fa-solid fa-sliders"></i> Rules
             </a>
         </div>
     </div>
 
-    <!-- 6 Analytics Metrics Cards -->
+    <!-- Analytics Metrics Cards -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem;">
         
         <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #f59e0b; background: {{ $pendingUsersCount > 0 ? 'rgba(245, 158, 11, 0.12)' : 'var(--bg-card)' }};">
             <div style="font-size: 0.85rem; color: #fbbf24; font-weight: 700; display: flex; align-items: center; justify-content: space-between;">
-                <span>Pending Approvals</span>
+                <span>Pending Players</span>
                 @if($pendingUsersCount > 0)
-                    <span style="background: #ef4444; color: #fff; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 9999px;">Action Required</span>
+                    <span style="background: #ef4444; color: #fff; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 9999px;">Action</span>
                 @endif
             </div>
             <div style="font-size: 2rem; font-weight: 900; color: #fbbf24; margin-top: 0.25rem;">{{ number_format($pendingUsersCount) }}</div>
+        </div>
+
+        <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #10b981; background: {{ $pendingWithdrawalsCount > 0 ? 'rgba(16, 185, 129, 0.12)' : 'var(--bg-card)' }};">
+            <div style="font-size: 0.85rem; color: #34d399; font-weight: 700; display: flex; align-items: center; justify-content: space-between;">
+                <span>Pending Payouts</span>
+                @if($pendingWithdrawalsCount > 0)
+                    <span style="background: #ef4444; color: #fff; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 9999px;">{{ $pendingWithdrawalsCount }} Need Payout</span>
+                @endif
+            </div>
+            <div style="font-size: 2rem; font-weight: 900; color: #34d399; margin-top: 0.25rem;">{{ number_format($pendingWithdrawalsCount) }}</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">Total Paid: ₱{{ number_format($totalApprovedWithdrawalsAmount) }}</div>
         </div>
 
         <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #6366f1;">
@@ -48,11 +65,6 @@
         <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #06b6d4;">
             <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Matches Played</div>
             <div style="font-size: 2rem; font-weight: 900; color: #fff; margin-top: 0.25rem;">{{ number_format($totalGames) }}</div>
-        </div>
-
-        <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #10b981;">
-            <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Completed Matches</div>
-            <div style="font-size: 2rem; font-weight: 900; color: #fff; margin-top: 0.25rem;">{{ number_format($totalCompletedGames) }}</div>
         </div>
 
         <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #f59e0b;">
@@ -66,6 +78,83 @@
         </div>
 
     </div>
+
+    <!-- PENDING WITHDRAWALS SECTION (When there are pending payouts) -->
+    @if($pendingWithdrawals->isNotEmpty())
+    <div class="glass-card" style="padding: 1.75rem; border: 1px solid rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-money-bill-transfer text-emerald-400"></i> Pending GCash Payouts ({{ $pendingWithdrawals->count() }})
+                </h3>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.2rem;">
+                    Send the funds to player's GCash and click Approve. Points are deducted upon approval and marked as <strong>"Already sent by the admin"</strong>.
+                </p>
+            </div>
+            <a href="{{ route('admin.withdrawals', ['status' => 'pending']) }}" class="btn btn-outline" style="font-size: 0.85rem; border-color: rgba(16, 185, 129, 0.5); color: #34d399;">
+                View All Withdrawals
+            </a>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: #64748b; text-align: left;">
+                        <th style="padding: 0.6rem;">ID</th>
+                        <th style="padding: 0.6rem;">Player Name</th>
+                        <th style="padding: 0.6rem;">Current Points</th>
+                        <th style="padding: 0.6rem;">Amount</th>
+                        <th style="padding: 0.6rem;">GCash Number & Name</th>
+                        <th style="padding: 0.6rem;">Requested</th>
+                        <th style="padding: 0.6rem; text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($pendingWithdrawals as $pw)
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1;">
+                        <td style="padding: 0.75rem 0.5rem; font-weight: 700; color: #64748b;">#{{ $pw->id }}</td>
+                        <td style="padding: 0.75rem 0.5rem; font-weight: 700; color: #fff;">
+                            <i class="fa-solid fa-circle-user text-indigo-400"></i> {{ $pw->user->name ?? 'User' }}
+                        </td>
+                        <td style="padding: 0.75rem 0.5rem;">
+                            <span style="font-weight: 700; color: {{ ($pw->user && $pw->user->points >= $pw->amount) ? '#34d399' : '#fb7185' }};">
+                                {{ number_format($pw->user->points ?? 0) }} PTS
+                            </span>
+                        </td>
+                        <td style="padding: 0.75rem 0.5rem; font-weight: 900; color: #fbbf24; font-size: 1.05rem;">
+                            ₱{{ number_format($pw->amount) }}
+                        </td>
+                        <td style="padding: 0.75rem 0.5rem;">
+                            <div style="font-family: monospace; font-weight: 700; color: #38bdf8;">{{ $pw->gcash_number }}</div>
+                            <div style="font-size: 0.8rem; color: #cbd5e1;">{{ $pw->gcash_name }}</div>
+                        </td>
+                        <td style="padding: 0.75rem 0.5rem; color: #64748b; font-size: 0.8rem;">
+                            {{ $pw->created_at->diffForHumans() }}
+                        </td>
+                        <td style="padding: 0.75rem 0.5rem; text-align: right;">
+                            <div style="display: inline-flex; gap: 0.4rem;">
+                                <form action="{{ route('admin.withdrawals.approve', $pw->id) }}" method="POST"
+                                    onsubmit="return confirm('Approve & payout ₱{{ number_format($pw->amount) }} to GCash {{ $pw->gcash_number }} ({{ $pw->gcash_name }})?');"
+                                    style="margin: 0;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success"
+                                        style="padding: 0.4rem 0.75rem; font-size: 0.8rem; font-weight: 700; background: linear-gradient(135deg, #10b981, #059669);"
+                                        {{ ($pw->user && $pw->user->points < $pw->amount) ? 'disabled' : '' }}>
+                                        <i class="fa-solid fa-check"></i> Approve & Send
+                                    </button>
+                                </form>
+                                <a href="{{ route('admin.withdrawals') }}" class="btn btn-outline" style="padding: 0.4rem 0.65rem; font-size: 0.8rem;">
+                                    Details
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
 
     <!-- PENDING APPROVALS SECTION (When there are pending registrations) -->
     @if($pendingUsers->isNotEmpty())

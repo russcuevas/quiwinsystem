@@ -6,6 +6,8 @@ use App\Models\GameSession;
 use App\Models\PointTransaction;
 use App\Models\Question;
 use App\Models\User;
+use App\Models\UserMail;
+use App\Models\Withdrawal;
 use App\Services\OpenTdbService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,6 +39,16 @@ class AdminController extends Controller
             ->take(10)
             ->get();
 
+        // Withdrawals stats & pending queue
+        $totalWithdrawalsCount = Withdrawal::count();
+        $pendingWithdrawalsCount = Withdrawal::where('status', 'pending')->count();
+        $totalApprovedWithdrawalsAmount = Withdrawal::where('status', 'approved')->sum('amount');
+        $pendingWithdrawals = Withdrawal::with('user')
+            ->where('status', 'pending')
+            ->latest()
+            ->take(8)
+            ->get();
+
         // Top players
         $topPlayers = User::where('role', 'user')
             ->where('status', 'approved')
@@ -66,6 +78,10 @@ class AdminController extends Controller
             'pendingUsersCount',
             'totalApprovedUsers',
             'pendingUsers',
+            'totalWithdrawalsCount',
+            'pendingWithdrawalsCount',
+            'totalApprovedWithdrawalsAmount',
+            'pendingWithdrawals',
             'totalGames',
             'totalCompletedGames',
             'totalPointsInCirculation',
@@ -77,6 +93,122 @@ class AdminController extends Controller
             'mediumCount',
             'hardCount'
         ));
+    }
+
+    public function withdrawals(Request $request)
+    {
+        $search = $request->input('search');
+        $status = $request->input('status', 'all');
+        $query = Withdrawal::with('user');
+
+        if ($status !== 'all') {
+            $query->where('status', $status);
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('gcash_number', 'like', "%{$search}%")
+                  ->orWhere('gcash_name', 'like', "%{$search}%")
+                  ->orWhereHas('user', function ($uq) use ($search) {
+                      $uq->where('name', 'like', "%{$search}%")
+                         ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $withdrawals = $query->orderByRaw("CASE WHEN status = 'pending' THEN 1 ELSE 2 END")
+            ->latest()
+            ->paginate(15);
+
+        $pendingCount = Withdrawal::where('status', 'pending')->count();
+        $totalApprovedAmount = Withdrawal::where('status', 'approved')->sum('amount');
+        $totalPendingAmount = Withdrawal::where('status', 'pending')->sum('amount');
+
+        return view('admin.withdrawals', compact(
+            'withdrawals',
+            'search',
+            'status',
+            'pendingCount',
+            'totalApprovedAmount',
+            'totalPendingAmount'
+        ));
+    }
+
+    public function approveWithdrawal(Request $request, $id)
+    {
+        $withdrawal = Withdrawal::with('user')->findOrFail($id);
+
+        if ($withdrawal->status === 'approved') {
+            return back()->with('info', "Withdrawal #{$withdrawal->id} is already approved.");
+        }
+
+        $user = $withdrawal->user;
+
+        // Verify player has sufficient balance
+        if ($user->points < $withdrawal->amount) {
+            return back()->with('error', "Cannot approve: Player {$user->name} currently only has " . number_format($user->points) . " PTS, which is less than the requested ₱" . number_format($withdrawal->amount) . ".");
+        }
+
+        DB::transaction(function () use ($withdrawal, $user, $request) {
+            // Deduct points from player in-game
+            $user->points -= $withdrawal->amount;
+            $user->save();
+
+            // Record point transaction
+            PointTransaction::create([
+                'user_id' => $user->id,
+                'game_session_id' => null,
+                'type' => 'withdrawal',
+                'amount' => -$withdrawal->amount,
+                'balance_after' => $user->points,
+                'description' => "GCash Withdrawal Approved & Sent: ₱" . number_format($withdrawal->amount) . " to {$withdrawal->gcash_number} ({$withdrawal->gcash_name})",
+            ]);
+
+            // Update withdrawal status
+            $withdrawal->status = 'approved';
+            $withdrawal->approved_at = now();
+            if ($request->filled('remarks')) {
+                $withdrawal->admin_remarks = $request->remarks;
+            }
+            $withdrawal->save();
+
+            // Send In-Game Mail marked "Already sent by the admin"
+            UserMail::create([
+                'user_id' => $user->id,
+                'title' => 'Withdrawal Sent! (Already sent by Admin) 💸',
+                'message' => "Already sent by the admin! Your withdrawal request of ₱" . number_format($withdrawal->amount) . " has been approved and sent to GCash account: {$withdrawal->gcash_name} ({$withdrawal->gcash_number}). Your in-game balance has been updated (-" . number_format($withdrawal->amount) . " PTS).",
+                'type' => 'withdrawal_approved',
+                'is_read' => false,
+            ]);
+        });
+
+        return back()->with('success', "Withdrawal #{$withdrawal->id} (₱" . number_format($withdrawal->amount) . " for {$user->name}) has been APPROVED and marked as 'Already sent by the admin'!");
+    }
+
+    public function rejectWithdrawal(Request $request, $id)
+    {
+        $withdrawal = Withdrawal::with('user')->findOrFail($id);
+
+        if ($withdrawal->status === 'approved') {
+            return back()->with('error', "Cannot reject an already approved withdrawal.");
+        }
+
+        $reason = $request->input('remarks', 'Withdrawal request was rejected by Admin.');
+
+        $withdrawal->status = 'rejected';
+        $withdrawal->admin_remarks = $reason;
+        $withdrawal->save();
+
+        // Notify user via in-game mail
+        UserMail::create([
+            'user_id' => $withdrawal->user_id,
+            'title' => 'Withdrawal Request Rejected ❌',
+            'message' => "Your withdrawal request for ₱" . number_format($withdrawal->amount) . " to GCash ({$withdrawal->gcash_number}) was rejected by Admin. Reason: {$reason}. No points were deducted.",
+            'type' => 'withdrawal_rejected',
+            'is_read' => false,
+        ]);
+
+        return back()->with('success', "Withdrawal #{$withdrawal->id} has been REJECTED.");
     }
 
     public function users(Request $request)

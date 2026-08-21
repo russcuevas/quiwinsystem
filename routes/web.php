@@ -35,6 +35,9 @@ Route::middleware('auth')->group(function () {
     // Player Dashboard & Actions
     Route::get('/home', [UserController::class, 'home'])->name('user.home');
     Route::post('/user/top-up', [UserController::class, 'topUp'])->name('user.topup');
+    Route::post('/user/withdraw', [UserController::class, 'withdraw'])->name('user.withdraw');
+    Route::post('/user/mail/{mailId}/read', [UserController::class, 'markMailRead'])->name('user.mail.read');
+    Route::post('/user/mail/read-all', [UserController::class, 'markAllMailsRead'])->name('user.mail.readall');
 
     // Game Arena Routes
     Route::post('/game/start', [GameController::class, 'start'])->name('game.start');
@@ -53,6 +56,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/users/{userId}/reject', [AdminController::class, 'rejectUser'])->name('users.reject');
         Route::post('/users/{userId}/points', [AdminController::class, 'updateUserPoints'])->name('users.points');
         Route::post('/users/{userId}/toggle-status', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
+        Route::get('/withdrawals', [AdminController::class, 'withdrawals'])->name('withdrawals');
+        Route::post('/withdrawals/{id}/approve', [AdminController::class, 'approveWithdrawal'])->name('withdrawals.approve');
+        Route::post('/withdrawals/{id}/reject', [AdminController::class, 'rejectWithdrawal'])->name('withdrawals.reject');
         Route::get('/questions', [AdminController::class, 'questions'])->name('questions');
         Route::post('/questions/sync', [AdminController::class, 'syncQuestions'])->name('questions.sync');
         Route::get('/settings', [AdminController::class, 'settings'])->name('settings');

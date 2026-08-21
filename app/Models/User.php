@@ -85,4 +85,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(SessionAnswer::class);
     }
+
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class)->latest();
+    }
+
+    public function mails()
+    {
+        return $this->hasMany(UserMail::class)->latest();
+    }
+
+    public function unreadMails()
+    {
+        return $this->hasMany(UserMail::class)->where('is_read', false);
+    }
 }
