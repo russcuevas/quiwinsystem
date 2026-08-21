@@ -48,6 +48,9 @@ class GameController extends Controller
             $user->points -= $entryFee;
             $user->save();
 
+            // Update daily play streak & check 7-day weekly quest reward
+            $user->updateDailyStreak();
+
             // Fetch 30 unique questions for this user
             $questions = $this->openTdbService->getGameQuestions($user->id);
 

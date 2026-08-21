@@ -75,11 +75,23 @@ class UserController extends Controller
             $user->save();
         }
 
+        // 7-Day Weekly Daily Play Quest Stats
+        $activeDailyStreak = $user->getActiveDailyStreak();
+        $playedToday = $user->hasPlayedToday();
+        $weeklyQuestTarget = 7;
+        $weeklyQuestProgress = $activeDailyStreak % 7;
+        if ($activeDailyStreak > 0 && $weeklyQuestProgress === 0) {
+            $weeklyQuestProgress = 7;
+        }
+        $weeklyQuestReward = (int) \App\Models\GameSetting::getVal('weekly_quest_reward', 300);
+        $weeklyQuestClaims = (int) ($user->weekly_quest_claims ?? 0);
+
         // Referral Quest Stats
         $approvedReferralsCount = $user->approvedReferrals()->count();
         $pendingReferralsCount = $user->pendingReferrals()->count();
         $referralQuestTarget = 5;
         $referralQuestProgress = min($approvedReferralsCount, $referralQuestTarget);
+        $referralQuestReward = (int) \App\Models\GameSetting::getVal('referral_quest_reward', 1000);
         $referralsList = $user->referrals()->latest()->take(6)->get();
 
         $entryFee = (int) \App\Models\GameSetting::getVal('entry_fee', 50);
@@ -97,10 +109,17 @@ class UserController extends Controller
             'mails',
             'unreadMailsCount',
             'entryFee',
+            'activeDailyStreak',
+            'playedToday',
+            'weeklyQuestTarget',
+            'weeklyQuestProgress',
+            'weeklyQuestReward',
+            'weeklyQuestClaims',
             'approvedReferralsCount',
             'pendingReferralsCount',
             'referralQuestTarget',
             'referralQuestProgress',
+            'referralQuestReward',
             'referralsList'
         ));
     }

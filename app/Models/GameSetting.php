@@ -37,12 +37,14 @@ class GameSetting extends Model
             'hard_wrong_penalty' => 10,
             'hard_timer_seconds' => 5,
 
-            // Economy & Streaks
+            // Economy, Streaks & Quests
             'entry_fee' => 50,
             'welcome_bonus' => 200,
             'streak_3_bonus' => 1,
             'streak_5_bonus' => 2,
             'streak_8_bonus' => 5,
+            'weekly_quest_reward' => 300,
+            'referral_quest_reward' => 1000,
         ];
     }
 

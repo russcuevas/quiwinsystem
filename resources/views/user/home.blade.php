@@ -20,12 +20,14 @@
                         style="display: inline-flex; align-items: center; gap: 0.45rem; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.35); padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.78rem; color: #a5b4fc; font-weight: 700; margin-bottom: 0.5rem;">
                         <i class="fa-solid fa-bolt text-amber-400"></i> Season 1 Live Arena
                     </div>
-                    <h1 style="font-size: clamp(1.45rem, 4.2vw, 2.35rem); font-weight: 900; line-height: 1.2; color: #fff; letter-spacing: -0.5px;">
+                    <h1
+                        style="font-size: clamp(1.45rem, 4.2vw, 2.35rem); font-weight: 900; line-height: 1.2; color: #fff; letter-spacing: -0.5px;">
                         Ready for the <span
                             style="background: linear-gradient(135deg, #818cf8, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Quiwin
                             Battle</span>?
                     </h1>
-                    <p style="color: #cbd5e1; font-size: clamp(0.85rem, 1.8vw, 1rem); margin-top: 0.45rem; line-height: 1.45;">
+                    <p
+                        style="color: #cbd5e1; font-size: clamp(0.85rem, 1.8vw, 1rem); margin-top: 0.45rem; line-height: 1.45;">
                         Answer 30 progressive questions across 3 intense rounds. Build streaks for multiplier bonuses, but
                         watch out for penalties on mistakes!
                     </p>
@@ -74,22 +76,28 @@
                         </button>
                     @endif
 
-                    <div style="display: flex; gap: 0.45rem; margin-top: 0.65rem;">
-                        <button type="button" class="btn btn-outline"
-                            style="flex: 1; font-size: 0.78rem; padding: 0.45rem 0.35rem;" onclick="openTopUpModal()">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35rem; margin-top: 0.65rem;">
+                        <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.45rem 0.2rem;"
+                            onclick="openTopUpModal()">
                             <i class="fa-solid fa-wallet text-amber-400"></i> Top-Up
                         </button>
                         <button type="button" class="btn btn-outline"
-                            style="flex: 1; font-size: 0.78rem; padding: 0.45rem 0.35rem; border-color: rgba(16, 185, 129, 0.4); color: #34d399;" onclick="openWithdrawModal()">
+                            style="font-size: 0.75rem; padding: 0.45rem 0.2rem; border-color: rgba(16, 185, 129, 0.4); color: #34d399;"
+                            onclick="openWithdrawModal()">
                             <i class="fa-solid fa-money-bill-transfer text-emerald-400"></i> Withdraw
+                        </button>
+                        <button type="button" class="btn btn-outline"
+                            style="font-size: 0.75rem; padding: 0.45rem 0.2rem; border-color: rgba(99, 102, 241, 0.4); color: #a5b4fc;"
+                            onclick="openQuestModal('daily')">
+                            <i class="fa-solid fa-bullseye text-cyan-400"></i> Quests
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 4 Stats Cards Grid (Responsive 2x2 on Mobile) -->
-        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem;">
+        <!-- 4 Stats Cards Grid (Responsive 2x2 on Mobile, 4x1 on Desktop) -->
+        <div class="stats-grid">
 
             <div class="glass-card stat-card"
                 style="padding: 0.95rem 0.85rem; display: flex; align-items: center; gap: 0.75rem; border-left: 4px solid #6366f1;">
@@ -98,8 +106,10 @@
                     <i class="fa-solid fa-gamepad"></i>
                 </div>
                 <div style="min-width: 0; flex: 1;">
-                    <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Matches</div>
-                    <div style="font-size: clamp(1.15rem, 3vw, 1.45rem); font-weight: 800; color: #fff; line-height: 1.2;">{{ $totalGames }}</div>
+                    <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Matches
+                    </div>
+                    <div style="font-size: clamp(1.15rem, 3vw, 1.45rem); font-weight: 800; color: #fff; line-height: 1.2;">
+                        {{ $totalGames }}</div>
                 </div>
             </div>
 
@@ -110,8 +120,10 @@
                     <i class="fa-solid fa-fire"></i>
                 </div>
                 <div style="min-width: 0; flex: 1;">
-                    <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Best Streak</div>
-                    <div style="font-size: clamp(1.15rem, 3vw, 1.45rem); font-weight: 800; color: #fff; line-height: 1.2;">{{ $bestStreak }} 🔥</div>
+                    <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Best
+                        Streak</div>
+                    <div style="font-size: clamp(1.15rem, 3vw, 1.45rem); font-weight: 800; color: #fff; line-height: 1.2;">
+                        {{ $bestStreak }} 🔥</div>
                 </div>
             </div>
 
@@ -122,29 +134,89 @@
                     <i class="fa-solid fa-bullseye"></i>
                 </div>
                 <div style="min-width: 0; flex: 1;">
-                    <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Accuracy</div>
-                    <div style="font-size: clamp(1.15rem, 3vw, 1.45rem); font-weight: 800; color: #fff; line-height: 1.2;">{{ $accuracy }}%</div>
+                    <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Accuracy
+                    </div>
+                    <div style="font-size: clamp(1.15rem, 3vw, 1.45rem); font-weight: 800; color: #fff; line-height: 1.2;">
+                        {{ $accuracy }}%</div>
                 </div>
             </div>
 
-            <div class="glass-card stat-card"
-                style="padding: 0.95rem 0.85rem; display: flex; align-items: center; gap: 0.75rem; border-left: 4px solid #06b6d4;">
+            @php
+                $userPts = (int) $user->points;
+                if ($userPts >= 5000) {
+                    $rankName = 'Legend';
+                    $rankIcon = 'fa-fire-flame-curved';
+                    $rankEmoji = '🔥';
+                    $rankColor = '#f43f5e';
+                    $rankBorder = '#f43f5e';
+                    $nextRankText = 'Max Rank Reached';
+                    $rankProgress = 100;
+                } elseif ($userPts >= 2500) {
+                    $rankName = 'Grandmaster';
+                    $rankIcon = 'fa-gem';
+                    $rankEmoji = '💎';
+                    $rankColor = '#06b6d4';
+                    $rankBorder = '#06b6d4';
+                    $ptsNeeded = 5000 - $userPts;
+                    $nextRankText = $ptsNeeded . ' PTS to Legend';
+                    $rankProgress = min(100, round((($userPts - 2500) / 2500) * 100));
+                } elseif ($userPts >= 1000) {
+                    $rankName = 'Master';
+                    $rankIcon = 'fa-crown';
+                    $rankEmoji = '👑';
+                    $rankColor = '#c084fc';
+                    $rankBorder = '#a855f7';
+                    $ptsNeeded = 2500 - $userPts;
+                    $nextRankText = $ptsNeeded . ' PTS to Grandmaster';
+                    $rankProgress = min(100, round((($userPts - 1000) / 1500) * 100));
+                } elseif ($userPts >= 500) {
+                    $rankName = 'Veteran';
+                    $rankIcon = 'fa-bolt';
+                    $rankEmoji = '⚡';
+                    $rankColor = '#fbbf24';
+                    $rankBorder = '#f59e0b';
+                    $ptsNeeded = 1000 - $userPts;
+                    $nextRankText = $ptsNeeded . ' PTS to Master';
+                    $rankProgress = min(100, round((($userPts - 500) / 500) * 100));
+                } elseif ($userPts >= 200) {
+                    $rankName = 'Challenger';
+                    $rankIcon = 'fa-shield';
+                    $rankEmoji = '⚔️';
+                    $rankColor = '#38bdf8';
+                    $rankBorder = '#0284c7';
+                    $ptsNeeded = 500 - $userPts;
+                    $nextRankText = $ptsNeeded . ' PTS to Veteran';
+                    $rankProgress = min(100, round((($userPts - 200) / 300) * 100));
+                } else {
+                    $rankName = 'Novice';
+                    $rankIcon = 'fa-shield-halved';
+                    $rankEmoji = '🛡️';
+                    $rankColor = '#94a3b8';
+                    $rankBorder = '#64748b';
+                    $ptsNeeded = 200 - $userPts;
+                    $nextRankText = $ptsNeeded . ' PTS to Challenger';
+                    $rankProgress = min(100, round(($userPts / 200) * 100));
+                }
+            @endphp
+
+            <!-- Interactive Clickable Rank Stat Card -->
+            <div class="glass-card stat-card" onclick="openRankSystemModal()"
+                style="padding: 0.95rem 0.85rem; display: flex; align-items: center; gap: 0.75rem; border-left: 4px solid {{ $rankBorder }}; cursor: pointer; transition: all 0.2s ease; position: relative;"
+                title="Click to view Ranking System">
                 <div
-                    style="width: 38px; height: 38px; border-radius: 10px; background: rgba(6, 182, 212, 0.15); display: flex; align-items: center; justify-content: center; color: #38bdf8; font-size: 1.15rem; flex-shrink: 0;">
-                    <i class="fa-solid fa-award"></i>
+                    style="width: 38px; height: 38px; border-radius: 10px; background: rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: center; color: {{ $rankColor }}; font-size: 1.15rem; flex-shrink: 0; box-shadow: 0 0 12px {{ $rankColor }}33;">
+                    <i class="fa-solid {{ $rankIcon }}"></i>
                 </div>
                 <div style="min-width: 0; flex: 1;">
-                    <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Rank</div>
-                    <div style="font-size: clamp(0.95rem, 2.5vw, 1.2rem); font-weight: 800; color: #fff; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        @if ($user->points >= 1000)
-                            Master 👑
-                        @elseif($user->points >= 500)
-                            Veteran ⚡
-                        @elseif($user->points >= 200)
-                            Challenger ⚔️
-                        @else
-                            Novice 🛡️
-                        @endif
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.25rem;">
+                        <span
+                            style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Rank</span>
+                        <span style="font-size: 0.65rem; color: #6366f1; font-weight: 700;">Tiers <i
+                                class="fa-solid fa-chevron-right" style="font-size: 0.55rem;"></i></span>
+                    </div>
+                    <div
+                        style="font-size: clamp(0.95rem, 2.5vw, 1.2rem); font-weight: 800; color: {{ $rankColor }}; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        {{ $rankName }} {{ $rankEmoji }}
                     </div>
                 </div>
             </div>
@@ -152,10 +224,10 @@
         </div>
 
         <!-- Main Content 2 Columns: Game Rules & Recent Games / Referral & Leaderboard -->
-        <div class="hub-main-grid" style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 1.25rem;">
+        <div class="hub-main-grid">
 
             <!-- Left Column: Game Rules / Scoring & Recent Games -->
-            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div class="hub-column">
 
                 <!-- Game Rules Card -->
                 <div class="glass-card" style="padding: clamp(0.85rem, 2.5vw, 1.25rem);">
@@ -164,52 +236,55 @@
                         <i class="fa-solid fa-circle-info text-indigo-400"></i> Rules & Pointing System
                     </h3>
 
-                    <!-- Responsive Rules Cards (Horizontal cards on mobile, 3-col on desktop) -->
-                    <div class="rules-responsive-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem; margin-bottom: 0.85rem;">
+                    <!-- Responsive Rules Cards (Horizontal list on mobile, 3-col on desktop) -->
+                    <div class="rules-responsive-grid">
 
                         <!-- Round 1 -->
                         <div class="rule-box"
-                            style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 0.65rem; padding: 0.65rem 0.5rem; text-align: center;">
-                            <div style="font-size: 0.72rem; font-weight: 800; color: #34d399; text-transform: uppercase;">
-                                Round 1 (Easy)</div>
-                            <div style="font-size: 0.75rem; color: #cbd5e1; margin: 0.15rem 0;">Q1–10 &bull; 5s</div>
-                            <div style="display: flex; justify-content: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 700; margin-top: 0.2rem;">
-                                <span style="color: #34d399;">+2 PTS</span>
-                                <span style="color: #64748b;">|</span>
-                                <span style="color: #fb7185;">-3 PTS</span>
+                            style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 0.75rem; padding: 0.65rem 0.85rem;">
+                            <div class="rule-box-info" style="min-width: 0;">
+                                <div style="font-size: 0.8rem; font-weight: 800; color: #34d399; text-transform: uppercase; letter-spacing: 0.3px;">
+                                    Round 1 (Easy)</div>
+                                <div style="font-size: 0.72rem; color: #cbd5e1; margin-top: 0.15rem;">Q1–10 &bull; 5s per question</div>
+                            </div>
+                            <div class="rule-box-points" style="display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0;">
+                                <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.15rem 0.45rem; border-radius: 9999px; font-weight: 800; font-size: 0.72rem; white-space: nowrap;">+2 PTS</span>
+                                <span style="background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); padding: 0.15rem 0.45rem; border-radius: 9999px; font-weight: 800; font-size: 0.72rem; white-space: nowrap;">-3 PTS</span>
                             </div>
                         </div>
 
                         <!-- Round 2 -->
                         <div class="rule-box"
-                            style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 0.65rem; padding: 0.65rem 0.5rem; text-align: center;">
-                            <div style="font-size: 0.72rem; font-weight: 800; color: #fbbf24; text-transform: uppercase;">
-                                Round 2 (Med)</div>
-                            <div style="font-size: 0.75rem; color: #cbd5e1; margin: 0.15rem 0;">Q11–20 &bull; 5s</div>
-                            <div style="display: flex; justify-content: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 700; margin-top: 0.2rem;">
-                                <span style="color: #34d399;">+3 PTS</span>
-                                <span style="color: #64748b;">|</span>
-                                <span style="color: #fb7185;">-5 PTS</span>
+                            style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 0.75rem; padding: 0.65rem 0.85rem;">
+                            <div class="rule-box-info" style="min-width: 0;">
+                                <div style="font-size: 0.8rem; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.3px;">
+                                    Round 2 (Med)</div>
+                                <div style="font-size: 0.72rem; color: #cbd5e1; margin-top: 0.15rem;">Q11–20 &bull; 5s per question</div>
+                            </div>
+                            <div class="rule-box-points" style="display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0;">
+                                <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.15rem 0.45rem; border-radius: 9999px; font-weight: 800; font-size: 0.72rem; white-space: nowrap;">+3 PTS</span>
+                                <span style="background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); padding: 0.15rem 0.45rem; border-radius: 9999px; font-weight: 800; font-size: 0.72rem; white-space: nowrap;">-5 PTS</span>
                             </div>
                         </div>
 
                         <!-- Round 3 -->
                         <div class="rule-box"
-                            style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 0.65rem; padding: 0.65rem 0.5rem; text-align: center;">
-                            <div style="font-size: 0.72rem; font-weight: 800; color: #fb7185; text-transform: uppercase;">
-                                Round 3 (Hard)</div>
-                            <div style="font-size: 0.75rem; color: #cbd5e1; margin: 0.15rem 0;">Q21–30 &bull; 5s</div>
-                            <div style="display: flex; justify-content: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 700; margin-top: 0.2rem;">
-                                <span style="color: #34d399;">+5 PTS</span>
-                                <span style="color: #64748b;">|</span>
-                                <span style="color: #fb7185;">-10 PTS</span>
+                            style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 0.75rem; padding: 0.65rem 0.85rem;">
+                            <div class="rule-box-info" style="min-width: 0;">
+                                <div style="font-size: 0.8rem; font-weight: 800; color: #fb7185; text-transform: uppercase; letter-spacing: 0.3px;">
+                                    Round 3 (Hard)</div>
+                                <div style="font-size: 0.72rem; color: #cbd5e1; margin-top: 0.15rem;">Q21–30 &bull; 5s per question</div>
+                            </div>
+                            <div class="rule-box-points" style="display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0;">
+                                <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.15rem 0.45rem; border-radius: 9999px; font-weight: 800; font-size: 0.72rem; white-space: nowrap;">+5 PTS</span>
+                                <span style="background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); padding: 0.15rem 0.45rem; border-radius: 9999px; font-weight: 800; font-size: 0.72rem; white-space: nowrap;">-10 PTS</span>
                             </div>
                         </div>
 
                     </div>
 
                     <div
-                        style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.65rem; padding: 0.65rem 0.85rem; font-size: 0.78rem; color: #94a3b8; line-height: 1.35;">
+                        style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.65rem; padding: 0.65rem 0.85rem; font-size: 0.78rem; color: #94a3b8; line-height: 1.4; word-break: break-word; overflow-wrap: break-word;">
                         🔥 <strong>Streak Bonus:</strong> Consecutive correct answers trigger multiplier bonuses (+1, +2, +5 PTS)!
                     </div>
                 </div>
@@ -223,39 +298,41 @@
 
                     @if ($recentGames->isEmpty())
                         <div style="text-align: center; color: #64748b; padding: 1.25rem 0.5rem; font-size: 0.82rem;">
-                            <i class="fa-solid fa-gamepad" style="font-size: 1.5rem; opacity: 0.4; margin-bottom: 0.35rem; display: block;"></i>
+                            <i class="fa-solid fa-gamepad"
+                                style="font-size: 1.5rem; opacity: 0.4; margin-bottom: 0.35rem; display: block;"></i>
                             No completed matches yet. Click "PLAY GAME" to start!
                         </div>
                     @else
-                        <div class="table-responsive">
-                            <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 360px;">
+                        <div class="table-responsive" style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
                                 <thead>
                                     <tr
-                                        style="border-bottom: 1px solid rgba(255,255,255,0.08); color: #64748b; text-align: left;">
-                                        <th style="padding: 0.45rem;">Match</th>
-                                        <th style="padding: 0.45rem;">Score</th>
-                                        <th style="padding: 0.45rem;">Streak</th>
-                                        <th style="padding: 0.45rem;">Net PTS</th>
-                                        <th style="padding: 0.45rem;">Date</th>
+                                        style="border-bottom: 1px solid rgba(255,255,255,0.08); color: #64748b; text-align: left; font-size: 0.72rem; text-transform: uppercase;">
+                                        <th style="padding: 0.45rem 0.35rem;">Match</th>
+                                        <th style="padding: 0.45rem 0.35rem;">Score</th>
+                                        <th style="padding: 0.45rem 0.35rem;">Streak</th>
+                                        <th style="padding: 0.45rem 0.35rem;">PTS</th>
+                                        <th style="padding: 0.45rem 0.35rem; text-align: right;">Time</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($recentGames as $game)
                                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1;">
-                                            <td style="padding: 0.55rem 0.45rem; font-weight: 600;">#{{ $game->id }}</td>
-                                            <td style="padding: 0.55rem 0.45rem;">
-                                                <span
-                                                    style="color: #34d399; font-weight: 700;">{{ $game->total_correct }}</span>/30
+                                            <td style="padding: 0.55rem 0.35rem; font-weight: 700; color: #fff; white-space: nowrap;">
+                                                #{{ $game->id }}
                                             </td>
-                                            <td style="padding: 0.55rem 0.45rem;">
+                                            <td style="padding: 0.55rem 0.35rem; white-space: nowrap;">
+                                                <span style="color: #34d399; font-weight: 700;">{{ $game->total_correct }}</span>/30
+                                            </td>
+                                            <td style="padding: 0.55rem 0.35rem; white-space: nowrap;">
                                                 {{ $game->max_streak }} 🔥
                                             </td>
                                             <td
-                                                style="padding: 0.55rem 0.45rem; font-weight: 700; color: {{ $game->points_delta >= 0 ? '#34d399' : '#fb7185' }};">
+                                                style="padding: 0.55rem 0.35rem; font-weight: 800; color: {{ $game->points_delta >= 0 ? '#34d399' : '#fb7185' }}; white-space: nowrap;">
                                                 {{ $game->points_delta >= 0 ? '+' . $game->points_delta : $game->points_delta }}
                                             </td>
-                                            <td style="padding: 0.55rem 0.45rem; color: #64748b; font-size: 0.72rem;">
-                                                {{ $game->created_at->diffForHumans() }}
+                                            <td style="padding: 0.55rem 0.35rem; color: #64748b; font-size: 0.72rem; text-align: right; white-space: nowrap;">
+                                                {{ $game->created_at->diffForHumans(null, true, true) }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -267,103 +344,106 @@
 
             </div>
 
-            <!-- Right Column: Referral Quest, Leaderboard & Points Ledger -->
-            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <!-- Right Column: Quests, Leaderboard & Points Ledger -->
+            <div class="hub-column">
 
-                <!-- REFERRAL / COUPON CODE & 5/5 QUEST CARD -->
-                <div class="glass-card" style="padding: clamp(0.85rem, 2.5vw, 1.25rem); background: linear-gradient(135deg, rgba(30, 27, 75, 0.7), rgba(15, 23, 42, 0.85)); border: 1px solid rgba(245, 158, 11, 0.35); position: relative; overflow: hidden;">
-                    
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.4rem;">
+                <!-- COMPACT CLICKABLE QUESTS & REWARDS WIDGET -->
+                <div class="glass-card"
+                    style="padding: clamp(0.85rem, 2.5vw, 1.15rem); background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(30, 27, 75, 0.75)); border: 1px solid rgba(99, 102, 241, 0.35); position: relative; overflow: hidden;">
+
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
                         <div style="display: flex; align-items: center; gap: 0.45rem;">
-                            <div style="width: 32px; height: 32px; border-radius: 9px; background: rgba(245, 158, 11, 0.2); display: flex; align-items: center; justify-content: center; color: #fbbf24; font-size: 0.95rem;">
-                                <i class="fa-solid fa-gift"></i>
+                            <div
+                                style="width: 30px; height: 30px; border-radius: 8px; background: rgba(99, 102, 241, 0.25); display: flex; align-items: center; justify-content: center; color: #a5b4fc; font-size: 0.95rem; flex-shrink: 0;">
+                                <i class="fa-solid fa-bullseye text-cyan-400"></i>
                             </div>
-                            <h3 style="font-size: 1.05rem; font-weight: 800; color: #fff;">Invite & Earn Quest</h3>
+                            <h3 style="font-size: 1rem; font-weight: 800; color: #fff;">Quests & Rewards</h3>
                         </div>
-                        <span style="font-size: 0.68rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.12rem 0.45rem; border-radius: 9999px;">
-                            +1,000 PTS REWARD
-                        </span>
+                        <button type="button" onclick="openQuestModal('daily')" class="btn btn-outline"
+                            style="padding: 0.2rem 0.55rem; font-size: 0.72rem; min-height: 28px; border-color: rgba(99, 102, 241, 0.4); color: #a5b4fc; border-radius: 9999px; flex-shrink: 0;">
+                            View All &rarr;
+                        </button>
                     </div>
 
-                    <!-- Personal Coupon Code Display Box -->
-                    <div style="background: rgba(15, 23, 42, 0.8); border: 1px dashed rgba(99, 102, 241, 0.5); border-radius: 0.65rem; padding: 0.75rem; margin-bottom: 0.85rem;">
-                        <div style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                            Your Personal Coupon Code
-                        </div>
-                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.45rem; flex-wrap: wrap;">
-                            <div id="referralCodeText" style="font-family: monospace; font-size: 1.15rem; font-weight: 900; color: #38bdf8; letter-spacing: 1px;">
-                                {{ $user->referral_code }}
-                            </div>
-                            <div style="display: flex; gap: 0.3rem;">
-                                <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.55rem; font-size: 0.75rem; border-color: rgba(99, 102, 241, 0.4); color: #a5b4fc; min-height: 32px;" onclick="copyReferralCode('{{ $user->referral_code }}')" id="copyCodeBtn" title="Copy Code">
-                                    <i class="fa-solid fa-copy"></i> Copy
-                                </button>
-                                <button type="button" class="btn btn-gold" style="padding: 0.3rem 0.55rem; font-size: 0.75rem; min-height: 32px;" onclick="copyReferralLink('{{ url('/register?ref=' . $user->referral_code) }}')" id="copyLinkBtn" title="Copy Invite Link">
-                                    <i class="fa-solid fa-link"></i> Link
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.55rem;">
 
-                    <!-- 5/5 Mission Progress -->
-                    <div style="margin-bottom: 0.75rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
-                            <span style="font-size: 0.78rem; font-weight: 700; color: #e2e8f0;">
-                                🎯 Mission: Invite 5 Approved Friends
-                            </span>
-                            <span style="font-size: 0.82rem; font-weight: 900; color: {{ $approvedReferralsCount >= 5 ? '#34d399' : '#fbbf24' }};">
-                                {{ $referralQuestProgress }} / 5
-                            </span>
-                        </div>
-
-                        <!-- Progress Bar -->
-                        <div style="width: 100%; height: 7px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden; position: relative;">
-                            <div style="height: 100%; width: {{ ($referralQuestProgress / 5) * 100 }}%; background: linear-gradient(90deg, #f59e0b, #10b981); border-radius: 9999px; transition: width 0.5s ease;"></div>
-                        </div>
-
-                        @if($user->quest_rewarded || $approvedReferralsCount >= 5)
-                            <div style="margin-top: 0.45rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 0.55rem; padding: 0.4rem 0.55rem; font-size: 0.75rem; color: #34d399; font-weight: 700; text-align: center;">
-                                <i class="fa-solid fa-trophy"></i> Quest Completed! +1,000 PTS Reward Awarded!
-                            </div>
-                        @else
-                            <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.35rem; line-height: 1.35;">
-                                Share your coupon code. You will receive <strong>1,000 bonus points</strong> once 5 friends register & get approved!
-                            </div>
-                        @endif
-                    </div>
-
-                    <!-- Friends Invited List -->
-                    @if($referralsList->isNotEmpty())
-                        <div style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.55rem;">
-                            <div style="font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.35rem;">
-                                Your Invited Friends ({{ $referralsList->count() }})
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 0.3rem;">
-                                @foreach($referralsList as $refFriend)
-                                    <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; padding: 0.25rem 0.45rem; background: rgba(255,255,255,0.02); border-radius: 0.35rem;">
-                                        <div style="color: #cbd5e1; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;">
-                                            <i class="fa-solid fa-circle-user text-indigo-400"></i> {{ $refFriend->name }}
+                        <!-- Clickable Quest Item 1: 7-Day Daily Play -->
+                        <div onclick="openQuestModal('daily')" class="quest-interactive-item"
+                            style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 0.75rem; padding: 0.65rem 0.75rem; cursor: pointer; transition: all 0.2s ease;">
+                            <div
+                                style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.35rem;">
+                                <div style="display: flex; align-items: center; gap: 0.45rem; min-width: 0; flex: 1;">
+                                    <div
+                                        style="width: 26px; height: 26px; border-radius: 7px; background: rgba(99, 102, 241, 0.2); display: flex; align-items: center; justify-content: center; color: #818cf8; font-size: 0.78rem; flex-shrink: 0;">
+                                        <i class="fa-solid fa-calendar-check"></i>
+                                    </div>
+                                    <div style="min-width: 0; flex: 1;">
+                                        <div style="font-size: 0.82rem; font-weight: 800; color: #fff; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            7-Day Daily Play Quest
                                         </div>
-                                        <div>
-                                            @if($refFriend->status === 'approved')
-                                                <span style="color: #34d399; font-weight: 700; font-size: 0.7rem;">
-                                                    <i class="fa-solid fa-check"></i> Approved (+1)
-                                                </span>
-                                            @elseif($refFriend->status === 'pending')
-                                                <span style="color: #fbbf24; font-weight: 600; font-size: 0.7rem;">
-                                                    <i class="fa-solid fa-clock"></i> Pending
-                                                </span>
+                                        <div
+                                            style="font-size: 0.68rem; color: {{ $playedToday ? '#34d399' : '#fbbf24' }}; font-weight: 600; line-height: 1.2; margin-top: 0.12rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            @if ($playedToday)
+                                                <i class="fa-solid fa-circle-check"></i> Played Today &bull; {{ $weeklyQuestProgress }}/7 Days
                                             @else
-                                                <span style="color: #f87171; font-size: 0.7rem;">
-                                                    <i class="fa-solid fa-ban"></i> Rejected
-                                                </span>
+                                                <i class="fa-solid fa-fire text-amber-400"></i> Day {{ $weeklyQuestProgress + 1 }} Ready &bull; Play 1 Match
                                             @endif
                                         </div>
                                     </div>
-                                @endforeach
+                                </div>
+                                <div style="text-align: right; display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0;">
+                                    <span
+                                        style="font-size: 0.72rem; font-weight: 800; background: rgba(99, 102, 241, 0.2); color: #38bdf8; border: 1px solid rgba(99, 102, 241, 0.4); padding: 0.12rem 0.45rem; border-radius: 9999px; white-space: nowrap;">
+                                        +{{ number_format($weeklyQuestReward) }} PTS
+                                    </span>
+                                    <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem; color: #64748b;"></i>
+                                </div>
+                            </div>
+                            <div
+                                style="width: 100%; height: 5px; background: rgba(255,255,255,0.06); border-radius: 9999px; overflow: hidden;">
+                                <div
+                                    style="height: 100%; width: {{ ($weeklyQuestProgress / 7) * 100 }}%; background: linear-gradient(90deg, #6366f1, #06b6d4); border-radius: 9999px;">
+                                </div>
                             </div>
                         </div>
-                    @endif
+
+                        <!-- Clickable Quest Item 2: 5 Friends Referral -->
+                        <div onclick="openQuestModal('referral')" class="quest-interactive-item"
+                            style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 0.75rem; padding: 0.65rem 0.75rem; cursor: pointer; transition: all 0.2s ease;">
+                            <div
+                                style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.35rem;">
+                                <div style="display: flex; align-items: center; gap: 0.45rem; min-width: 0; flex: 1;">
+                                    <div
+                                        style="width: 26px; height: 26px; border-radius: 7px; background: rgba(245, 158, 11, 0.2); display: flex; align-items: center; justify-content: center; color: #fbbf24; font-size: 0.78rem; flex-shrink: 0;">
+                                        <i class="fa-solid fa-gift"></i>
+                                    </div>
+                                    <div style="min-width: 0; flex: 1;">
+                                        <div style="font-size: 0.82rem; font-weight: 800; color: #fff; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            Invite & Earn Quest
+                                        </div>
+                                        <div style="font-size: 0.68rem; color: #a5b4fc; font-weight: 600; line-height: 1.2; margin-top: 0.12rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            <i class="fa-solid fa-users"></i> {{ $referralQuestProgress }}/5 Approved Friends
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right; display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0;">
+                                    <span
+                                        style="font-size: 0.72rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.12rem 0.45rem; border-radius: 9999px; white-space: nowrap;">
+                                        +{{ number_format($referralQuestReward) }} PTS
+                                    </span>
+                                    <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem; color: #64748b;"></i>
+                                </div>
+                            </div>
+                            <div
+                                style="width: 100%; height: 5px; background: rgba(255,255,255,0.06); border-radius: 9999px; overflow: hidden;">
+                                <div
+                                    style="height: 100%; width: {{ ($referralQuestProgress / 5) * 100 }}%; background: linear-gradient(90deg, #f59e0b, #10b981); border-radius: 9999px;">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -375,7 +455,8 @@
                             style="font-size: 1.05rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.45rem;">
                             <i class="fa-solid fa-trophy text-amber-400"></i> Leaderboard
                         </h3>
-                        <span style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Top Players</span>
+                        <span style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Top
+                            Players</span>
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 0.4rem;">
@@ -433,43 +514,54 @@
                                     <div style="color: #64748b; font-size: 0.68rem;">
                                         {{ $tx->created_at->format('M d, H:i') }}</div>
                                 </div>
-                                <div style="font-weight: 800; color: {{ $tx->amount >= 0 ? '#34d399' : '#fb7185' }}; white-space: nowrap; flex-shrink: 0;">
+                                <div
+                                    style="font-weight: 800; color: {{ $tx->amount >= 0 ? '#34d399' : '#fb7185' }}; white-space: nowrap; flex-shrink: 0;">
                                     {{ $tx->amount >= 0 ? '+' . $tx->amount : $tx->amount }} PTS
                                 </div>
                             </div>
                         @empty
-                            <p style="color: #64748b; font-size: 0.78rem; text-align: center;">No transactions recorded yet.</p>
+                            <p style="color: #64748b; font-size: 0.78rem; text-align: center;">No transactions recorded
+                                yet.</p>
                         @endforelse
                     </div>
                 </div>
 
                 <!-- GCash Withdrawal Payout History -->
-                <div class="glass-card" style="padding: clamp(0.85rem, 2.5vw, 1.25rem); border: 1px solid rgba(16, 185, 129, 0.3);">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.4rem;">
-                        <h3 style="font-size: 1.05rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.45rem;">
+                <div class="glass-card"
+                    style="padding: clamp(0.85rem, 2.5vw, 1.25rem); border: 1px solid rgba(16, 185, 129, 0.3);">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.4rem;">
+                        <h3
+                            style="font-size: 1.05rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.45rem;">
                             <i class="fa-solid fa-money-bill-transfer text-emerald-400"></i> GCash Payouts
                         </h3>
-                        <button type="button" class="btn btn-outline" style="font-size: 0.72rem; padding: 0.25rem 0.55rem; min-height: 30px; border-color: rgba(16, 185, 129, 0.4); color: #34d399;" onclick="openWithdrawModal()">
+                        <button type="button" class="btn btn-outline"
+                            style="font-size: 0.72rem; padding: 0.25rem 0.55rem; min-height: 30px; border-color: rgba(16, 185, 129, 0.4); color: #34d399;"
+                            onclick="openWithdrawModal()">
                             + Request
                         </button>
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 0.45rem;">
                         @forelse($withdrawals as $w)
-                            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid {{ $w->status === 'approved' ? 'rgba(16, 185, 129, 0.4)' : ($w->status === 'rejected' ? 'rgba(244, 63, 94, 0.3)' : 'rgba(245, 158, 11, 0.3)') }}; border-radius: 0.65rem; padding: 0.55rem 0.65rem;">
-                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.2rem; flex-wrap: wrap; gap: 0.25rem;">
+                            <div
+                                style="background: rgba(15, 23, 42, 0.6); border: 1px solid {{ $w->status === 'approved' ? 'rgba(16, 185, 129, 0.4)' : ($w->status === 'rejected' ? 'rgba(244, 63, 94, 0.3)' : 'rgba(245, 158, 11, 0.3)') }}; border-radius: 0.65rem; padding: 0.55rem 0.65rem;">
+                                <div
+                                    style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.2rem; flex-wrap: wrap; gap: 0.25rem;">
                                     <span style="font-weight: 800; font-size: 0.9rem; color: #fff;">
-                                        ₱{{ number_format($w->amount) }} <span style="font-size: 0.68rem; color: #94a3b8;">PHP</span>
+                                        ₱{{ number_format($w->amount) }} <span
+                                            style="font-size: 0.68rem; color: #94a3b8;">PHP</span>
                                     </span>
-                                    <span style="font-size: 0.68rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 9999px; text-transform: uppercase;
-                                        @if($w->status === 'approved') background: rgba(16, 185, 129, 0.2); color: #34d399;
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 9999px; text-transform: uppercase;
+                                        @if ($w->status === 'approved') background: rgba(16, 185, 129, 0.2); color: #34d399;
                                         @elseif($w->status === 'pending') background: rgba(245, 158, 11, 0.2); color: #fbbf24;
-                                        @else background: rgba(244, 63, 94, 0.2); color: #fb7185;
-                                        @endif">
+                                        @else background: rgba(244, 63, 94, 0.2); color: #fb7185; @endif">
                                         {{ $w->status === 'approved' ? 'Sent' : $w->status }}
                                     </span>
                                 </div>
-                                <div style="font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center;">
+                                <div
+                                    style="font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center;">
                                     <span>GCash: {{ $w->gcash_number }}</span>
                                     <span>{{ $w->created_at->diffForHumans() }}</span>
                                 </div>
@@ -525,46 +617,777 @@
         </div>
     </div>
 
+    <!-- COMPREHENSIVE QUESTS & MISSIONS CENTER MODAL -->
+    <div id="questsModal" class="modal-overlay">
+        <div class="modal-card"
+            style="max-width: 580px; width: 95%; padding: 0; overflow: hidden; border: 1px solid rgba(99, 102, 241, 0.4); background: radial-gradient(circle at top, rgba(30, 27, 75, 0.98), #090d16 85%); box-shadow: 0 0 50px rgba(0, 0, 0, 0.85); border-radius: 1.25rem;">
+
+            <!-- Modal Header -->
+            <div
+                style="padding: 1.2rem 1.4rem 0.9rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(15, 23, 42, 0.7);">
+                <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div
+                        style="width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, #6366f1, #06b6d4); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.15rem; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.15rem; font-weight: 900; color: #fff; line-height: 1.2;">Quests & Rewards
+                            Center</h3>
+                        <p style="font-size: 0.75rem; color: #94a3b8; margin: 0;">Complete missions to claim thousands of
+                            free points!</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeQuestModal()"
+                    style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 1rem; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Tab Switcher Navigation Bar -->
+            <div
+                style="display: flex; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(15, 23, 42, 0.9);">
+                <button type="button" id="tabBtnDaily" class="quest-tab-btn active" onclick="switchQuestTab('daily')">
+                    <i class="fa-solid fa-calendar-check text-cyan-400"></i>
+                    <span>7-Day Streak (+{{ number_format($weeklyQuestReward) }} PTS)</span>
+                </button>
+                <button type="button" id="tabBtnReferral" class="quest-tab-btn" onclick="switchQuestTab('referral')">
+                    <i class="fa-solid fa-gift text-amber-400"></i>
+                    <span>Invite & Earn (+{{ number_format($referralQuestReward) }} PTS)</span>
+                </button>
+            </div>
+
+            <!-- Modal Content Body -->
+            <div style="padding: 1.25rem 1.4rem; max-height: 72vh; overflow-y: auto;">
+
+                <!-- TAB 1: 7-DAY DAILY PLAY QUEST -->
+                <div id="questTabContentDaily" class="quest-tab-content active">
+
+                    <!-- Reward Highlight Card -->
+                    <div
+                        style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.15)); border: 1px solid rgba(99, 102, 241, 0.4); border-radius: 0.85rem; padding: 0.85rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                        <div>
+                            <div style="font-size: 0.72rem; font-weight: 700; color: #a5b4fc; text-transform: uppercase;">
+                                Mission Reward</div>
+                            <div style="font-size: 1.25rem; font-weight: 900; color: #38bdf8;">
+                                +{{ number_format($weeklyQuestReward) }} Bonus Points</div>
+                        </div>
+                        <div>
+                            <span
+                                style="font-size: 0.75rem; font-weight: 800; padding: 0.25rem 0.65rem; border-radius: 9999px; background: {{ $playedToday ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)' }}; color: {{ $playedToday ? '#34d399' : '#fbbf24' }}; border: 1px solid {{ $playedToday ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)' }};">
+                                @if ($playedToday)
+                                    <i class="fa-solid fa-circle-check"></i> Played Today
+                                @else
+                                    <i class="fa-solid fa-clock"></i> Match Required Today
+                                @endif
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 7-Day Timeline Tracker -->
+                    <div
+                        style="margin-bottom: 1rem; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.85rem; padding: 1rem 0.75rem;">
+                        <div
+                            style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.75rem; display: flex; justify-content: space-between;">
+                            <span>7-Day Streak Timeline</span>
+                            <span style="color: #fbbf24;">{{ $weeklyQuestProgress }}/7 Days</span>
+                        </div>
+
+                        <div
+                            style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; text-align: center;">
+                            @for ($day = 1; $day <= 7; $day++)
+                                @php
+                                    $isCompletedDay = $day <= $weeklyQuestProgress;
+                                    $isTodayTarget = !$playedToday && $day === $weeklyQuestProgress + 1;
+                                @endphp
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem;">
+                                    <div
+                                        style="width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: 800;
+                                        @if ($isCompletedDay) background: linear-gradient(135deg, #10b981, #059669); color: #fff; box-shadow: 0 0 14px rgba(16, 185, 129, 0.6); border: 2px solid #34d399;
+                                        @elseif($isTodayTarget)
+                                            background: rgba(245, 158, 11, 0.25); color: #fbbf24; border: 2px dashed #f59e0b;
+                                        @else
+                                            background: rgba(255, 255, 255, 0.04); color: #64748b; border: 1px solid rgba(255,255,255,0.08); @endif
+                                    ">
+                                        @if ($isCompletedDay)
+                                            <i class="fa-solid fa-check"></i>
+                                        @elseif($isTodayTarget)
+                                            <i class="fa-solid fa-fire text-amber-400"></i>
+                                        @else
+                                            {{ $day }}
+                                        @endif
+                                    </div>
+                                    <span
+                                        style="font-size: 0.7rem; font-weight: 700; color: {{ $isCompletedDay ? '#34d399' : ($isTodayTarget ? '#fbbf24' : '#64748b') }};">
+                                        Day {{ $day }}
+                                    </span>
+                                </div>
+                            @endfor
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div style="margin-bottom: 1rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.35rem;">
+                            <span>Overall Progress</span>
+                            <span style="color: #38bdf8;">{{ round(($weeklyQuestProgress / 7) * 100) }}%</span>
+                        </div>
+                        <div
+                            style="width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden;">
+                            <div
+                                style="height: 100%; width: {{ ($weeklyQuestProgress / 7) * 100 }}%; background: linear-gradient(90deg, #6366f1, #06b6d4); border-radius: 9999px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rules List -->
+                    <div
+                        style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 0.75rem; padding: 0.85rem; font-size: 0.78rem; color: #94a3b8; line-height: 1.5; margin-bottom: 1.25rem;">
+                        <div style="font-weight: 700; color: #fff; margin-bottom: 0.25rem;"><i
+                                class="fa-solid fa-circle-info text-indigo-400"></i> How it works:</div>
+                        &bull; Play at least 1 match everyday to build your daily streak.<br>
+                        &bull; Once you reach <strong>7 consecutive days</strong>, +300 points will be credited to your
+                        account automatically!<br>
+                        &bull; Completed so far: <strong>{{ $weeklyQuestClaims }}x weekly cycles</strong>. Keep your streak
+                        going!
+                    </div>
+
+                    <!-- Action Button -->
+                    @if (!$playedToday)
+                        <form action="{{ route('game.start') }}" method="POST"
+                            onsubmit="handlePlayGameSubmit(event, this)">
+                            @csrf
+                            <button type="submit" class="btn btn-primary"
+                                style="width: 100%; padding: 0.75rem; font-size: 0.95rem; font-weight: 800; border-radius: 0.75rem; background: linear-gradient(135deg, #6366f1, #06b6d4);">
+                                <i class="fa-solid fa-play"></i> Play Today's Match (-{{ $entryFee ?? 50 }} PTS)
+                            </button>
+                        </form>
+                    @else
+                        <div
+                            style="text-align: center; padding: 0.75rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 0.75rem; color: #34d399; font-size: 0.88rem; font-weight: 700;">
+                            <i class="fa-solid fa-circle-check"></i> Great job! Today's streak match is completed. Come
+                            back tomorrow!
+                        </div>
+                    @endif
+
+                </div>
+
+                <!-- TAB 2: INVITE & EARN QUEST -->
+                <div id="questTabContentReferral" class="quest-tab-content">
+
+                    <!-- Reward Highlight Card -->
+                    <div
+                        style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.15)); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 0.85rem; padding: 0.85rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                        <div>
+                            <div style="font-size: 0.72rem; font-weight: 700; color: #fbbf24; text-transform: uppercase;">
+                                Mission Reward</div>
+                            <div style="font-size: 1.25rem; font-weight: 900; color: #fbbf24;">
+                                +{{ number_format($referralQuestReward) }} Bonus Points</div>
+                        </div>
+                        <div>
+                            <span
+                                style="font-size: 0.75rem; font-weight: 800; padding: 0.25rem 0.65rem; border-radius: 9999px; background: {{ $approvedReferralsCount >= 5 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)' }}; color: {{ $approvedReferralsCount >= 5 ? '#34d399' : '#fbbf24' }}; border: 1px solid {{ $approvedReferralsCount >= 5 ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)' }};">
+                                {{ $approvedReferralsCount }} / 5 Approved Friends
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Personal Coupon Code Display Box -->
+                    <div
+                        style="background: rgba(15, 23, 42, 0.85); border: 1px dashed rgba(99, 102, 241, 0.5); border-radius: 0.85rem; padding: 0.95rem; margin-bottom: 1rem;">
+                        <div
+                            style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Your Personal Coupon Code
+                        </div>
+                        <div
+                            style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                            <div
+                                style="font-family: monospace; font-size: 1.35rem; font-weight: 900; color: #38bdf8; letter-spacing: 1.5px;">
+                                {{ $user->referral_code }}
+                            </div>
+                            <div style="display: flex; gap: 0.4rem;">
+                                <button type="button" class="btn btn-outline"
+                                    style="padding: 0.35rem 0.75rem; font-size: 0.78rem; border-color: rgba(99, 102, 241, 0.4); color: #a5b4fc; min-height: 34px;"
+                                    onclick="copyReferralCode('{{ $user->referral_code }}')" id="copyCodeBtn">
+                                    <i class="fa-solid fa-copy"></i> Copy Code
+                                </button>
+                                <button type="button" class="btn btn-gold"
+                                    style="padding: 0.35rem 0.75rem; font-size: 0.78rem; min-height: 34px;"
+                                    onclick="copyReferralLink('{{ url('/register?ref=' . $user->referral_code) }}')"
+                                    id="copyLinkBtn">
+                                    <i class="fa-solid fa-link"></i> Copy Link
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div style="margin-bottom: 1rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.35rem;">
+                            <span>Invited Friends Goal</span>
+                            <span style="color: #fbbf24;">{{ $referralQuestProgress }} / 5
+                                ({{ round(($referralQuestProgress / 5) * 100) }}%)</span>
+                        </div>
+                        <div
+                            style="width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden;">
+                            <div
+                                style="height: 100%; width: {{ ($referralQuestProgress / 5) * 100 }}%; background: linear-gradient(90deg, #f59e0b, #10b981); border-radius: 9999px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Friends Invited List -->
+                    @if ($referralsList->isNotEmpty())
+                        <div
+                            style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 0.85rem; padding: 0.85rem; margin-bottom: 1rem;">
+                            <div
+                                style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.45rem;">
+                                Your Referred Friends ({{ $referralsList->count() }})
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                @foreach ($referralsList as $refFriend)
+                                    <div
+                                        style="display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; padding: 0.35rem 0.55rem; background: rgba(255,255,255,0.02); border-radius: 0.45rem;">
+                                        <div style="color: #cbd5e1; font-weight: 500;">
+                                            <i class="fa-solid fa-circle-user text-indigo-400"></i> {{ $refFriend->name }}
+                                        </div>
+                                        <div>
+                                            @if ($refFriend->status === 'approved')
+                                                <span style="color: #34d399; font-weight: 700; font-size: 0.72rem;">
+                                                    <i class="fa-solid fa-check"></i> Approved (+1)
+                                                </span>
+                                            @elseif($refFriend->status === 'pending')
+                                                <span style="color: #fbbf24; font-weight: 600; font-size: 0.72rem;">
+                                                    <i class="fa-solid fa-clock"></i> Pending Approval
+                                                </span>
+                                            @else
+                                                <span style="color: #f87171; font-size: 0.72rem;">
+                                                    <i class="fa-solid fa-ban"></i> Rejected
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    <div
+                        style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 0.75rem; padding: 0.85rem; font-size: 0.78rem; color: #94a3b8; line-height: 1.5;">
+                        <div style="font-weight: 700; color: #fff; margin-bottom: 0.25rem;"><i
+                                class="fa-solid fa-circle-info text-amber-400"></i> How it works:</div>
+                        Share your personal coupon code with friends. When they register using your code and are approved by
+                        the admin, you'll earn <strong>1,000 points</strong> upon reaching 5 friends!
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- COMPREHENSIVE RANKING SYSTEM MODAL (0 to 5,000+ PTS) -->
+    <div id="rankSystemModal" class="modal-overlay">
+        <div class="modal-card"
+            style="max-width: 620px; width: 95%; padding: 0; overflow: hidden; border: 1px solid rgba(99, 102, 241, 0.4); background: radial-gradient(circle at top, rgba(30, 27, 75, 0.98), #090d16 85%); box-shadow: 0 0 50px rgba(0, 0, 0, 0.9); border-radius: 1.25rem;">
+
+            <!-- Header -->
+            <div
+                style="padding: 1.2rem 1.4rem 0.9rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(15, 23, 42, 0.7);">
+                <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div
+                        style="width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, #f59e0b, #f43f5e); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.15rem; box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);">
+                        <i class="fa-solid fa-ranking-star"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.15rem; font-weight: 900; color: #fff; line-height: 1.2;">Quiwin Ranking
+                            System</h3>
+                        <p style="font-size: 0.75rem; color: #94a3b8; margin: 0;">Climb from Novice (0 PTS) all the way to
+                            Quiwin Legend (5,000+ PTS)!</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeRankSystemModal()"
+                    style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 1rem; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div style="padding: 1.25rem 1.4rem; max-height: 72vh; overflow-y: auto;">
+
+                <!-- Player Current Rank Banner -->
+                <div
+                    style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 27, 75, 0.75)); border: 1px solid {{ $rankBorder }}; border-radius: 0.95rem; padding: 1rem; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div
+                            style="width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,0.06); border: 2px solid {{ $rankBorder }}; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: {{ $rankColor }}; box-shadow: 0 0 20px {{ $rankColor }}44;">
+                            <i class="fa-solid {{ $rankIcon }}"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">
+                                Your Current Tier</div>
+                            <div style="font-size: 1.25rem; font-weight: 900; color: {{ $rankColor }};">
+                                {{ $rankName }} {{ $rankEmoji }}
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600;">Your Balance</div>
+                        <div style="font-size: 1.2rem; font-weight: 900; color: #fbbf24;">
+                            {{ number_format($userPts) }} <span style="font-size: 0.75rem; color: #94a3b8;">PTS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6 Tiers Grid / Progression Ladder -->
+                <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+
+                    <!-- Tier 6: Legend (5000+ PTS) -->
+                    @php $isCurrentLegend = ($userPts >= 5000); @endphp
+                    <div class="rank-tier-card {{ $isCurrentLegend ? 'active-tier' : '' }}"
+                        style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentLegend ? '#f43f5e' : 'rgba(244, 63, 94, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; position: relative;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
+                            <div
+                                style="width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, rgba(244, 63, 94, 0.25), rgba(255, 0, 122, 0.35)); border: 1.5px solid #f43f5e; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #f43f5e; flex-shrink: 0; box-shadow: 0 0 15px rgba(244, 63, 94, 0.4);">
+                                <i class="fa-solid fa-fire-flame-curved"></i>
+                            </div>
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
+                                    <span style="font-size: 0.95rem; font-weight: 900; color: #f43f5e;">Legend 🔥</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(244, 63, 94, 0.2); color: #fda4af; padding: 0.1rem 0.45rem; border-radius: 9999px;">5,000+
+                                        PTS</span>
+                                </div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">The pinnacle of
+                                    Quiwin trivia gods. Highest prestige & glory!</div>
+                            </div>
+                        </div>
+                        <div style="flex-shrink: 0; text-align: right;">
+                            @if ($isCurrentLegend)
+                                <span
+                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #f43f5e, #e11d48); color: #fff; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(244, 63, 94, 0.6);">
+                                    YOU ARE HERE ⭐
+                                </span>
+                            @else
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;">
+                                    <i class="fa-solid fa-lock"></i> 5,000 PTS
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Tier 5: Grandmaster (2500 - 4999 PTS) -->
+                    @php
+                        $isCurrentGrandmaster = $userPts >= 2500 && $userPts < 5000;
+                        $isPastGrandmaster = $userPts >= 5000;
+                    @endphp
+                    <div class="rank-tier-card {{ $isCurrentGrandmaster ? 'active-tier' : '' }}"
+                        style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentGrandmaster ? '#06b6d4' : 'rgba(6, 182, 212, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
+                            <div
+                                style="width: 42px; height: 42px; border-radius: 12px; background: rgba(6, 182, 212, 0.2); border: 1.5px solid #06b6d4; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #22d3ee; flex-shrink: 0; box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);">
+                                <i class="fa-solid fa-gem"></i>
+                            </div>
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
+                                    <span style="font-size: 0.95rem; font-weight: 900; color: #38bdf8;">Grandmaster
+                                        💎</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(6, 182, 212, 0.2); color: #67e8f9; padding: 0.1rem 0.45rem; border-radius: 9999px;">2,500
+                                        – 4,999 PTS</span>
+                                </div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Exceptional diamond
+                                    champion with extraordinary trivia mastery.</div>
+                            </div>
+                        </div>
+                        <div style="flex-shrink: 0; text-align: right;">
+                            @if ($isCurrentGrandmaster)
+                                <span
+                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #06b6d4, #0891b2); color: #fff; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(6, 182, 212, 0.6);">
+                                    YOU ARE HERE ⭐
+                                </span>
+                            @elseif($isPastGrandmaster)
+                                <span style="font-size: 0.75rem; color: #34d399; font-weight: 700;"><i
+                                        class="fa-solid fa-circle-check"></i></span>
+                            @else
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;"><i
+                                        class="fa-solid fa-lock"></i> 2,500 PTS</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Tier 4: Master (1000 - 2499 PTS) -->
+                    @php
+                        $isCurrentMaster = $userPts >= 1000 && $userPts < 2500;
+                        $isPastMaster = $userPts >= 2500;
+                    @endphp
+                    <div class="rank-tier-card {{ $isCurrentMaster ? 'active-tier' : '' }}"
+                        style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentMaster ? '#a855f7' : 'rgba(168, 85, 247, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
+                            <div
+                                style="width: 42px; height: 42px; border-radius: 12px; background: rgba(168, 85, 247, 0.2); border: 1.5px solid #a855f7; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #c084fc; flex-shrink: 0; box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);">
+                                <i class="fa-solid fa-crown"></i>
+                            </div>
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
+                                    <span style="font-size: 0.95rem; font-weight: 900; color: #c084fc;">Master 👑</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(168, 85, 247, 0.2); color: #d8b4fe; padding: 0.1rem 0.45rem; border-radius: 9999px;">1,000
+                                        – 2,499 PTS</span>
+                                </div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Elite trivia master
+                                    commanding speed, knowledge, and high streaks.</div>
+                            </div>
+                        </div>
+                        <div style="flex-shrink: 0; text-align: right;">
+                            @if ($isCurrentMaster)
+                                <span
+                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #a855f7, #7e22ce); color: #fff; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);">
+                                    YOU ARE HERE ⭐
+                                </span>
+                            @elseif($isPastMaster)
+                                <span style="font-size: 0.75rem; color: #34d399; font-weight: 700;"><i
+                                        class="fa-solid fa-circle-check"></i></span>
+                            @else
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;"><i
+                                        class="fa-solid fa-lock"></i> 1,000 PTS</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Tier 3: Veteran (500 - 999 PTS) -->
+                    @php
+                        $isCurrentVeteran = $userPts >= 500 && $userPts < 1000;
+                        $isPastVeteran = $userPts >= 1000;
+                    @endphp
+                    <div class="rank-tier-card {{ $isCurrentVeteran ? 'active-tier' : '' }}"
+                        style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentVeteran ? '#f59e0b' : 'rgba(245, 158, 11, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
+                            <div
+                                style="width: 42px; height: 42px; border-radius: 12px; background: rgba(245, 158, 11, 0.2); border: 1.5px solid #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #fbbf24; flex-shrink: 0; box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
+                                    <span style="font-size: 0.95rem; font-weight: 900; color: #fbbf24;">Veteran ⚡</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fde68a; padding: 0.1rem 0.45rem; border-radius: 9999px;">500
+                                        – 999 PTS</span>
+                                </div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Experienced
+                                    competitor with strong trivia accuracy across rounds.</div>
+                            </div>
+                        </div>
+                        <div style="flex-shrink: 0; text-align: right;">
+                            @if ($isCurrentVeteran)
+                                <span
+                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #f59e0b, #d97706); color: #090d16; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);">
+                                    YOU ARE HERE ⭐
+                                </span>
+                            @elseif($isPastVeteran)
+                                <span style="font-size: 0.75rem; color: #34d399; font-weight: 700;"><i
+                                        class="fa-solid fa-circle-check"></i></span>
+                            @else
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;"><i
+                                        class="fa-solid fa-lock"></i> 500 PTS</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Tier 2: Challenger (200 - 499 PTS) -->
+                    @php
+                        $isCurrentChallenger = $userPts >= 200 && $userPts < 500;
+                        $isPastChallenger = $userPts >= 500;
+                    @endphp
+                    <div class="rank-tier-card {{ $isCurrentChallenger ? 'active-tier' : '' }}"
+                        style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentChallenger ? '#38bdf8' : 'rgba(56, 189, 248, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
+                            <div
+                                style="width: 42px; height: 42px; border-radius: 12px; background: rgba(56, 189, 248, 0.2); border: 1.5px solid #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #38bdf8; flex-shrink: 0; box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);">
+                                <i class="fa-solid fa-shield"></i>
+                            </div>
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
+                                    <span style="font-size: 0.95rem; font-weight: 900; color: #38bdf8;">Challenger
+                                        ⚔️</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(56, 189, 248, 0.2); color: #bae6fd; padding: 0.1rem 0.45rem; border-radius: 9999px;">200
+                                        – 499 PTS</span>
+                                </div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Active arena fighter
+                                    proving skills and building point multiplier streaks.</div>
+                            </div>
+                        </div>
+                        <div style="flex-shrink: 0; text-align: right;">
+                            @if ($isCurrentChallenger)
+                                <span
+                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);">
+                                    YOU ARE HERE ⭐
+                                </span>
+                            @elseif($isPastChallenger)
+                                <span style="font-size: 0.75rem; color: #34d399; font-weight: 700;"><i
+                                        class="fa-solid fa-circle-check"></i></span>
+                            @else
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;"><i
+                                        class="fa-solid fa-lock"></i> 200 PTS</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Tier 1: Novice (0 - 199 PTS) -->
+                    @php
+                        $isCurrentNovice = $userPts < 200;
+                        $isPastNovice = $userPts >= 200;
+                    @endphp
+                    <div class="rank-tier-card {{ $isCurrentNovice ? 'active-tier' : '' }}"
+                        style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $isCurrentNovice ? '#94a3b8' : 'rgba(148, 163, 184, 0.3)' }}; border-radius: 0.85rem; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
+                            <div
+                                style="width: 42px; height: 42px; border-radius: 12px; background: rgba(148, 163, 184, 0.2); border: 1.5px solid #94a3b8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #cbd5e1; flex-shrink: 0; box-shadow: 0 0 15px rgba(148, 163, 184, 0.3);">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
+                                    <span style="font-size: 0.95rem; font-weight: 900; color: #cbd5e1;">Novice 🛡️</span>
+                                    <span
+                                        style="font-size: 0.68rem; font-weight: 800; background: rgba(148, 163, 184, 0.2); color: #e2e8f0; padding: 0.1rem 0.45rem; border-radius: 9999px;">0
+                                        – 199 PTS</span>
+                                </div>
+                                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">Entry tier for new
+                                    players starting their journey to the top.</div>
+                            </div>
+                        </div>
+                        <div style="flex-shrink: 0; text-align: right;">
+                            @if ($isCurrentNovice)
+                                <span
+                                    style="font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #64748b, #475569); color: #fff; padding: 0.25rem 0.65rem; border-radius: 9999px; box-shadow: 0 0 12px rgba(148, 163, 184, 0.6);">
+                                    YOU ARE HERE ⭐
+                                </span>
+                            @else
+                                <span style="font-size: 0.75rem; color: #34d399; font-weight: 700;"><i
+                                        class="fa-solid fa-circle-check"></i></span>
+                            @endif
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <style>
-        @media (max-width: 900px) {
-            .hub-main-grid {
-                grid-template-columns: 1fr !important;
+        .rank-tier-card {
+            transition: all 0.2s ease;
+        }
+
+        .rank-tier-card:hover {
+            transform: translateX(4px);
+            background: rgba(30, 27, 75, 0.5) !important;
+        }
+
+        .rank-tier-card.active-tier {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+            background: rgba(30, 27, 75, 0.6) !important;
+        }
+
+        .quest-interactive-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(99, 102, 241, 0.6) !important;
+            background: rgba(30, 27, 75, 0.45) !important;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
+        }
+
+        .quest-tab-btn {
+            flex: 1;
+            padding: 0.85rem 0.75rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #94a3b8;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            transition: all 0.2s ease;
+        }
+
+        .quest-tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .quest-tab-btn.active {
+            color: #fff;
+            border-bottom-color: #6366f1;
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .quest-tab-content {
+            display: none;
+        }
+
+        .quest-tab-content.active {
+            display: block;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
             }
-            .hero-action-card {
-                max-width: 100% !important;
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        @media (max-width: 600px) {
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .hub-main-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+            gap: 1.25rem;
+            width: 100%;
+            align-items: start;
+        }
+
+        .hub-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .hub-column .glass-card {
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .rules-responsive-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.65rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .rule-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 0.35rem;
+            transition: all 0.2s ease;
+        }
+
+        .rule-box-info {
+            text-align: center;
+        }
+
+        .rule-box-points {
+            margin-top: 0.2rem;
+        }
+
+        @media (max-width: 960px) {
+            .hub-main-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1rem !important;
+                width: 100% !important;
+            }
+
+            .hub-column {
+                width: 100% !important;
+                gap: 1rem !important;
+            }
+
+            .hero-flex {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+
+            .hero-text {
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            .hero-action-card {
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 768px) {
             .stats-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
                 gap: 0.55rem !important;
             }
+
             .stat-card {
                 padding: 0.75rem 0.65rem !important;
                 gap: 0.5rem !important;
+                min-width: 0 !important;
             }
+
             .rules-responsive-grid {
                 grid-template-columns: 1fr !important;
                 gap: 0.45rem !important;
             }
+
             .rule-box {
-                display: flex !important;
+                flex-direction: row !important;
                 align-items: center !important;
                 justify-content: space-between !important;
                 text-align: left !important;
-                padding: 0.55rem 0.75rem !important;
+                padding: 0.65rem 0.85rem !important;
+            }
+
+            .rule-box-info {
+                text-align: left !important;
+            }
+
+            .rule-box-points {
+                margin-top: 0 !important;
+            }
+
+            .quest-tab-btn {
+                font-size: 0.72rem !important;
+                padding: 0.65rem 0.35rem !important;
             }
         }
 
         @keyframes spinOrb {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         @keyframes spinOrbReverse {
-            0% { transform: rotate(360deg); }
-            100% { transform: rotate(0deg); }
+            0% {
+                transform: rotate(360deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
         }
     </style>
 @endsection
@@ -572,6 +1395,50 @@
 @push('scripts')
     <script>
         let isSubmittingGame = false;
+
+        function openRankSystemModal() {
+            const modal = document.getElementById('rankSystemModal');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeRankSystemModal() {
+            const modal = document.getElementById('rankSystemModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function openQuestModal(tab = 'daily') {
+            switchQuestTab(tab);
+            const modal = document.getElementById('questsModal');
+            if (modal) {
+                modal.classList.add('active');
+            }
+        }
+
+        function closeQuestModal() {
+            const modal = document.getElementById('questsModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        function switchQuestTab(tab) {
+            const tabDailyBtn = document.getElementById('tabBtnDaily');
+            const tabReferralBtn = document.getElementById('tabBtnReferral');
+            const contentDaily = document.getElementById('questTabContentDaily');
+            const contentReferral = document.getElementById('questTabContentReferral');
+
+            if (tab === 'daily') {
+                tabDailyBtn?.classList.add('active');
+                tabReferralBtn?.classList.remove('active');
+                contentDaily?.classList.add('active');
+                contentReferral?.classList.remove('active');
+            } else {
+                tabDailyBtn?.classList.remove('active');
+                tabReferralBtn?.classList.add('active');
+                contentDaily?.classList.remove('active');
+                contentReferral?.classList.add('active');
+            }
+        }
 
         function handlePlayGameSubmit(event, form) {
             if (isSubmittingGame) {
@@ -588,6 +1455,10 @@
                 btn.style.opacity = '0.85';
                 btn.style.cursor = 'wait';
             }
+
+            // Close modals if open
+            closeQuestModal();
+            closeRankSystemModal();
 
             // Show Modal
             const modal = document.getElementById('gameLoadingModal');

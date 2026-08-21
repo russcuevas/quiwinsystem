@@ -241,11 +241,36 @@
                             <input type="number" name="streak_5_bonus" value="{{ old('streak_5_bonus', $settings['streak_5_bonus'] ?? 2) }}" min="0" max="50" class="form-input" style="border-color: rgba(245, 158, 11, 0.4); font-weight: 700; color: #fbbf24; min-height: 38px;" required>
                         </div>
 
+                <!-- Quest Rewards Card -->
+                <div class="glass-card" style="padding: 1.25rem; border-top: 4px solid #06b6d4; background: rgba(15, 23, 42, 0.85); grid-column: 1 / -1;">
+                    <div style="display: flex; align-items: center; gap: 0.55rem; margin-bottom: 1rem;">
+                        <div style="width: 34px; height: 34px; border-radius: 10px; background: rgba(6, 182, 212, 0.2); display: flex; align-items: center; justify-content: center; color: #22d3ee;">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <h3 style="font-size: 1.05rem; font-weight: 800; color: #fff;">Missions & Quest Rewards</h3>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
                         <div>
-                            <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
-                                8+ Godlike
+                            <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
+                                <i class="fa-solid fa-calendar-check text-cyan-400"></i> 7-Day Daily Play Quest Reward
                             </label>
-                            <input type="number" name="streak_8_bonus" value="{{ old('streak_8_bonus', $settings['streak_8_bonus'] ?? 5) }}" min="0" max="100" class="form-input" style="border-color: rgba(168, 85, 247, 0.4); font-weight: 700; color: #c084fc; min-height: 38px;" required>
+                            <div style="position: relative;">
+                                <input type="number" name="weekly_quest_reward" value="{{ old('weekly_quest_reward', $settings['weekly_quest_reward'] ?? 300) }}" min="0" max="10000" class="form-input" style="border-color: rgba(6, 182, 212, 0.4); font-weight: 700; color: #38bdf8; min-height: 38px;" required>
+                                <span style="position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: #64748b;">PTS</span>
+                            </div>
+                            <span style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.2rem; display: block;">Awarded automatically when a player plays daily for 7 consecutive days.</span>
+                        </div>
+
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
+                                <i class="fa-solid fa-user-group text-amber-400"></i> 5 Friends Referral Quest Reward
+                            </label>
+                            <div style="position: relative;">
+                                <input type="number" name="referral_quest_reward" value="{{ old('referral_quest_reward', $settings['referral_quest_reward'] ?? 1000) }}" min="0" max="20000" class="form-input" style="border-color: rgba(245, 158, 11, 0.4); font-weight: 700; color: #fbbf24; min-height: 38px;" required>
+                                <span style="position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: #64748b;">PTS</span>
+                            </div>
+                            <span style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.2rem; display: block;">Awarded when 5 referred friends are approved by Admin.</span>
                         </div>
                     </div>
                 </div>

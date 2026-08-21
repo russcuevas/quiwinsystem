@@ -420,6 +420,8 @@ class AdminController extends Controller
             'streak_3_bonus' => 'required|integer|min:0|max:50',
             'streak_5_bonus' => 'required|integer|min:0|max:50',
             'streak_8_bonus' => 'required|integer|min:0|max:100',
+            'weekly_quest_reward' => 'required|integer|min:0|max:10000',
+            'referral_quest_reward' => 'required|integer|min:0|max:20000',
         ]);
 
         foreach ($validated as $key => $val) {

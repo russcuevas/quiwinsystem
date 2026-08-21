@@ -230,4 +230,72 @@ class QuiwinGameTest extends TestCase
         $resAdmin = $this->actingAs($admin)->get(route('admin.dashboard'));
         $resAdmin->assertStatus(200);
     }
+
+    public function test_seven_day_daily_play_quest_reward()
+    {
+        $user = User::create([
+            'name' => 'Streak Master',
+            'email' => 'streak_' . uniqid() . '@quiwin.com',
+            'password' => bcrypt('password123'),
+            'role' => 'user',
+            'status' => 'approved',
+            'points' => 100,
+            'is_active' => true,
+        ]);
+
+        // Day 1
+        $res = $user->updateDailyStreak();
+        $this->assertEquals(1, $res['streak']);
+        $this->assertEquals(1, $user->daily_streak);
+        $this->assertFalse($res['reward_earned']);
+        $this->assertEquals(100, $user->points);
+
+        // Same day play does not duplicate increment
+        $resSameDay = $user->updateDailyStreak();
+        $this->assertEquals(1, $resSameDay['streak']);
+        $this->assertFalse($resSameDay['reward_earned']);
+
+        // Simulate Days 2 through 6 consecutive daily play
+        for ($day = 2; $day <= 6; $day++) {
+            // Set last_played_date to yesterday
+            $user->last_played_date = now()->subDay()->format('Y-m-d');
+            $user->save();
+
+            $resDay = $user->updateDailyStreak();
+            $this->assertEquals($day, $resDay['streak']);
+            $this->assertFalse($resDay['reward_earned']);
+            $this->assertEquals(100, $user->points);
+        }
+
+        // Day 7: 7th consecutive daily play -> Triggers +300 PTS Quest Reward!
+        $user->last_played_date = now()->subDay()->format('Y-m-d');
+        $user->save();
+
+        $resDay7 = $user->updateDailyStreak();
+        $this->assertEquals(7, $resDay7['streak']);
+        $this->assertTrue($resDay7['reward_earned']);
+        $this->assertEquals(300, $resDay7['reward_amount']);
+        $this->assertEquals(400, $user->points); // 100 initial + 300 quest bonus
+        $this->assertEquals(1, $user->weekly_quest_claims);
+
+        // Verify PointTransaction created
+        $this->assertDatabaseHas('point_transactions', [
+            'user_id' => $user->id,
+            'type' => 'quest_reward',
+            'amount' => 300,
+        ]);
+
+        // Verify UserMail notification created
+        $this->assertDatabaseHas('user_mails', [
+            'user_id' => $user->id,
+            'type' => 'quest',
+        ]);
+
+        // Test streak reset if a day was missed (e.g. last played 3 days ago)
+        $user->last_played_date = now()->subDays(3)->format('Y-m-d');
+        $user->save();
+
+        $resMissed = $user->updateDailyStreak();
+        $this->assertEquals(1, $resMissed['streak']); // Resets to 1
+    }
 }
