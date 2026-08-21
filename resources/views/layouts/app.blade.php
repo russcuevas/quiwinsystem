@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#090d16">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -51,7 +52,8 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html, body {
+        html,
+        body {
             max-width: 100vw;
             overflow-x: hidden;
         }
@@ -170,6 +172,7 @@
             .nav-desktop-actions {
                 display: none;
             }
+
             .nav-mobile-actions {
                 display: flex;
             }
@@ -288,7 +291,8 @@
             padding: 0.75rem 1rem;
             border-radius: 0.85rem;
             color: #fff;
-            font-size: 16px; /* 16px prevents iOS Safari auto-zoom on input focus */
+            font-size: 16px;
+            /* 16px prevents iOS Safari auto-zoom on input focus */
             outline: none;
             transition: all 0.2s ease;
             min-height: 44px;
@@ -374,6 +378,7 @@
             .modal-overlay {
                 padding: 0.75rem;
             }
+
             .modal-card {
                 padding: 1.15rem 0.95rem;
                 border-radius: 1.1rem;
@@ -411,7 +416,7 @@
             transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            box-shadow: -10px 0 40px rgba(0,0,0,0.8);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
             padding: 1.25rem 1rem;
         }
 
@@ -433,7 +438,8 @@
             min-height: 46px;
         }
 
-        .mobile-drawer-link:hover, .mobile-drawer-link:active {
+        .mobile-drawer-link:hover,
+        .mobile-drawer-link:active {
             background: rgba(99, 102, 241, 0.15);
             color: #fff;
         }
@@ -493,7 +499,8 @@
             transition: transform 0.2s ease;
         }
 
-        .bottom-nav-item.active, .bottom-nav-item:active {
+        .bottom-nav-item.active,
+        .bottom-nav-item:active {
             color: #818cf8;
         }
 
@@ -521,10 +528,12 @@
         .table-responsive::-webkit-scrollbar {
             height: 6px;
         }
+
         .table-responsive::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.02);
             border-radius: 4px;
         }
+
         .table-responsive::-webkit-scrollbar-thumb {
             background: rgba(99, 102, 241, 0.3);
             border-radius: 4px;
@@ -555,7 +564,8 @@
             <div class="nav-inner">
                 <a href="{{ auth()->check() ? (auth()->user()->isAdmin() ? route('admin.dashboard') : route('user.home')) : route('login') }}"
                     class="brand-logo">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="Quiwin" class="brand-logo-img" style="width: 38px; height: 38px; border-radius: 10px; object-fit: cover; box-shadow: 0 0 16px var(--primary-glow); border: 1.5px solid rgba(99, 102, 241, 0.5);">
+                    <img src="{{ asset('images/logo.jpg') }}" alt="Quiwin" class="brand-logo-img"
+                        style="width: 38px; height: 38px; border-radius: 10px; object-fit: cover; box-shadow: 0 0 16px var(--primary-glow); border: 1.5px solid rgba(99, 102, 241, 0.5);">
                     <span>QUIWIN</span>
                 </a>
 
@@ -591,7 +601,8 @@
                                 onclick="openMailModal()" title="In-Game Mail & Notifications">
                                 <i class="fa-solid fa-envelope"></i>
                                 @if ($userUnreadMailsCount > 0)
-                                    <span style="position: absolute; top: -6px; right: -6px; background: #ef4444; color: white; border-radius: 9999px; font-size: 0.68rem; font-weight: 800; padding: 0.1rem 0.35rem; min-width: 18px; text-align: center; box-shadow: 0 0 8px rgba(239, 68, 68, 0.8); border: 2px solid #090d16;">
+                                    <span
+                                        style="position: absolute; top: -6px; right: -6px; background: #ef4444; color: white; border-radius: 9999px; font-size: 0.68rem; font-weight: 800; padding: 0.1rem 0.35rem; min-width: 18px; text-align: center; box-shadow: 0 0 8px rgba(239, 68, 68, 0.8); border: 2px solid #090d16;">
                                         {{ $userUnreadMailsCount }}
                                     </span>
                                 @endif
@@ -612,7 +623,8 @@
                                 style="padding: 0.45rem 0.85rem; font-size: 0.85rem; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
                                 <i class="fa-solid fa-money-bill-wave text-amber-400"></i> Withdrawals
                                 @if ($adminPendingWithdrawals > 0)
-                                    <span style="background: #ef4444; color: white; border-radius: 9999px; font-size: 0.68rem; font-weight: 800; padding: 0.1rem 0.45rem; margin-left: 0.3rem;">
+                                    <span
+                                        style="background: #ef4444; color: white; border-radius: 9999px; font-size: 0.68rem; font-weight: 800; padding: 0.1rem 0.45rem; margin-left: 0.3rem;">
                                         {{ $adminPendingWithdrawals }}
                                     </span>
                                 @endif
@@ -645,7 +657,7 @@
                     @else
                         <a href="{{ route('login') }}" class="btn btn-outline">Login</a>
                         <a href="{{ route('register') }}" class="btn btn-primary">
-                            <i class="fa-solid fa-sparkles"></i> Register (+200 PTS)
+                            <i class="fa-solid fa-sparkles"></i> Register
                         </a>
                     @endauth
                 </div>
@@ -655,7 +667,8 @@
                     @auth
                         @if (!auth()->user()->isAdmin())
                             <!-- Points badge compact -->
-                            <div class="points-badge" style="padding: 0.35rem 0.65rem; font-size: 0.8rem;" onclick="openTopUpModal()">
+                            <div class="points-badge" style="padding: 0.35rem 0.65rem; font-size: 0.8rem;"
+                                onclick="openTopUpModal()">
                                 <i class="fa-solid fa-coins"></i>
                                 <span id="mobile-nav-points">{{ number_format(auth()->user()->points) }}</span>
                             </div>
@@ -664,10 +677,13 @@
                             @php
                                 $mobileUnreadMailsCount = auth()->user()->unreadMails()->count();
                             @endphp
-                            <button type="button" class="btn btn-outline" style="position: relative; padding: 0.35rem 0.6rem; font-size: 0.9rem; min-height: 36px;" onclick="openMailModal()">
+                            <button type="button" class="btn btn-outline"
+                                style="position: relative; padding: 0.35rem 0.6rem; font-size: 0.9rem; min-height: 36px;"
+                                onclick="openMailModal()">
                                 <i class="fa-solid fa-envelope text-indigo-300"></i>
                                 @if ($mobileUnreadMailsCount > 0)
-                                    <span style="position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; border-radius: 9999px; font-size: 0.62rem; font-weight: 800; padding: 0.05rem 0.3rem; min-width: 16px; text-align: center;">
+                                    <span
+                                        style="position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; border-radius: 9999px; font-size: 0.62rem; font-weight: 800; padding: 0.05rem 0.3rem; min-width: 16px; text-align: center;">
                                         {{ $mobileUnreadMailsCount }}
                                     </span>
                                 @endif
@@ -675,12 +691,16 @@
                         @endif
 
                         <!-- Hamburger Menu Trigger -->
-                        <button type="button" class="btn btn-outline" style="padding: 0.35rem 0.65rem; font-size: 1.05rem; min-height: 36px;" onclick="toggleMobileDrawer()">
+                        <button type="button" class="btn btn-outline"
+                            style="padding: 0.35rem 0.65rem; font-size: 1.05rem; min-height: 36px;"
+                            onclick="toggleMobileDrawer()">
                             <i class="fa-solid fa-bars"></i>
                         </button>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.85rem; min-height: 36px;">Login</a>
-                        <a href="{{ route('register') }}" class="btn btn-primary" style="padding: 0.35rem 0.75rem; font-size: 0.85rem; min-height: 36px;">Register</a>
+                        <a href="{{ route('login') }}" class="btn btn-outline"
+                            style="padding: 0.35rem 0.75rem; font-size: 0.85rem; min-height: 36px;">Login</a>
+                        <a href="{{ route('register') }}" class="btn btn-primary"
+                            style="padding: 0.35rem 0.75rem; font-size: 0.85rem; min-height: 36px;">Register</a>
                     @endauth
                 </div>
 
@@ -692,55 +712,78 @@
     @auth
         <div id="mobileDrawerOverlay" class="mobile-drawer-overlay" onclick="toggleMobileDrawer(false)"></div>
         <div id="mobileDrawer" class="mobile-drawer">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1rem;">
+            <div
+                style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.65rem;">
-                    <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #6366f1, #06b6d4); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem;">
+                    <div
+                        style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #6366f1, #06b6d4); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem;">
                         <i class="fa-solid fa-circle-user"></i>
                     </div>
                     <div>
                         <div style="font-weight: 800; color: #fff; font-size: 1rem;">{{ auth()->user()->name }}</div>
-                        <div style="font-size: 0.75rem; color: #94a3b8;">{{ auth()->user()->isAdmin() ? 'Administrator' : 'Player' }}</div>
+                        <div style="font-size: 0.75rem; color: #94a3b8;">
+                            {{ auth()->user()->isAdmin() ? 'Administrator' : 'Player' }}</div>
                     </div>
                 </div>
-                <button type="button" onclick="toggleMobileDrawer(false)" style="background: none; border: none; color: #94a3b8; font-size: 1.35rem; cursor: pointer; padding: 0.25rem;">
+                <button type="button" onclick="toggleMobileDrawer(false)"
+                    style="background: none; border: none; color: #94a3b8; font-size: 1.35rem; cursor: pointer; padding: 0.25rem;">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
             <!-- Drawer Navigation Items -->
             <div style="display: flex; flex-direction: column; gap: 0.35rem; flex: 1; overflow-y: auto;">
-                @if(!auth()->user()->isAdmin())
-                    <a href="{{ route('user.home') }}" class="mobile-drawer-link {{ request()->routeIs('user.home') ? 'active' : '' }}" onclick="toggleMobileDrawer(false)">
+                @if (!auth()->user()->isAdmin())
+                    <a href="{{ route('user.home') }}"
+                        class="mobile-drawer-link {{ request()->routeIs('user.home') ? 'active' : '' }}"
+                        onclick="toggleMobileDrawer(false)">
                         <i class="fa-solid fa-house text-indigo-400"></i> Hub / Home
                     </a>
-                    <button type="button" class="mobile-drawer-link" style="background: none; border: none; text-align: left; width: 100%; cursor: pointer;" onclick="toggleMobileDrawer(false); openTopUpModal();">
+                    <button type="button" class="mobile-drawer-link"
+                        style="background: none; border: none; text-align: left; width: 100%; cursor: pointer;"
+                        onclick="toggleMobileDrawer(false); openTopUpModal();">
                         <i class="fa-solid fa-wallet text-amber-400"></i> Top-Up Points
                     </button>
-                    <button type="button" class="mobile-drawer-link" style="background: none; border: none; text-align: left; width: 100%; cursor: pointer;" onclick="toggleMobileDrawer(false); openWithdrawModal();">
+                    <button type="button" class="mobile-drawer-link"
+                        style="background: none; border: none; text-align: left; width: 100%; cursor: pointer;"
+                        onclick="toggleMobileDrawer(false); openWithdrawModal();">
                         <i class="fa-solid fa-money-bill-transfer text-emerald-400"></i> GCash Withdraw
                     </button>
-                    <button type="button" class="mobile-drawer-link" style="background: none; border: none; text-align: left; width: 100%; cursor: pointer;" onclick="toggleMobileDrawer(false); openMailModal();">
+                    <button type="button" class="mobile-drawer-link"
+                        style="background: none; border: none; text-align: left; width: 100%; cursor: pointer;"
+                        onclick="toggleMobileDrawer(false); openMailModal();">
                         <i class="fa-solid fa-envelope text-purple-400"></i> In-Game Mailbox
                     </button>
                 @else
-                    <a href="{{ route('admin.dashboard') }}" class="mobile-drawer-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" onclick="toggleMobileDrawer(false)">
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="mobile-drawer-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                        onclick="toggleMobileDrawer(false)">
                         <i class="fa-solid fa-shield-halved text-indigo-400"></i> Dashboard
                     </a>
-                    <a href="{{ route('admin.users') }}" class="mobile-drawer-link {{ request()->routeIs('admin.users') ? 'active' : '' }}" onclick="toggleMobileDrawer(false)">
+                    <a href="{{ route('admin.users') }}"
+                        class="mobile-drawer-link {{ request()->routeIs('admin.users') ? 'active' : '' }}"
+                        onclick="toggleMobileDrawer(false)">
                         <i class="fa-solid fa-users text-cyan-400"></i> Manage Players
                     </a>
-                    <a href="{{ route('admin.withdrawals') }}" class="mobile-drawer-link {{ request()->routeIs('admin.withdrawals') ? 'active' : '' }}" onclick="toggleMobileDrawer(false)">
+                    <a href="{{ route('admin.withdrawals') }}"
+                        class="mobile-drawer-link {{ request()->routeIs('admin.withdrawals') ? 'active' : '' }}"
+                        onclick="toggleMobileDrawer(false)">
                         <i class="fa-solid fa-money-bill-wave text-amber-400"></i> Withdrawals
-                        @if(\App\Models\Withdrawal::where('status', 'pending')->count() > 0)
-                            <span style="background: #ef4444; color: white; border-radius: 9999px; font-size: 0.7rem; font-weight: 800; padding: 0.1rem 0.45rem; margin-left: auto;">
+                        @if (\App\Models\Withdrawal::where('status', 'pending')->count() > 0)
+                            <span
+                                style="background: #ef4444; color: white; border-radius: 9999px; font-size: 0.7rem; font-weight: 800; padding: 0.1rem 0.45rem; margin-left: auto;">
                                 {{ \App\Models\Withdrawal::where('status', 'pending')->count() }}
                             </span>
                         @endif
                     </a>
-                    <a href="{{ route('admin.questions') }}" class="mobile-drawer-link {{ request()->routeIs('admin.questions') ? 'active' : '' }}" onclick="toggleMobileDrawer(false)">
+                    <a href="{{ route('admin.questions') }}"
+                        class="mobile-drawer-link {{ request()->routeIs('admin.questions') ? 'active' : '' }}"
+                        onclick="toggleMobileDrawer(false)">
                         <i class="fa-solid fa-database text-purple-400"></i> Question Bank
                     </a>
-                    <a href="{{ route('admin.settings') }}" class="mobile-drawer-link {{ request()->routeIs('admin.settings') ? 'active' : '' }}" onclick="toggleMobileDrawer(false)">
+                    <a href="{{ route('admin.settings') }}"
+                        class="mobile-drawer-link {{ request()->routeIs('admin.settings') ? 'active' : '' }}"
+                        onclick="toggleMobileDrawer(false)">
                         <i class="fa-solid fa-sliders text-emerald-400"></i> Rules & Pointing
                     </a>
                 @endif
@@ -750,7 +793,8 @@
             <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; margin-top: auto;">
                 <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                     @csrf
-                    <button type="submit" class="btn btn-outline" style="width: 100%; color: #f87171; border-color: rgba(239, 68, 68, 0.3);">
+                    <button type="submit" class="btn btn-outline"
+                        style="width: 100%; color: #f87171; border-color: rgba(239, 68, 68, 0.3);">
                         <i class="fa-solid fa-right-from-bracket"></i> Log Out
                     </button>
                 </form>
@@ -803,8 +847,9 @@
     <!-- Mobile Bottom Navigation Bar (For quick 1-thumb touch navigation) -->
     @auth
         <nav class="mobile-bottom-bar" aria-label="Mobile Navigation">
-            @if(!auth()->user()->isAdmin())
-                <a href="{{ route('user.home') }}" class="bottom-nav-item {{ request()->routeIs('user.home') ? 'active' : '' }}">
+            @if (!auth()->user()->isAdmin())
+                <a href="{{ route('user.home') }}"
+                    class="bottom-nav-item {{ request()->routeIs('user.home') ? 'active' : '' }}">
                     <i class="fa-solid fa-house"></i>
                     <span>Hub</span>
                 </a>
@@ -825,19 +870,23 @@
                     <span>Menu</span>
                 </button>
             @else
-                <a href="{{ route('admin.dashboard') }}" class="bottom-nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                <a href="{{ route('admin.dashboard') }}"
+                    class="bottom-nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="fa-solid fa-shield-halved"></i>
                     <span>Admin</span>
                 </a>
-                <a href="{{ route('admin.users') }}" class="bottom-nav-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                <a href="{{ route('admin.users') }}"
+                    class="bottom-nav-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
                     <i class="fa-solid fa-users"></i>
                     <span>Players</span>
                 </a>
-                <a href="{{ route('admin.withdrawals') }}" class="bottom-nav-item {{ request()->routeIs('admin.withdrawals') ? 'active' : '' }}">
+                <a href="{{ route('admin.withdrawals') }}"
+                    class="bottom-nav-item {{ request()->routeIs('admin.withdrawals') ? 'active' : '' }}">
                     <i class="fa-solid fa-money-bill-wave"></i>
                     <span>Payouts</span>
                 </a>
-                <a href="{{ route('admin.questions') }}" class="bottom-nav-item {{ request()->routeIs('admin.questions') ? 'active' : '' }}">
+                <a href="{{ route('admin.questions') }}"
+                    class="bottom-nav-item {{ request()->routeIs('admin.questions') ? 'active' : '' }}">
                     <i class="fa-solid fa-database"></i>
                     <span>Questions</span>
                 </a>
@@ -915,7 +964,8 @@
         @if (!auth()->user()->isAdmin())
             <div id="withdrawModal" class="modal-overlay">
                 <div class="modal-card" style="max-width: 500px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
                         <div style="display: flex; align-items: center; gap: 0.6rem;">
                             <div
                                 style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); display: flex; align-items: center; justify-content: center; color: #34d399; font-size: 1.2rem;">
@@ -933,11 +983,13 @@
                     </div>
 
                     <!-- Balance indicator card -->
-                    <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.85rem; padding: 0.85rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <div
+                        style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.85rem; padding: 0.85rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Available Balance</div>
                             <div style="font-size: 1.35rem; font-weight: 900; color: #fbbf24;">
-                                {{ number_format(auth()->user()->points) }} <span style="font-size: 0.8rem; color: #94a3b8;">PTS</span>
+                                {{ number_format(auth()->user()->points) }} <span
+                                    style="font-size: 0.8rem; color: #94a3b8;">PTS</span>
                             </div>
                         </div>
                         <div style="text-align: right;">
@@ -948,57 +1000,79 @@
 
                     @if (auth()->user()->points < 500)
                         <!-- Warning when balance is below 500 (e.g. 499) -->
-                        <div style="background: rgba(244, 63, 94, 0.12); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 0.85rem; padding: 1rem; margin-bottom: 1.25rem; display: flex; align-items: flex-start; gap: 0.75rem;">
-                            <i class="fa-solid fa-triangle-exclamation text-rose-400" style="font-size: 1.25rem; margin-top: 0.15rem;"></i>
+                        <div
+                            style="background: rgba(244, 63, 94, 0.12); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 0.85rem; padding: 1rem; margin-bottom: 1.25rem; display: flex; align-items: flex-start; gap: 0.75rem;">
+                            <i class="fa-solid fa-triangle-exclamation text-rose-400"
+                                style="font-size: 1.25rem; margin-top: 0.15rem;"></i>
                             <div>
-                                <div style="font-weight: 700; color: #fb7185; font-size: 0.92rem;">Cannot Withdraw Yet</div>
+                                <div style="font-weight: 700; color: #fb7185; font-size: 0.92rem;">Cannot Withdraw Yet
+                                </div>
                                 <div style="font-size: 0.82rem; color: #cbd5e1; margin-top: 0.25rem; line-height: 1.4;">
-                                    Minimum withdrawal is <strong>500 PTS (₱500)</strong>. Your balance is <strong>{{ number_format(auth()->user()->points) }} PTS</strong> (Need {{ 500 - auth()->user()->points }} more points). Play matches or invite friends to reach 500+ PTS!
+                                    Minimum withdrawal is <strong>500 PTS (₱500)</strong>. Your balance is
+                                    <strong>{{ number_format(auth()->user()->points) }} PTS</strong> (Need
+                                    {{ 500 - auth()->user()->points }} more points). Play matches or invite friends to
+                                    reach 500+ PTS!
                                 </div>
                             </div>
                         </div>
 
                         <div style="display: flex; gap: 0.75rem;">
-                            <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeWithdrawModal()">Close</button>
-                            <button type="button" class="btn btn-gold" style="flex: 2;" onclick="closeWithdrawModal(); openTopUpModal();">
+                            <button type="button" class="btn btn-outline" style="flex: 1;"
+                                onclick="closeWithdrawModal()">Close</button>
+                            <button type="button" class="btn btn-gold" style="flex: 2;"
+                                onclick="closeWithdrawModal(); openTopUpModal();">
                                 <i class="fa-solid fa-coins"></i> Top-Up Points
                             </button>
                         </div>
                     @else
                         <!-- Active Withdrawal Form -->
-                        <form action="{{ route('user.withdraw') }}" method="POST" id="withdrawForm" onsubmit="return validateWithdrawForm(event)">
+                        <form action="{{ route('user.withdraw') }}" method="POST" id="withdrawForm"
+                            onsubmit="return validateWithdrawForm(event)">
                             @csrf
 
                             <!-- Quick Amount Selection Buttons -->
                             <div style="margin-bottom: 0.85rem;">
-                                <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; margin-bottom: 0.35rem; text-transform: uppercase;">
+                                <label
+                                    style="display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; margin-bottom: 0.35rem; text-transform: uppercase;">
                                     Quick Amount
                                 </label>
                                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem;">
-                                    <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.25rem; font-size: 0.8rem; font-weight: 700; color: #34d399; border-color: rgba(16, 185, 129, 0.3);" onclick="setWithdrawAmount(500)">
+                                    <button type="button" class="btn btn-outline"
+                                        style="padding: 0.4rem 0.25rem; font-size: 0.8rem; font-weight: 700; color: #34d399; border-color: rgba(16, 185, 129, 0.3);"
+                                        onclick="setWithdrawAmount(500)">
                                         ₱500
                                     </button>
-                                    @if(auth()->user()->points >= 1000)
-                                        <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.25rem; font-size: 0.8rem; font-weight: 700; color: #34d399; border-color: rgba(16, 185, 129, 0.3);" onclick="setWithdrawAmount(1000)">
+                                    @if (auth()->user()->points >= 1000)
+                                        <button type="button" class="btn btn-outline"
+                                            style="padding: 0.4rem 0.25rem; font-size: 0.8rem; font-weight: 700; color: #34d399; border-color: rgba(16, 185, 129, 0.3);"
+                                            onclick="setWithdrawAmount(1000)">
                                             ₱1,000
                                         </button>
                                     @else
-                                        <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.25rem; font-size: 0.8rem; color: #64748b; opacity: 0.5;" disabled>
+                                        <button type="button" class="btn btn-outline"
+                                            style="padding: 0.4rem 0.25rem; font-size: 0.8rem; color: #64748b; opacity: 0.5;"
+                                            disabled>
                                             ₱1,000
                                         </button>
                                     @endif
 
-                                    @if(auth()->user()->points >= 2000)
-                                        <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.25rem; font-size: 0.8rem; font-weight: 700; color: #34d399; border-color: rgba(16, 185, 129, 0.3);" onclick="setWithdrawAmount(2000)">
+                                    @if (auth()->user()->points >= 2000)
+                                        <button type="button" class="btn btn-outline"
+                                            style="padding: 0.4rem 0.25rem; font-size: 0.8rem; font-weight: 700; color: #34d399; border-color: rgba(16, 185, 129, 0.3);"
+                                            onclick="setWithdrawAmount(2000)">
                                             ₱2,000
                                         </button>
                                     @else
-                                        <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.25rem; font-size: 0.8rem; color: #64748b; opacity: 0.5;" disabled>
+                                        <button type="button" class="btn btn-outline"
+                                            style="padding: 0.4rem 0.25rem; font-size: 0.8rem; color: #64748b; opacity: 0.5;"
+                                            disabled>
                                             ₱2,000
                                         </button>
                                     @endif
 
-                                    <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.25rem; font-size: 0.8rem; font-weight: 800; color: #fbbf24; border-color: rgba(245, 158, 11, 0.4);" onclick="setWithdrawAmount({{ auth()->user()->points }})">
+                                    <button type="button" class="btn btn-outline"
+                                        style="padding: 0.4rem 0.25rem; font-size: 0.8rem; font-weight: 800; color: #fbbf24; border-color: rgba(245, 158, 11, 0.4);"
+                                        onclick="setWithdrawAmount({{ auth()->user()->points }})">
                                         MAX
                                     </button>
                                 </div>
@@ -1006,55 +1080,75 @@
 
                             <!-- Amount input -->
                             <div style="margin-bottom: 0.85rem;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
                                     <label style="font-size: 0.82rem; font-weight: 600; color: #cbd5e1;">
                                         Withdrawal Amount (₱ / PTS)
                                     </label>
-                                    <span style="font-size: 0.72rem; color: #94a3b8;">Max: {{ number_format(auth()->user()->points) }} PTS</span>
+                                    <span style="font-size: 0.72rem; color: #94a3b8;">Max:
+                                        {{ number_format(auth()->user()->points) }} PTS</span>
                                 </div>
                                 <div style="position: relative;">
-                                    <span style="position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: #34d399; font-weight: 800; font-size: 1.1rem;">₱</span>
-                                    <input type="number" name="amount" id="withdrawAmountInput" min="500" max="{{ auth()->user()->points }}" value="500" class="form-input" style="padding-left: 2rem; font-size: 1.05rem; font-weight: 700;" required oninput="validateAmountRealtime(this, {{ auth()->user()->points }})">
+                                    <span
+                                        style="position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: #34d399; font-weight: 800; font-size: 1.1rem;">₱</span>
+                                    <input type="number" name="amount" id="withdrawAmountInput" min="500"
+                                        max="{{ auth()->user()->points }}" value="500" class="form-input"
+                                        style="padding-left: 2rem; font-size: 1.05rem; font-weight: 700;" required
+                                        oninput="validateAmountRealtime(this, {{ auth()->user()->points }})">
                                 </div>
-                                <div id="amountFeedbackText" style="font-size: 0.72rem; color: #34d399; margin-top: 0.25rem;">
+                                <div id="amountFeedbackText"
+                                    style="font-size: 0.72rem; color: #34d399; margin-top: 0.25rem;">
                                     ✓ Valid withdrawal amount: ₱500 PHP
                                 </div>
                             </div>
 
                             <!-- GCash Number -->
                             <div style="margin-bottom: 0.85rem;">
-                                <label style="display: block; font-size: 0.82rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.3rem;">
+                                <label
+                                    style="display: block; font-size: 0.82rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.3rem;">
                                     GCash Mobile Number (starts with 09)
                                 </label>
                                 <div style="position: relative;">
-                                    <div style="position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: #06b6d4; font-size: 1rem;">
+                                    <div
+                                        style="position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: #06b6d4; font-size: 1rem;">
                                         <i class="fa-solid fa-mobile-screen"></i>
                                     </div>
-                                    <input type="text" name="gcash_number" id="gcashNumberInput" placeholder="09123456789" maxlength="11" class="form-input" style="padding-left: 2.4rem; letter-spacing: 1px; font-family: monospace; font-size: 1rem;" required oninput="formatGCashNumber(this)">
+                                    <input type="text" name="gcash_number" id="gcashNumberInput"
+                                        placeholder="09123456789" maxlength="11" class="form-input"
+                                        style="padding-left: 2.4rem; letter-spacing: 1px; font-family: monospace; font-size: 1rem;"
+                                        required oninput="formatGCashNumber(this)">
                                 </div>
                             </div>
 
                             <!-- GCash Account Name -->
                             <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.82rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.3rem;">
+                                <label
+                                    style="display: block; font-size: 0.82rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.3rem;">
                                     GCash Registered Account Name
                                 </label>
                                 <div style="position: relative;">
-                                    <div style="position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: #a5b4fc; font-size: 1rem;">
+                                    <div
+                                        style="position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: #a5b4fc; font-size: 1rem;">
                                         <i class="fa-solid fa-user-check"></i>
                                     </div>
-                                    <input type="text" name="gcash_name" id="gcashNameInput" placeholder="e.g. Juan Dela Cruz" class="form-input" style="padding-left: 2.4rem;" required>
+                                    <input type="text" name="gcash_name" id="gcashNameInput"
+                                        placeholder="e.g. Juan Dela Cruz" class="form-input"
+                                        style="padding-left: 2.4rem;" required>
                                 </div>
                             </div>
 
                             <!-- Payout note -->
-                            <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 0.75rem; padding: 0.65rem 0.8rem; margin-bottom: 1rem; font-size: 0.75rem; color: #c7d2fe; line-height: 1.35;">
-                                <i class="fa-solid fa-circle-info text-indigo-400"></i> Points are deducted when Admin approves payout. You'll receive a notification <em>"Already sent by the admin"</em>.
+                            <div
+                                style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 0.75rem; padding: 0.65rem 0.8rem; margin-bottom: 1rem; font-size: 0.75rem; color: #c7d2fe; line-height: 1.35;">
+                                <i class="fa-solid fa-circle-info text-indigo-400"></i> Points are deducted when Admin
+                                approves payout. You'll receive a notification <em>"Already sent by the admin"</em>.
                             </div>
 
                             <div style="display: flex; gap: 0.75rem;">
-                                <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeWithdrawModal()">Cancel</button>
-                                <button type="submit" id="submitWithdrawBtn" class="btn btn-success" style="flex: 2; padding: 0.75rem; font-weight: 800; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);">
+                                <button type="button" class="btn btn-outline" style="flex: 1;"
+                                    onclick="closeWithdrawModal()">Cancel</button>
+                                <button type="submit" id="submitWithdrawBtn" class="btn btn-success"
+                                    style="flex: 2; padding: 0.75rem; font-weight: 800; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);">
                                     <i class="fa-solid fa-paper-plane"></i> Submit Payout
                                 </button>
                             </div>
@@ -1065,27 +1159,33 @@
 
             <!-- Global In-Game Mailbox / Notifications Modal -->
             <div id="mailModal" class="modal-overlay">
-                <div class="modal-card" style="max-width: 580px; max-height: 85vh; max-height: 85dvh; display: flex; flex-direction: column;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.75rem;">
+                <div class="modal-card"
+                    style="max-width: 580px; max-height: 85vh; max-height: 85dvh; display: flex; flex-direction: column;">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.75rem;">
                         <div style="display: flex; align-items: center; gap: 0.55rem;">
-                            <div style="width: 34px; height: 34px; border-radius: 10px; background: rgba(99, 102, 241, 0.2); display: flex; align-items: center; justify-content: center; color: #818cf8; font-size: 1rem;">
+                            <div
+                                style="width: 34px; height: 34px; border-radius: 10px; background: rgba(99, 102, 241, 0.2); display: flex; align-items: center; justify-content: center; color: #818cf8; font-size: 1rem;">
                                 <i class="fa-solid fa-inbox"></i>
                             </div>
                             <div>
                                 <h3 style="font-size: 1.15rem; font-weight: 800; color: #fff;">In-Game Mailbox</h3>
-                                <div style="font-size: 0.72rem; color: #94a3b8;">Official alerts & Admin payout notifications</div>
+                                <div style="font-size: 0.72rem; color: #94a3b8;">Official alerts & Admin payout
+                                    notifications</div>
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.4rem;">
-                            @if(auth()->user()->unreadMails()->count() > 0)
+                            @if (auth()->user()->unreadMails()->count() > 0)
                                 <form action="{{ route('user.mail.readall') }}" method="POST" style="margin:0;">
                                     @csrf
-                                    <button type="submit" class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.72rem; color: #94a3b8; min-height: 30px;">
+                                    <button type="submit" class="btn btn-outline"
+                                        style="padding: 0.25rem 0.5rem; font-size: 0.72rem; color: #94a3b8; min-height: 30px;">
                                         <i class="fa-solid fa-check-double"></i> Read all
                                     </button>
                                 </form>
                             @endif
-                            <button onclick="closeMailModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; padding: 0.2rem 0.35rem;">
+                            <button onclick="closeMailModal()"
+                                style="background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; padding: 0.2rem 0.35rem;">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
                         </div>
@@ -1095,28 +1195,35 @@
                         $userMailsList = auth()->user()->mails()->take(20)->get();
                     @endphp
 
-                    <div style="overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 0.65rem; padding-right: 0.2rem;">
+                    <div
+                        style="overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 0.65rem; padding-right: 0.2rem;">
                         @forelse($userMailsList as $mail)
-                            <div style="background: {{ $mail->is_read ? 'rgba(15, 23, 42, 0.6)' : 'rgba(30, 27, 75, 0.5)' }}; border: 1px solid {{ $mail->type === 'withdrawal_approved' ? 'rgba(16, 185, 129, 0.4)' : ($mail->is_read ? 'rgba(255, 255, 255, 0.06)' : 'rgba(99, 102, 241, 0.35)') }}; border-radius: 0.85rem; padding: 0.85rem; position: relative;">
-                                
-                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 0.3rem;">
+                            <div
+                                style="background: {{ $mail->is_read ? 'rgba(15, 23, 42, 0.6)' : 'rgba(30, 27, 75, 0.5)' }}; border: 1px solid {{ $mail->type === 'withdrawal_approved' ? 'rgba(16, 185, 129, 0.4)' : ($mail->is_read ? 'rgba(255, 255, 255, 0.06)' : 'rgba(99, 102, 241, 0.35)') }}; border-radius: 0.85rem; padding: 0.85rem; position: relative;">
+
+                                <div
+                                    style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 0.3rem;">
                                     <div style="display: flex; align-items: center; gap: 0.4rem;">
-                                        @if($mail->type === 'withdrawal_approved')
-                                            <span style="font-size: 0.68rem; font-weight: 800; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.12rem 0.45rem; border-radius: 9999px;">
+                                        @if ($mail->type === 'withdrawal_approved')
+                                            <span
+                                                style="font-size: 0.68rem; font-weight: 800; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.12rem 0.45rem; border-radius: 9999px;">
                                                 <i class="fa-solid fa-circle-check"></i> Already sent by admin
                                             </span>
                                         @elseif($mail->type === 'withdrawal_rejected')
-                                            <span style="font-size: 0.68rem; font-weight: 800; background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); padding: 0.12rem 0.45rem; border-radius: 9999px;">
+                                            <span
+                                                style="font-size: 0.68rem; font-weight: 800; background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); padding: 0.12rem 0.45rem; border-radius: 9999px;">
                                                 <i class="fa-solid fa-ban"></i> Payout Rejected
                                             </span>
                                         @else
-                                            <span style="font-size: 0.68rem; font-weight: 700; background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); padding: 0.12rem 0.45rem; border-radius: 9999px;">
+                                            <span
+                                                style="font-size: 0.68rem; font-weight: 700; background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); padding: 0.12rem 0.45rem; border-radius: 9999px;">
                                                 <i class="fa-solid fa-bell"></i> System Alert
                                             </span>
                                         @endif
 
-                                        @if(!$mail->is_read)
-                                            <span style="width: 7px; height: 7px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
+                                        @if (!$mail->is_read)
+                                            <span
+                                                style="width: 7px; height: 7px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
                                         @endif
                                     </div>
 
@@ -1133,10 +1240,12 @@
                                     {{ $mail->message }}
                                 </p>
 
-                                @if(!$mail->is_read)
-                                    <form action="{{ route('user.mail.read', $mail->id) }}" method="POST" style="margin: 0; text-align: right;">
+                                @if (!$mail->is_read)
+                                    <form action="{{ route('user.mail.read', $mail->id) }}" method="POST"
+                                        style="margin: 0; text-align: right;">
                                         @csrf
-                                        <button type="submit" style="background: none; border: none; font-size: 0.72rem; color: #818cf8; cursor: pointer; text-decoration: underline; padding: 0.2rem 0;">
+                                        <button type="submit"
+                                            style="background: none; border: none; font-size: 0.72rem; color: #818cf8; cursor: pointer; text-decoration: underline; padding: 0.2rem 0;">
                                             Mark as read
                                         </button>
                                     </form>
@@ -1144,14 +1253,19 @@
                             </div>
                         @empty
                             <div style="text-align: center; padding: 2rem 1rem; color: #64748b;">
-                                <i class="fa-regular fa-envelope-open" style="font-size: 2.2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
-                                <p style="font-size: 0.85rem;">Your mailbox is empty. System announcements and withdrawal receipts will appear here.</p>
+                                <i class="fa-regular fa-envelope-open"
+                                    style="font-size: 2.2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                                <p style="font-size: 0.85rem;">Your mailbox is empty. System announcements and withdrawal
+                                    receipts will appear here.</p>
                             </div>
                         @endforelse
                     </div>
 
-                    <div style="margin-top: 0.85rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.65rem; text-align: right;">
-                        <button type="button" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.4rem 0.9rem; min-height: 36px;" onclick="closeMailModal()">Close</button>
+                    <div
+                        style="margin-top: 0.85rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.65rem; text-align: right;">
+                        <button type="button" class="btn btn-outline"
+                            style="font-size: 0.85rem; padding: 0.4rem 0.9rem; min-height: 36px;"
+                            onclick="closeMailModal()">Close</button>
                     </div>
                 </div>
             </div>
@@ -1341,13 +1455,15 @@
             } else if (val > maxBalance) {
                 if (feedback) {
                     feedback.style.color = '#fb7185';
-                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Amount cannot exceed balance (${maxBalance.toLocaleString()} PTS).`;
+                    feedback.innerHTML =
+                        `<i class="fa-solid fa-circle-xmark"></i> Amount cannot exceed balance (${maxBalance.toLocaleString()} PTS).`;
                 }
                 if (submitBtn) submitBtn.disabled = true;
             } else {
                 if (feedback) {
                     feedback.style.color = '#34d399';
-                    feedback.innerHTML = `✓ Valid withdrawal amount: ₱${val.toLocaleString()} PHP (${val.toLocaleString()} PTS)`;
+                    feedback.innerHTML =
+                        `✓ Valid withdrawal amount: ₱${val.toLocaleString()} PHP (${val.toLocaleString()} PTS)`;
                 }
                 if (submitBtn) submitBtn.disabled = false;
             }
@@ -1417,7 +1533,8 @@
                             }
                             return;
                         }
-                        if (overlay.id === 'gameLoadingModal' || overlay.id === 'antiCheatModal' || overlay.id === 'bankruptcyModal') {
+                        if (overlay.id === 'gameLoadingModal' || overlay.id === 'antiCheatModal' ||
+                            overlay.id === 'bankruptcyModal') {
                             return; // Protected game state modals
                         }
                         overlay.classList.remove('active');
@@ -1433,7 +1550,8 @@
                             if (typeof proceedToNextRound === 'function') {
                                 proceedToNextRound();
                             }
-                        } else if (modal.id !== 'gameLoadingModal' && modal.id !== 'antiCheatModal' && modal.id !== 'bankruptcyModal') {
+                        } else if (modal.id !== 'gameLoadingModal' && modal.id !==
+                            'antiCheatModal' && modal.id !== 'bankruptcyModal') {
                             modal.classList.remove('active');
                         }
                     });

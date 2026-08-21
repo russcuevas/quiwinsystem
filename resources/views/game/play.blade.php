@@ -79,7 +79,8 @@
             <div style="display: flex; justify-content: center; margin-bottom: 1.25rem;">
                 <div class="timer-wrapper"
                     style="position: relative; width: 76px; height: 76px; display: flex; align-items: center; justify-content: center;">
-                    <svg width="76" height="76" viewBox="0 0 84 84" style="transform: rotate(-90deg); width: 100%; height: 100%;">
+                    <svg width="76" height="76" viewBox="0 0 84 84"
+                        style="transform: rotate(-90deg); width: 100%; height: 100%;">
                         <circle cx="42" cy="42" r="36" stroke="rgba(255,255,255,0.1)" stroke-width="6"
                             fill="transparent" />
                         <circle id="timer-circle" cx="42" cy="42" r="36" stroke="#10b981" stroke-width="6"
@@ -96,7 +97,8 @@
             <!-- Question Prompt -->
             <div
                 style="min-height: 60px; display: flex; align-items: center; justify-content: center; text-align: center; margin-bottom: 1.5rem;">
-                <h2 id="question-text" style="font-size: clamp(1.05rem, 3.5vw, 1.35rem); font-weight: 700; color: #fff; line-height: 1.45;">
+                <h2 id="question-text"
+                    style="font-size: clamp(1.05rem, 3.5vw, 1.35rem); font-weight: 700; color: #fff; line-height: 1.45;">
                     Fetching questions...
                 </h2>
             </div>
@@ -125,7 +127,8 @@
         </div>
 
         <!-- Bottom Actions: Forfeit / Sound Toggle -->
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+        <div
+            style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; flex-wrap: wrap; gap: 0.5rem;">
             <form action="{{ route('game.abandon', ['sessionId' => $session->id]) }}" method="POST"
                 onsubmit="return confirm('Are you sure you want to forfeit this match? Points earned or lost will be finalized.')">
                 @csrf
@@ -350,8 +353,8 @@
         }
 
         /* ========================================================
-                   ULTRA-SMOOTH GPU-ACCELERATED GAMEPLAY ANIMATIONS
-                   ======================================================== */
+                       ULTRA-SMOOTH GPU-ACCELERATED GAMEPLAY ANIMATIONS
+                       ======================================================== */
 
         /* 1. Correct Answer: Smooth Emerald Glow & Pop */
         @keyframes choiceCorrectPop {
@@ -626,6 +629,7 @@
                 opacity: 0;
                 transform: translate3d(0, 6px, 0);
             }
+
             100% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0);
@@ -642,29 +646,36 @@
                 margin-bottom: 0.5rem !important;
                 gap: 0.35rem !important;
             }
+
             .arena-card {
                 padding: 0.85rem 0.65rem !important;
                 margin-bottom: 0.75rem !important;
             }
+
             .timer-wrapper {
                 width: 60px !important;
                 height: 60px !important;
             }
+
             .timer-wrapper svg {
                 width: 60px !important;
                 height: 60px !important;
             }
+
             #timer-number {
                 font-size: 1.35rem !important;
             }
+
             #question-text {
                 font-size: 0.95rem !important;
                 line-height: 1.35 !important;
             }
+
             .choices-container {
                 grid-template-columns: 1fr !important;
                 gap: 0.45rem !important;
             }
+
             .choice-btn {
                 padding: 0.65rem 0.8rem !important;
                 min-height: 44px !important;
@@ -672,11 +683,13 @@
                 gap: 0.55rem !important;
                 border-radius: 0.75rem !important;
             }
+
             .choice-letter {
                 width: 28px !important;
                 height: 28px !important;
                 font-size: 0.8rem !important;
             }
+
             .floating-score-chip {
                 font-size: 1.3rem !important;
                 padding: 0.25rem 0.85rem !important;
@@ -918,13 +931,15 @@
                 } else if (timeSec > 1.5) {
                     timerCircle.style.stroke = '#f59e0b';
                     if (timerNum) timerNum.style.color = '#fbbf24';
-                    if (Math.abs(timeSec - Math.round(timeSec)) < 0.06 && window.soundFX && typeof window.soundFX.tick === 'function') {
+                    if (Math.abs(timeSec - Math.round(timeSec)) < 0.06 && window.soundFX && typeof window.soundFX.tick ===
+                        'function') {
                         window.soundFX.tick();
                     }
                 } else {
                     timerCircle.style.stroke = '#f43f5e';
                     if (timerNum) timerNum.style.color = '#fb7185';
-                    if (Math.abs(timeSec - Math.round(timeSec)) < 0.06 && window.soundFX && typeof window.soundFX.tick === 'function') {
+                    if (Math.abs(timeSec - Math.round(timeSec)) < 0.06 && window.soundFX && typeof window.soundFX.tick ===
+                        'function') {
                         window.soundFX.tick();
                     }
                 }
@@ -1020,7 +1035,8 @@
 
                     if (prevStreak >= 3) {
                         triggerStreakBrokenEffect(prevStreak);
-                        if (window.soundFX && typeof window.soundFX.streakLost === 'function') window.soundFX.streakLost();
+                        if (window.soundFX && typeof window.soundFX.streakLost === 'function') window.soundFX
+                            .streakLost();
                     } else {
                         if (window.soundFX && typeof window.soundFX.wrong === 'function') window.soundFX.wrong();
                     }
